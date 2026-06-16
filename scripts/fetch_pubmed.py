@@ -250,7 +250,11 @@ def analyze_domain(domain_name: str, query: str, days: int) -> dict:
         s["abstract"] = abstracts.get(s["pmid"], "")
 
     # 提取关键词
-    all_texts = [s["title"] + " " + s.get("abstract", "") for s in summaries]
+    all_texts = []
+    for s in summaries:
+        title = s.get("title") or ""
+        abstract = s.get("abstract") or ""
+        all_texts.append(title + " " + abstract)
     keywords = extract_keywords(all_texts)
 
     # 期刊统计
