@@ -3,6 +3,7 @@
 """
 生成HTML报告页面
 将JSON数据转换为丝滑的Web展示页面
+使用纯CSS/SVG图表，无需外部依赖
 """
 
 import json
@@ -32,8 +33,6 @@ def generate_html(reports: dict, output_path: Path):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>医学研究热点文献计量报告</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
     <style>
         :root {{
             --primary: #2563eb;
@@ -65,7 +64,6 @@ def generate_html(reports: dict, output_path: Path):
             line-height: 1.6;
         }}
 
-        /* Header */
         .header {{
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
@@ -107,16 +105,15 @@ def generate_html(reports: dict, output_path: Path):
             border-radius: 9999px;
             font-size: 0.875rem;
             margin-top: 1rem;
+            position: relative;
         }}
 
-        /* Container */
         .container {{
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem 1rem;
         }}
 
-        /* Time Selector */
         .time-selector {{
             display: flex;
             justify-content: center;
@@ -151,7 +148,6 @@ def generate_html(reports: dict, output_path: Path):
             box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
         }}
 
-        /* Stats Grid */
         .stats-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -202,7 +198,6 @@ def generate_html(reports: dict, output_path: Path):
             margin-top: 0.25rem;
         }}
 
-        /* Section */
         .section {{
             background: var(--card-bg);
             border-radius: 1rem;
@@ -225,19 +220,23 @@ def generate_html(reports: dict, output_path: Path):
             font-size: 1.25rem;
         }}
 
-        /* Charts Grid */
         .charts-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 2rem;
         }}
 
-        .chart-container {{
-            position: relative;
+        /* SVG Charts */
+        .svg-chart {{
+            width: 100%;
             height: 350px;
         }}
 
-        /* Domain Cards */
+        .svg-chart text {{
+            font-family: inherit;
+            font-size: 12px;
+        }}
+
         .domain-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -286,7 +285,6 @@ def generate_html(reports: dict, output_path: Path):
             transition: width 1s ease;
         }}
 
-        /* Keywords */
         .keywords-container {{
             display: flex;
             flex-wrap: wrap;
@@ -320,7 +318,6 @@ def generate_html(reports: dict, output_path: Path):
             font-weight: 600;
         }}
 
-        /* Articles Table */
         .articles-table {{
             width: 100%;
             border-collapse: collapse;
@@ -362,7 +359,6 @@ def generate_html(reports: dict, output_path: Path):
             color: var(--text-light);
         }}
 
-        /* Footer */
         .footer {{
             text-align: center;
             padding: 3rem 1rem;
@@ -375,7 +371,6 @@ def generate_html(reports: dict, output_path: Path):
             text-decoration: none;
         }}
 
-        /* Animations */
         @keyframes fadeIn {{
             from {{ opacity: 0; transform: translateY(20px); }}
             to {{ opacity: 1; transform: translateY(0); }}
@@ -385,7 +380,6 @@ def generate_html(reports: dict, output_path: Path):
             animation: fadeIn 0.6s ease forwards;
         }}
 
-        /* Responsive */
         @media (max-width: 768px) {{
             .header h1 {{ font-size: 1.75rem; }}
             .charts-grid {{ grid-template-columns: 1fr; }}
@@ -394,7 +388,6 @@ def generate_html(reports: dict, output_path: Path):
             .time-btn {{ padding: 0.5rem 1rem; font-size: 0.85rem; }}
         }}
 
-        /* Scrollbar */
         ::-webkit-scrollbar {{
             width: 8px;
             height: 8px;
@@ -412,27 +405,6 @@ def generate_html(reports: dict, output_path: Path):
         ::-webkit-scrollbar-thumb:hover {{
             background: #94a3b8;
         }}
-
-        /* Loading */
-        .loading {{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 3rem;
-        }}
-
-        .spinner {{
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }}
-
-        @keyframes spin {{
-            to {{ transform: rotate(360deg); }}
-        }}
     </style>
 </head>
 <body>
@@ -443,7 +415,6 @@ def generate_html(reports: dict, output_path: Path):
     </header>
 
     <div class="container">
-        <!-- Time Selector -->
         <div class="time-selector" id="time-selector">
             <button class="time-btn active" data-time="past_week">过去一周</button>
             <button class="time-btn" data-time="past_month">过去一月</button>
@@ -451,7 +422,6 @@ def generate_html(reports: dict, output_path: Path):
             <button class="time-btn" data-time="past_year">过去一年</button>
         </div>
 
-        <!-- Stats -->
         <div class="stats-grid" id="stats-grid">
             <div class="stat-card">
                 <div class="icon blue">&#128218;</div>
@@ -480,32 +450,24 @@ def generate_html(reports: dict, output_path: Path):
             </div>
         </div>
 
-        <!-- Charts -->
         <div class="section">
             <h2 class="section-title"><span class="icon">&#128202;</span> 领域分布与趋势</h2>
             <div class="charts-grid">
-                <div class="chart-container">
-                    <canvas id="domainChart"></canvas>
-                </div>
-                <div class="chart-container">
-                    <canvas id="keywordChart"></canvas>
-                </div>
+                <div id="domain-chart-container"></div>
+                <div id="keyword-chart-container"></div>
             </div>
         </div>
 
-        <!-- Domains -->
         <div class="section">
             <h2 class="section-title"><span class="icon">&#127942;</span> 各领域发文量</h2>
             <div class="domain-grid" id="domain-grid"></div>
         </div>
 
-        <!-- Keywords -->
         <div class="section">
             <h2 class="section-title"><span class="icon">&#128293;</span> 热门关键词</h2>
             <div class="keywords-container" id="keywords-container"></div>
         </div>
 
-        <!-- Top Articles -->
         <div class="section">
             <h2 class="section-title"><span class="icon">&#128220;</span> 代表性文献</h2>
             <div style="overflow-x: auto;">
@@ -531,13 +493,10 @@ def generate_html(reports: dict, output_path: Path):
     </footer>
 
     <script>
-        // 报告数据
         const REPORTS = {reports_json};
 
         let currentTimeRange = 'past_week';
-        let charts = {{}};
 
-        // 时间范围中文映射
         const TIME_LABELS = {{
             'past_week': '过去一周',
             'past_month': '过去一月',
@@ -545,7 +504,12 @@ def generate_html(reports: dict, output_path: Path):
             'past_year': '过去一年'
         }};
 
-        // 初始化
+        const COLORS = [
+            '#2563eb', '#7c3aed', '#06b6d4', '#10b981',
+            '#f59e0b', '#ef4444', '#ec4899', '#8b5cf6',
+            '#14b8a6', '#f97316'
+        ];
+
         document.addEventListener('DOMContentLoaded', () => {{
             setupTimeSelector();
             render(currentTimeRange);
@@ -571,8 +535,8 @@ def generate_html(reports: dict, output_path: Path):
             }}
 
             updateStats(data);
-            updateDomainChart(data);
-            updateKeywordChart(data);
+            renderDomainChart(data);
+            renderKeywordChart(data);
             renderDomainCards(data);
             renderKeywords(data);
             renderArticles(data);
@@ -592,97 +556,67 @@ def generate_html(reports: dict, output_path: Path):
             document.getElementById('stat-range').textContent = TIME_LABELS[timeRange] || timeRange;
         }}
 
-        function updateDomainChart(data) {{
-            const ctx = document.getElementById('domainChart').getContext('2d');
-            if (charts.domain) charts.domain.destroy();
-
+        function renderDomainChart(data) {{
+            const container = document.getElementById('domain-chart-container');
             const domains = data.domains;
-            const labels = domains.map(d => d.domain);
-            const values = domains.map(d => d.count);
-            const colors = [
-                '#2563eb', '#7c3aed', '#06b6d4', '#10b981',
-                '#f59e0b', '#ef4444', '#ec4899', '#8b5cf6',
-                '#14b8a6', '#f97316'
-            ];
-
-            charts.domain = new Chart(ctx, {{
-                type: 'doughnut',
-                data: {{
-                    labels: labels,
-                    datasets: [{{
-                        data: values,
-                        backgroundColor: colors,
-                        borderWidth: 2,
-                        borderColor: '#fff'
-                    }}]
-                }},
-                options: {{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {{
-                        legend: {{
-                            position: 'right',
-                            labels: {{ font: {{ size: 12 }}, padding: 15 }}
-                        }},
-                        title: {{
-                            display: true,
-                            text: '各领域文献占比',
-                            font: {{ size: 16, weight: 'bold' }}
-                        }},
-                        tooltip: {{
-                            callbacks: {{
-                                label: (ctx) => `${{ctx.label}}: ${{ctx.raw.toLocaleString()}} 篇`
-                            }}
-                        }}
-                    }}
-                }}
+            const total = domains.reduce((sum, d) => sum + d.count, 0);
+            
+            let svg = '<svg class="svg-chart" viewBox="0 0 500 350">';
+            svg += '<text x="250" y="20" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e293b">各领域文献占比</text>';
+            
+            let currentAngle = 0;
+            const centerX = 180;
+            const centerY = 190;
+            const radius = 100;
+            
+            domains.forEach((d, i) => {{
+                const angle = (d.count / total) * 2 * Math.PI;
+                const x1 = centerX + radius * Math.cos(currentAngle);
+                const y1 = centerY + radius * Math.sin(currentAngle);
+                const x2 = centerX + radius * Math.cos(currentAngle + angle);
+                const y2 = centerY + radius * Math.sin(currentAngle + angle);
+                const largeArc = angle > Math.PI ? 1 : 0;
+                
+                svg += `<path d="M ${{centerX}},${{centerY}} L ${{x1}},${{y1}} A ${{radius}},${{radius}} 0 ${{largeArc}},1 ${{x2}},${{y2}} Z" fill="${{COLORS[i % COLORS.length]}}" stroke="white" stroke-width="2"/>`;
+                currentAngle += angle;
             }});
+            
+            // Legend
+            domains.forEach((d, i) => {{
+                const y = 80 + i * 28;
+                svg += `<rect x="320" y="${{y-8}}" width="16" height="16" rx="4" fill="${{COLORS[i % COLORS.length]}}"/>`;
+                svg += `<text x="345" y="${{y+4}}" font-size="12" fill="#334155">${{d.domain}} (${{d.count}})</text>`;
+            }});
+            
+            svg += '</svg>';
+            container.innerHTML = svg;
         }}
 
-        function updateKeywordChart(data) {{
-            const ctx = document.getElementById('keywordChart').getContext('2d');
-            if (charts.keyword) charts.keyword.destroy();
-
+        function renderKeywordChart(data) {{
+            const container = document.getElementById('keyword-chart-container');
             const keywords = data.global_keywords.slice(0, 15);
-            const labels = keywords.map(k => k.term);
-            const values = keywords.map(k => k.count);
-
-            charts.keyword = new Chart(ctx, {{
-                type: 'bar',
-                data: {{
-                    labels: labels,
-                    datasets: [{{
-                        label: '出现频次',
-                        data: values,
-                        backgroundColor: 'rgba(37, 99, 235, 0.7)',
-                        borderColor: '#2563eb',
-                        borderWidth: 1,
-                        borderRadius: 6,
-                    }}]
-                }},
-                options: {{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    plugins: {{
-                        legend: {{ display: false }},
-                        title: {{
-                            display: true,
-                            text: 'Top 15 热门关键词',
-                            font: {{ size: 16, weight: 'bold' }}
-                        }}
-                    }},
-                    scales: {{
-                        x: {{
-                            beginAtZero: true,
-                            grid: {{ color: '#f1f5f9' }}
-                        }},
-                        y: {{
-                            grid: {{ display: false }}
-                        }}
-                    }}
-                }}
+            const maxCount = Math.max(...keywords.map(k => k.count));
+            
+            let svg = '<svg class="svg-chart" viewBox="0 0 500 350">';
+            svg += '<text x="250" y="20" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e293b">Top 15 热门关键词</text>';
+            
+            const barHeight = 18;
+            const gap = 4;
+            const startY = 45;
+            const maxBarWidth = 300;
+            const labelWidth = 140;
+            
+            keywords.forEach((k, i) => {{
+                const y = startY + i * (barHeight + gap);
+                const barWidth = (k.count / maxCount) * maxBarWidth;
+                
+                svg += `<text x="${{labelWidth-5}}" y="${{y+13}}" text-anchor="end" font-size="11" fill="#475569">${{k.term}}</text>`;
+                svg += `<rect x="${{labelWidth+5}}" y="${{y}}" width="${{barWidth}}" height="${{barHeight}}" rx="4" fill="rgba(37,99,235,0.7)"/>`;
+                svg += `<text x="${{labelWidth+10+barWidth}}" y="${{y+13}}" font-size="11" fill="#64748b">${{k.count}}</text>`;
             }});
+            
+            svg += '</svg>';
+            container.innerHTML = svg;
         }}
 
         function renderDomainCards(data) {{
@@ -722,18 +656,17 @@ def generate_html(reports: dict, output_path: Path):
                 }});
             }});
 
-            // 按日期排序，取前20
-            allArticles.sort((a, b) => new Date(b.pubdate) - new Date(a.pubdate));
+            allArticles.sort((a, b) => new Date(b.pubdate || 0) - new Date(a.pubdate || 0));
             const topArticles = allArticles.slice(0, 20);
 
             tbody.innerHTML = topArticles.map(a => `
                 <tr>
                     <td>
-                        <a href="https://pubmed.ncbi.nlm.nih.gov/${{a.pmid}}/" target="_blank" class="title">${{a.title}}</a>
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/${{a.pmid}}/" target="_blank" class="title">${{a.title || 'Untitled'}}</a>
                         <div class="meta">PMID: ${{a.pmid}} | 领域: ${{a.domain}}</div>
                     </td>
                     <td>${{a.journal || '-'}}</td>
-                    <td>${{a.authors.slice(0, 3).join(', ')}}${{a.authors.length > 3 ? ' et al.' : ''}}</td>
+                    <td>${{(a.authors || []).slice(0, 3).join(', ')}}${{(a.authors || []).length > 3 ? ' et al.' : ''}}</td>
                     <td>${{a.pubdate || '-'}}</td>
                 </tr>
             `).join('');
