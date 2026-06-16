@@ -3,340 +3,176 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>医学研究热点文献计量报告</title>
+<title>公共数据库发文套路大全 — 医学文献计量学</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
   :root {
-    --bg: oklch(0.985 0.002 240);
+    --bg: oklch(0.987 0.003 250);
     --surface: oklch(1 0 0);
-    --text: oklch(0.18 0.008 250);
-    --text-secondary: oklch(0.45 0.015 250);
-    --text-muted: oklch(0.60 0.012 245);
+    --text: oklch(0.16 0.008 250);
+    --text-secondary: oklch(0.38 0.015 250);
+    --text-muted: oklch(0.50 0.012 245);
     --accent: oklch(0.48 0.18 250);
-    --accent-light: oklch(0.62 0.12 250);
-    --accent-bg: oklch(0.94 0.04 250);
-    --border: oklch(0.88 0.01 250);
-    --red: oklch(0.52 0.19 20);
-    --green: oklch(0.52 0.18 160);
+    --accent-light: oklch(0.60 0.12 250);
+    --accent-bg: oklch(0.94 0.05 250);
+    --border: oklch(0.86 0.01 250);
+    --red: oklch(0.50 0.20 22);
+    --green: oklch(0.50 0.18 155);
     --orange: oklch(0.55 0.16 65);
     --purple: oklch(0.48 0.15 300);
-    --teal: oklch(0.52 0.12 190);
-    --radius: 6px;
+    --teal: oklch(0.50 0.12 190);
+    --pink: oklch(0.52 0.15 350);
+    --radius: 8px;
   }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  
-  body {
-    font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    font-size: 14px;
-    -webkit-font-smoothing: antialiased;
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+  body{
+    font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.55;
+    font-size:14px;
+    -webkit-font-smoothing:antialiased;
   }
 
-  /* ── Compact Header ── */
-  .site-header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 10px 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    background: oklch(1 0 0 / 0.92);
+  .site-header{
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    padding:8px 0;
+    position:sticky;top:0;z-index:100;
+    backdrop-filter:blur(10px);
+    background:oklch(1 0 0/0.93);
   }
-  .header-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+  .header-inner{
+    max-width:1200px;margin:0 auto;padding:0 16px;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;
   }
-  .header-logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    color: var(--text);
-  }
-  .header-icon {
-    width: 28px; height: 28px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-light));
-    border-radius: 5px;
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-size: 13px; font-weight: 700;
-  }
-  .header-title {
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    white-space: nowrap;
-  }
-  .header-meta {
-    font-size: 11px;
-    color: var(--text-muted);
-    white-space: nowrap;
+  .logo{font-size:15px;font-weight:700;color:var(--accent);white-space:nowrap;}
+  .header-badge{
+    font-size:11px;padding:3px 10px;border-radius:12px;
+    background:var(--accent-bg);color:var(--accent);
+    font-weight:500;white-space:nowrap;
   }
 
-  /* ── Layout ── */
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
+  /* ===== Stats Strip ===== */
+  .stats-strip{
+    max-width:1200px;margin:12px auto;padding:0 16px;
+    display:flex;gap:8px;flex-wrap:wrap;
+  }
+  .stat-pill{
+    flex:1;min-width:70px;background:var(--surface);
+    border:1px solid var(--border);border-radius:var(--radius);
+    padding:10px 12px;text-align:center;
+  }
+  .stat-pill .val{font-size:22px;font-weight:700;color:var(--accent);line-height:1.2;}
+  .stat-pill .lbl{font-size:11px;color:var(--text-muted);margin-top:2px;}
+
+  /* ===== Main Container ===== */
+  .main-container{max-width:1200px;margin:16px auto;padding:0 16px;}
+
+  /* ===== Tab Nav ===== */
+  .tab-nav{
+    display:flex;gap:4px;flex-wrap:wrap;
+    margin-bottom:16px;overflow-x:auto;
+    padding-bottom:4px;
+  }
+  .tab-nav::-webkit-scrollbar{height:3px}
+  .tab-nav::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+  .tab-btn{
+    padding:6px 14px;border:1px solid var(--border);
+    background:var(--surface);border-radius:var(--radius);
+    font-size:12px;cursor:pointer;white-space:nowrap;
+    color:var(--text-secondary);font-weight:500;
+    transition:all .15s;font-family:inherit;
+  }
+  .tab-btn:hover{background:var(--accent-bg);color:var(--accent);}
+  .tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+  /* ===== Panels ===== */
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  /* ===== Carousel ===== */
+  .carousel{
+    display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;
+    scroll-snap-type:x mandatory;
+  }
+  .carousel::-webkit-scrollbar{height:4px}
+  .carousel::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+  .routine-card{
+    flex:0 0 340px;scroll-snap-align:start;
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .routine-card .card-header{
+    padding:14px 16px 10px;border-bottom:1px solid var(--border);
+    display:flex;align-items:flex-start;gap:10px;
+  }
+  .routine-card .tag{
+    font-size:10px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.5px;padding:3px 8px;border-radius:4px;
+    white-space:nowrap;flex-shrink:0;
+  }
+  .tag-db   {background:oklch(0.93 0.04 250);color:var(--accent);}
+  .tag-hot  {background:oklch(0.93 0.05 22);color:var(--red);}
+  .tag-mid  {background:oklch(0.93 0.04 65);color:var(--orange);}
+  .tag-new  {background:oklch(0.93 0.04 155);color:var(--green);}
+  .routine-card .card-title{
+    font-size:15px;font-weight:700;line-height:1.35;
+    color:var(--text);
+  }
+  .routine-card .card-body{
+    padding:12px 16px;font-size:12.5px;color:var(--text-secondary);
+    flex:1;line-height:1.7;
+  }
+  .routine-card .card-body .section-label{
+    font-size:10px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.8px;color:var(--text-muted);margin:10px 0 4px;
+  }
+  .routine-card .card-body .db-list{
+    display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;
+  }
+  .routine-card .card-body .db-tag{
+    font-size:10px;padding:2px 8px;border-radius:4px;
+    background:var(--bg);color:var(--text-secondary);
+    font-family:'JetBrains Mono',monospace;font-weight:500;
+  }
+  .routine-card .card-body .flow-steps{
+    list-style:none;padding:0;margin:4px 0;
+  }
+  .routine-card .card-body .flow-steps li{
+    padding:2px 0;padding-left:16px;position:relative;
+    font-size:12px;
+  }
+  .routine-card .card-body .flow-steps li::before{
+    content:'→';position:absolute;left:0;color:var(--accent);
+    font-weight:700;font-family:'JetBrains Mono',monospace;font-size:11px;
+  }
+  .routine-card .card-body .jrn{
+    font-size:11px;color:var(--text-muted);font-style:italic;
+    margin-top:4px;line-height:1.6;
   }
 
-  /* ── Section Headers ── */
-  .section {
-    margin-bottom: 36px;
-  }
-  .section-header {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid var(--accent);
-  }
-  .section-header h2 {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-  }
-  .section-header .badge {
-    font-size: 11px;
-    font-weight: 500;
-    padding: 2px 8px;
-    border-radius: 10px;
-    background: var(--accent-bg);
-    color: var(--accent);
-    white-space: nowrap;
+  /* ===== Footer ===== */
+  .site-footer{
+    text-align:center;padding:24px 16px;font-size:11px;
+    color:var(--text-muted);border-top:1px solid var(--border);
+    margin-top:24px;
   }
 
-  /* ── Stats Summary Row ── */
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px 14px;
-    text-align: center;
-  }
-  .stat-value {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--accent);
-    line-height: 1.1;
-  }
-  .stat-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 3px;
-  }
-
-  /* ── Time Tabs ── */
-  .time-tabs {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 16px;
-    background: var(--surface);
-    padding: 3px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    overflow-x: auto;
-  }
-  .time-tab {
-    padding: 6px 14px;
-    font-size: 13px;
-    font-weight: 500;
-    border: none;
-    background: transparent;
-    border-radius: 4px;
-    cursor: pointer;
-    color: var(--text-secondary);
-    white-space: nowrap;
-    transition: all 0.15s;
-  }
-  .time-tab:hover { background: var(--accent-bg); }
-  .time-tab.active {
-    background: var(--accent);
-    color: #fff;
-  }
-
-  /* ── Two-Column Layout ── */
-  .two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
-
-  /* ── Chart Box ── */
-  .chart-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-  }
-  .chart-box h3 {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 12px;
-    color: var(--text);
-  }
-  .chart-box canvas { width: 100% !important; height: 260px !important; }
-
-  /* ── Journal List ── */
-  .journal-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .journal-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 10px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    font-size: 13px;
-    transition: background 0.15s;
-  }
-  .journal-item:hover { background: var(--accent-bg); }
-  .journal-rank {
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700;
-    flex-shrink: 0;
-  }
-  .journal-rank.top3 { background: var(--accent); color: #fff; }
-  .journal-rank.normal { background: var(--border); color: var(--text-secondary); }
-  .journal-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .journal-count { font-weight: 600; font-size: 12px; color: var(--accent); flex-shrink: 0; }
-
-  /* ── Keyword Tags ── */
-  .keyword-cloud {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    line-height: 1.2;
-  }
-  .keyword-tag {
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-    white-space: nowrap;
-    transition: transform 0.15s;
-  }
-  .keyword-tag:hover { transform: scale(1.05); }
-  .tag-xl { font-size: 16px; padding: 6px 14px; }
-  .tag-lg { font-size: 14px; padding: 5px 12px; }
-  .tag-md { font-size: 12px; }
-  .tag-sm { font-size: 11px; }
-
-  /* ── Methodology Section ── */
-  .methodology-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
-  }
-  .method-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 14px;
-  }
-  .method-card .step-num {
-    display: inline-block;
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    background: var(--accent);
-    color: #fff;
-    text-align: center;
-    line-height: 22px;
-    font-size: 11px;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  .method-card h4 {
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-  .method-card p {
-    font-size: 12px;
-    color: var(--text-secondary);
-    line-height: 1.5;
-  }
-
-  /* ── Domain Bar Chart Table ── */
-  .domain-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  .domain-table td {
-    padding: 5px 8px;
-    font-size: 13px;
-    vertical-align: middle;
-  }
-  .domain-table .domain-name {
-    font-weight: 500;
-    white-space: nowrap;
-    width: 90px;
-    text-align: right;
-    padding-right: 10px;
-  }
-  .domain-table .domain-bar-cell { width: 100%; }
-  .domain-bar {
-    height: 16px;
-    border-radius: 3px;
-    min-width: 4px;
-    transition: width 0.3s ease;
-  }
-  .domain-table .domain-count {
-    font-weight: 600;
-    font-size: 12px;
-    color: var(--accent);
-    width: 50px;
-    white-space: nowrap;
-    padding-left: 8px;
-  }
-
-  /* ── Info Callout ── */
-  .info-callout {
-    background: oklch(0.96 0.03 80 / 0.6);
-    border-left: 3px solid var(--orange);
-    padding: 10px 14px;
-    border-radius: 0 var(--radius) var(--radius) 0;
-    font-size: 12px;
-    color: oklch(0.4 0.08 70);
-    margin: 12px 0;
-    line-height: 1.5;
-  }
-
-  /* ── Footer ── */
-  .site-footer {
-    border-top: 1px solid var(--border);
-    padding: 16px 0;
-    text-align: center;
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { transition: none !important; animation: none !important; }
+  /* ===== Responsive ===== */
+  @media(max-width:768px){
+    .routine-card{flex:0 0 290px;}
+    .header-inner{gap:8px;flex-wrap:wrap;}
+    .logo{font-size:13px;}
+    .stat-pill .val{font-size:18px;}
+    .stat-pill .lbl{font-size:10px;}
+    .tab-btn{font-size:11px;padding:5px 10px;}
   }
 </style>
 </head>
@@ -344,376 +180,746 @@
 
 <header class="site-header">
   <div class="header-inner">
-    <a class="header-logo" href="#">
-      <span class="header-icon">M</span>
-      <span class="header-title">医学研究热点 · 文献计量报告</span>
-    </a>
-    <span class="header-meta">PubMed/MEDLINE · 2026-06-16 更新</span>
+    <span class="logo">公共数据库发文套路大全</span>
+    <span class="header-badge">2026.06 更新</span>
   </div>
 </header>
 
-<div class="container">
+<div class="stats-strip">
+  <div class="stat-pill"><div class="val">16+</div><div class="lbl">发文套路</div></div>
+  <div class="stat-pill"><div class="val">20+</div><div class="lbl">公共数据库</div></div>
+  <div class="stat-pill"><div class="val">4万+</div><div class="lbl">2024 年发文量</div></div>
+  <div class="stat-pill"><div class="val">0 实验</div><div class="lbl">纯数据驱动</div></div>
+</div>
 
-  <!-- ═══════════ 数据概览 ═══════════ -->
-  <div class="stats-row" id="statsRow"></div>
+<div class="main-container">
 
-  <!-- ═══════════ 时间维度切换 ═══════════ -->
-  <div class="time-tabs" id="timeTabs"></div>
+<!-- ===== TAB NAVIGATION ===== -->
+<div class="tab-nav" id="tab-nav">
+  <button class="tab-btn active" data-tab="tyg">TYG 指数系列</button>
+  <button class="tab-btn" data-tab="mr">孟德尔随机化</button>
+  <button class="tab-btn" data-tab="geo-tcga">生信挖掘系列</button>
+  <button class="tab-btn" data-tab="virtual-ko">虚拟敲除系列</button>
+  <button class="tab-btn" data-tab="nhanes">NHANES 系列</button>
+  <button class="tab-btn" data-tab="mimic">MIMIC 重症系列</button>
+  <button class="tab-btn" data-tab="seer">SEER 肿瘤系列</button>
+  <button class="tab-btn" data-tab="faers">FAERS 药物警戒</button>
+  <button class="tab-btn" data-tab="gbd">GBD 疾病负担</button>
+  <button class="tab-btn" data-tab="aging">老龄化队列系列</button>
+  <button class="tab-btn" data-tab="ukb">UK Biobank 系列</button>
+  <button class="tab-btn" data-tab="scrnaseq">单细胞挖掘系列</button>
+  <button class="tab-btn" data-tab="network-pharm">网络药理学系列</button>
+  <button class="tab-btn" data-tab="biblio">文献计量学系列</button>
+  <button class="tab-btn" data-tab="nomogram">临床预测模型系列</button>
+  <button class="tab-btn" data-tab="drug-mr">药靶孟德尔随机化</button>
+</div>
 
-  <!-- ═══════════ 核心内容双栏 ═══════════ -->
-  <div class="two-col">
-    <!-- 左：领域分布 -->
-    <div class="chart-box">
-      <h3>十大医学领域发文量</h3>
-      <div id="domainChart"></div>
-    </div>
-    <!-- 右：关键词云 -->
-    <div class="chart-box">
-      <h3>跨领域热点关键词</h3>
-      <div class="keyword-cloud" id="keywordCloud"></div>
-    </div>
+<!-- ===== PANELS ===== -->
+
+<!-- 1. TYG 指数系列 -->
+<div class="panel active" id="panel-tyg">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-hot">极热</span>
+    <div class="card-title">TyG 指数 × NHANES<br>横断面关联研究</div>
   </div>
-
-  <!-- ═══════════ 公共数据库套路 ═══════════ -->
-  <div class="section" style="margin-top:28px;">
-    <div class="section-header">
-      <h2>公共数据库发文套路</h2>
-      <span class="badge">方法论</span>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    TyG = Ln[TG×FBG/2]，作为胰岛素抵抗替代指标 → 选某疾病（CVD/糖尿病/代谢综合征）→ 选某人群分层（年龄/性别/种族）→ Logistic/Cox回归 → 得出 TyG 与结局的关联
+    <div class="section-label">常用数据库</div>
+    <div class="db-list">
+      <span class="db-tag">NHANES</span>
+      <span class="db-tag">MIMIC-IV</span>
+      <span class="db-tag">CHARLS</span>
+      <span class="db-tag">UK Biobank</span>
     </div>
-    <div class="methodology-grid">
-      <div class="method-card">
-        <div class="step-num">1</div>
-        <h4>选定公共数据库</h4>
-        <p>PubMed/MEDLINE 是最大免费生物医学数据库，NCBI E-utilities API 无需认证即可调用，覆盖 3700 万+ 文献。</p>
-      </div>
-      <div class="method-card">
-        <div class="step-num">2</div>
-        <h4>制定检索策略</h4>
-        <p>按 MeSH 词 + 自由词组合，覆盖 10 大医学领域；分 4 个时间窗口（周/月/半年/年）捕捉热点演变。</p>
-      </div>
-      <div class="method-card">
-        <div class="step-num">3</div>
-        <h4>文献计量分析</h4>
-        <p>高频关键词提取、期刊分布统计、作者合作网络、领域交叉分析——纯 Python 实现，无需付费工具。</p>
-      </div>
-      <div class="method-card">
-        <div class="step-num">4</div>
-        <h4>写作套路</h4>
-        <p>"基于 XXX 数据库的 YYY 领域文献计量学分析"是成熟发文模板，PubMed/FAERS/TCGA/GEO/MIMIC 等均为热门数据源。</p>
-      </div>
-    </div>
-    <div class="info-callout">
-      <strong>常见公共数据库发文路径</strong>：PubMed（文献计量）→ FAERS（药物不良反应）→ TCGA/GEO（基因组学）→ MIMIC（重症监护）→ NHANES（营养健康）。文献计量学因免伦理审批、数据公开、套路成熟，是硕博毕业和职称评定的热门选择。
-    </div>
+    <div class="section-label">衍生指标</div>
+    TyG-WC（腰围）、TyG-WHtR（腰高比）、TyG-BMI、TyG-WC、TyG+hsCRP联合
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Cardiovasc Diabetol (IF 8.5–9.3)<br>Sci Reports · Front Endocrinol<br>Lipids Health Dis · Diabetol Metab Syndr</div>
   </div>
+</div>
 
-  <!-- ═══════════ 偏好公共数据库文章的期刊 ═══════════ -->
-  <div class="section">
-    <div class="section-header">
-      <h2>偏好公共数据库文章的期刊</h2>
-      <span class="badge">投稿指南</span>
-    </div>
-    <div class="two-col">
-      <div>
-        <ul class="journal-list" id="journalListWeek"></ul>
-        <p style="font-size:11px;color:var(--text-muted);margin-top:6px;">▲ 近一周发文量排名</p>
-      </div>
-      <div>
-        <ul class="journal-list" id="journalListYear"></ul>
-        <p style="font-size:11px;color:var(--text-muted);margin-top:6px;">▲ 近一年发文量排名</p>
-      </div>
-    </div>
-    <div class="info-callout" style="margin-top:12px;">
-      <strong>投稿建议</strong>：<em>Scientific Reports</em>、<em>PLoS ONE</em>、<em>Medicine</em>、<em>Frontiers in Immunology</em>、<em>Int J Mol Sci</em> 等期刊大量接收基于公共数据库的文献计量/生信分析文章。注意避开掠夺性期刊，优先选择有影响因子且审稿透明的正规出版物。
-    </div>
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-db">数据库</span>
+    <div class="card-title">TyG × MIMIC-IV<br>重症预后研究</div>
   </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    MIMIC-IV 提取 ICU 患者 → 计算 TyG/TyG-BMI/TyG-WC → Cox 回归 → 28天/90天/5年死亡率预测 → RCS 曲线找非线性关系
+    <div class="section-label">关键差异</div>
+    不同于 NHANES 的普通人群关联，MIMIC 版本强调"急性重症环境下"TyG 的预后价值，可做亚组分析（脓毒症/心衰/卒中）
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Cardiovasc Diabetol · Diabetol Metab Syndr · BMC Cardiovasc Disord · Front Cardiovasc Med</div>
+  </div>
+</div>
 
-  <!-- ═══════════ 各领域期刊推荐 ═══════════ -->
-  <div class="section">
-    <div class="section-header">
-      <h2>各领域代表性期刊</h2>
-      <span class="badge">细分推荐</span>
-    </div>
-    <div class="methodology-grid" id="domainJournals"></div>
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-mid">进阶</span>
+    <div class="card-title">TyG 轨迹分析<br>纵向队列研究</div>
   </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    利用 CHARLS/HRS 等多波数据 → 计算多时间点 TyG → 潜类别轨迹模型(LCMM)识别 TyG 变化轨迹组 → 关联远期结局
+    <div class="section-label">优势</div>
+    从单次测量升级为纵向轨迹，回应审稿人"单次测量无法反映长期暴露"的质疑，IF 更高
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Cardiovasc Diabetol · J Clin Endocrinol Metab · Diabetes Care</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- 2. 孟德尔随机化 -->
+<div class="panel" id="panel-mr">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-hot">极热</span>
+    <div class="card-title">双样本 MR 标准套路<br>暴露 → 结局因果推断</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心流程</div>
+    <ol class="flow-steps">
+      <li>GWAS catalog / OpenGWAS 选暴露&结局</li>
+      <li>筛选工具变量（P<5e-8, LD clump r²<0.001）</li>
+      <li>IVW 主分析 + MR-Egger/加权中位数/简单中位数敏感性</li>
+      <li>异质性检验 + 水平多效性检验 + Leave-one-out</li>
+      <li>散点图/森林图/漏斗图可视化</li>
+    </ol>
+    <div class="section-label">常用数据库</div>
+    <div class="db-list">
+      <span class="db-tag">GWAS Catalog</span>
+      <span class="db-tag">FinnGen</span>
+      <span class="db-tag">UK Biobank</span>
+      <span class="db-tag">IEU OpenGWAS</span>
+    </div>
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Int J Surg · BMC Med · Eur J Epidemiol · JAMA Netw Open · Front系列(已设限)</div>
+  </div>
+</div>
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-mid">进阶</span>
+    <div class="card-title">MR+NHANES 联合分析<br>关联+因果双重证据</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    NHANES 观测性分析证明关联 → GWAS MR 证明因果关系 → 双数据库交叉验证 → 证据等级大幅提升
+    <div class="section-label">现状</div>
+    目前仅发表约 134 篇联合分析文献，仍属蓝海。几乎所有临床科室都可用
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Cardiovasc Diabetol · BMC Med · Environ Health Perspect</div>
+  </div>
+</div>
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-mid">高阶</span>
+    <div class="card-title">多变量 MR / 中介 MR<br>机制通路解析</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    MVMR 同时放入多个暴露，排除混杂路径 → 两步法中介 MR：暴露→中介→结局，计算中介比例 → 双向 MR 排除反向因果
+    <div class="section-label">2025 新趋势</div>
+    Frontiers 系列要求外部验证（2024.7）；药物靶点 MR 兴起（见单独分类）；免疫细胞 MR（731种免疫表型作暴露）
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- 3. 生信挖掘（GEO/TCGA） -->
+<div class="panel" id="panel-geo-tcga">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-hot">极热</span>
+    <div class="card-title">肿瘤预后模型构建<br>差异基因 → LASSO → Risk Score</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心流程</div>
+    <ol class="flow-steps">
+      <li>TCGA 获取癌种表达+临床数据</li>
+      <li>差异表达分析(limma/DESeq2) → DEGs</li>
+      <li>GO/KEGG 富集 → PPI网络(STRING+Cytoscape)</li>
+      <li>LASSO+Cox 筛选核心基因 → Risk Score公式</li>
+      <li>KM生存曲线+ROC → GEO外部验证</li>
+    </ol>
+    <div class="section-label">热点表型（绑定即创新）</div>
+    铁死亡 · 铜死亡 · 焦亡 · m6A · 自噬 · 免疫检查点 · 细胞衰老 · 乳酸化
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Front Oncol · Front Genet · J Transl Med · Sci Reports · BMC Cancer · Aging</div>
+  </div>
+</div>
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-mid">进阶</span>
+    <div class="card-title">机器学习增强版<br>101种算法 × 多组学</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    TCGA+GEO多队列 → 差异基因+WGCNA → 101种算法组合(CoxBoost/RF/SuperPC/LASSO/RSF) → 留一交叉验证 → 选最优模型 → 单细胞验证
+    <div class="section-label">加分点</div>
+    Transformer/深度学习预后模型；免疫亚型分组(TIMER/CIBERSORT/ssGSEA)；药物敏感性预测(oncoPredict)；单细胞数据验证
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Brief Bioinform · Comput Biol Med · Front Immunol · Int J Biol Sci</div>
+  </div>
+</div>
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-new">持久</span>
+    <div class="card-title">泛癌分析<br>Pan-Cancer</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    单一基因/通路 → 在 TCGA 33种癌种中逐一分析 → 表达差异+预后+突变+免疫浸润+药物敏感 → 全景图谱
+    <div class="section-label">风险</div>
+    低质重复严重。必须有强故事逻辑（某基因为何跨癌种重要？），单纯堆分析图表已难发
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">J Transl Med · Front Immunol · iScience · eLife</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- 4. 虚拟敲除 -->
+<div class="panel" id="panel-virtual-ko">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-hot">新热</span>
+    <div class="card-title">scTenifoldKnk 虚拟敲除<br>单细胞数据基因功能验证</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    <ol class="flow-steps">
+      <li>整合公共单细胞数据(GEO scRNA-seq)</li>
+      <li>鉴定目标细胞亚群 → 筛选关键基因</li>
+      <li>scTenifoldKnk 构建基因调控网络</li>
+      <li>模拟敲除：比较敲除前后表达变化</li>
+      <li>观察通路/干性/免疫微环境改变</li>
+    </ol>
+    <div class="section-label">典型案例</div>
+    哈医大团队：敲除5个干性核心基因 → 观察TNBC干性通路变化 → 纯生信45天接收
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Cell Proliferat · npj Precis Oncol · Front Immunol · J Transl Med</div>
+  </div>
+</div>
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-new">前沿</span>
+    <div class="card-title">Geneformer 虚拟扰动<br>AI驱动基因功能预测</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    基于Transformer的Geneformer模型 → 预训练于千万级单细胞数据 → 针对特定基因做 in silico perturbation → 预测敲除/过表达后的全局转录变化 → 解码细胞通讯网络
+    <div class="section-label">典型应用</div>
+    胶质瘤 SLC1A3 虚拟敲除 → 揭示免疫抑制微环境调控机制；HCC 动态演化虚拟扰动分析
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">npj Precis Oncol · Front Immunol · Nature系列子刊</div>
+  </div>
+</div>
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-db">经典</span>
+    <div class="card-title">表达分组模拟敲除<br>高表达 vs 低表达组对比</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    按目标基因表达中位数分高/低组 → 差异基因 → GO/KEGG/免疫浸润对比 → 代谢重编程分析 → 推断该基因"敲除"效应。最基础的虚拟敲除策略
+    <div class="section-label">局限</div>
+    无法模拟真实敲除的动态过程，只能做"快照"对比。适合入门，高分需升级到 scTenifoldKnk 或 Geneformer
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Front Oncol · Front Genet · BMC Genomics · Sci Reports</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- 5. NHANES -->
+<div class="panel" id="panel-nhanes">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-hot">极热</span>
+    <div class="card-title">单因素关联分析<br>某暴露 × 某结局</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">模板公式</div>
+    某指标 + 某疾病 + 某特定人群 → Logistic/Cox回归 → 关联结论
+    <div class="section-label">Science 警告</div>
+    2025年Science报道：低质论文泛滥。2014-2021年均4篇/年 → 2024年190+篇（仅单因素模板）。147种期刊发表341篇此类论文。28项抑郁症研究中仅13项经校正后仍显著
+    <div class="section-label">常见操作</div>
+    无合理依据下选择性截取特定年份/年龄 → 刻意寻找显著P值。ChatGPT辅助批量生成
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Sci Reports · BMC Public Health · BMJ Open · Front Nutr · Nutrients</div>
+  </div>
+</div>
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-mid">进阶</span>
+    <div class="card-title">组合指标 + 外部验证<br>高分升级策略</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    选题升级：单一指标→组合指标（胰岛素抵抗+炎症 / 血脂+体型 / 代谢+衰老）；方法升级：加限制性立方样条(RCS)找非线性；验证升级：必须做外部验证（另一数据库或独立队列）
+    <div class="section-label">2026 趋势</div>
+    NHANES + CHARLS/ELSA 跨数据库验证，利用不同国家/种族的队列数据做泛化性验证
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Cardiovasc Diabetol · Environ Int · Ecotoxicol Environ Saf · J Clin Endocrinol Metab</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- 6. MIMIC -->
+<div class="panel" id="panel-mimic">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-hot">热门</span>
+    <div class="card-title">ICU 临床预测模型<br>MIMIC-IV 回顾性队列</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心流程</div>
+    <ol class="flow-steps">
+      <li>MIMIC-IV 提取 ICU 人群（脓毒症/心衰/卒中/AKI…）</li>
+      <li>选指标（SHR/NLR/PLR/TyG/LDH…）</li>
+      <li>Cox回归 → KM曲线 → RCS非线性</li>
+      <li>机器学习(随机森林/XGBoost/LightGBM) → 列线图</li>
+      <li>MIMIC-III 或 eICU-CRD 外部验证</li>
+    </ol>
+    <div class="section-label">新指标赛道</div>
+    应激性高血糖比(SHR) · 甘油三酯-葡萄糖-体重指数(TyG-BMI) · TG/HDL-C · 乳酸脱氢酶/白蛋白比(LAR)
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Cardiovasc Diabetol · Crit Care · BMC Med Inform Decis Mak · J Clin Med · Front Med</div>
+  </div>
+</div>
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-mid">高阶</span>
+    <div class="card-title">可解释机器学习<br>SHAP + 列线图</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    MIMIC-IV 数据 → XGBoost/LightGBM预测 → SHAP值解释特征重要性 → 将ML模型转化为列线图 → 临床易用性提升
+    <div class="section-label">优势</div>
+    结合ML的预测能力 + Nomogram的可解释性 + SHAP的全局/局部解释 → 符合临床医生使用习惯
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">BMC Med Inform Decis Mak · J Biomed Inform · Comput Biol Med</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- 7. SEER -->
+<div class="panel" id="panel-seer">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-db">经典</span>
+    <div class="card-title">SEER 肿瘤预后分析<br>生存分析 + 列线图</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心流程</div>
+    <ol class="flow-steps">
+      <li>SEER*Stat 按癌种/分期/年份提取数据</li>
+      <li>Kaplan-Meier生存分析 + Log-rank</li>
+      <li>Cox回归筛选独立预后因素</li>
+      <li>LASSO-Cox构建列线图(Nomogram)</li>
+      <li>C-index/校准曲线/DCA评价 + 内部验证</li>
+    </ol>
+    <div class="section-label">覆盖癌种</div>
+    乳腺癌/肺癌/结直肠癌/胃癌/前列腺癌/胰腺癌/肝癌/甲状腺癌等30+癌种
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Front Oncol · Cancer Med · BMC Cancer · Ann Surg Oncol · J Surg Oncol</div>
+  </div>
+</div>
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-mid">进阶</span>
+    <div class="card-title">竞争风险模型<br>Fine-Gray 亚分布风险</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    传统 Cox 将竞争事件视为删失 → 改用 Fine-Gray 竞争风险模型 → 更准确地评估特定原因死亡 → 累计发生率函数(CIF)可视化
+    <div class="section-label">适用场景</div>
+    老年肿瘤患者（死于其他原因概率高）、多原发癌、肿瘤特异性死亡 vs 其他原因死亡
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Cancer Med · Ann Surg Oncol · Clin Transl Oncol · J Cancer Res Clin Oncol</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- 8. FAERS -->
+<div class="panel" id="panel-faers">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-hot">极热</span>
+    <div class="card-title">比例失衡分析<br>药物-不良事件信号挖掘</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心流程</div>
+    <ol class="flow-steps">
+      <li>FAERS 下载季度数据，去重（保留最新 CASEID）</li>
+      <li>标准化药物名和不良事件(MedDRA PT)</li>
+      <li>ROR(报告比值比)/PRR(比例报告比)/BCPNN/EBGM 四种方法</li>
+      <li>按性别/年龄/严重程度分层分析</li>
+      <li>敏感性分析排除竞争偏倚</li>
+    </ol>
+    <div class="section-label">行业震荡</div>
+    2025年 Expert Opin Drug Saf 宣布不再接收 FAERS 主动投稿！2021年100篇 → 2024年600+篇。Front Pharmacol 要求外部验证。2025年8月多篇撤稿
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Expert Opin Drug Saf（已关）· Front Pharmacol（限）· Sci Reports · J Clin Pharmacol · Drug Saf</div>
+  </div>
+</div>
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-new">新兴</span>
+    <div class="card-title">跨数据库验证<br>FAERS + VigiBase + JADER</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    同一药物-事件对在 FAERS(美)+VigiBase(WHO全球)+JADER(日)+EudraVigilance(欧) 四个数据库中同时验证 → 信号一致性 → 提升可信度
+    <div class="section-label">趋势</div>
+    单一FAERS数据库越来越难发表。多数据库交叉验证 + 药物流行病学方法(sequence symmetry analysis等)是生存之道
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Drug Saf · Pharmacoepidemiol Drug Saf · J Clin Pharmacol · BMJ Open</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- 9. GBD -->
+<div class="panel" id="panel-gbd">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-hot">极热</span>
+    <div class="card-title">GBD 疾病负担分析<br>地区 × 病种 × 年份</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    <ol class="flow-steps">
+      <li>GBD 2021 数据库免费下载</li>
+      <li>选地区(全球/国家/区域/省) × 病种 × 人群(年龄/性别)</li>
+      <li>指标：发病率/患病率/死亡率/DALYs/YLLs/YLDs</li>
+      <li>Joinpoint回归 → APC(年度变化百分比)</li>
+      <li>SDI(社会人口指数)关联分析</li>
+      <li>BAPC模型预测未来趋势(到2030/2040/2050)</li>
+    </ol>
+    <div class="section-label">核心公式</div>
+    地区 + 病种 + 年龄/性别人群 → 趋势分析 + SDI关联 + 未来预测
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">BMJ · Lancet系列 · BMC Public Health · Front Public Health · J Glob Health</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- 10. 老龄化队列 -->
+<div class="panel" id="panel-aging">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-hot">极热</span>
+    <div class="card-title">CHARLS 中国老龄化<br>纵向队列 × 共病/轨迹</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">数据库概览</div>
+    中国45岁+人群，基线约1.7万人，覆盖150个县区。多波随访(2011/2013/2015/2018/2020)，含体检+血液+认知
+    <div class="section-label">热门研究方向</div>
+    抑郁-功能残疾双向关联；认知衰退轨迹；多发病共病模式；肌少症与衰弱；心血管-代谢指标交互；社会参与与健康老龄化
+    <div class="section-label">2025 趋势</div>
+    2025年仅上半年CHARLS发文量已接近去年全年，满屏一区。Global Aging 8大数据库联合分析(CHARLS+HRS+ELSA+SHARE+CLHLS+MHAS+KLoSA+LASI)是超级蓝海
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">JAMA Netw Open · BMC Med · BMC Geriatr · J Affect Disord · Soc Sci Med · Lancet Public Health</div>
+  </div>
+</div>
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-db">数据库</span>
+    <div class="card-title">Global Aging 8大数据库<br>跨国家/种族联合分析</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">8大数据库速览</div>
+    <table style="width:100%;font-size:11px;border-collapse:collapse;">
+      <tr><td style="padding:2px 4px;border-bottom:1px solid var(--border);font-weight:600;">HRS</td><td style="padding:2px 4px;border-bottom:1px solid var(--border);">美国 | 50岁+ | ~2万 | 1992起</td></tr>
+      <tr><td style="padding:2px 4px;border-bottom:1px solid var(--border);font-weight:600;">ELSA</td><td style="padding:2px 4px;border-bottom:1px solid var(--border);">英国 | 50岁+ | ~1万 | 2002起</td></tr>
+      <tr><td style="padding:2px 4px;border-bottom:1px solid var(--border);font-weight:600;">SHARE</td><td style="padding:2px 4px;border-bottom:1px solid var(--border);">欧洲 | 50岁+ | ~14万 | 2004起</td></tr>
+      <tr><td style="padding:2px 4px;border-bottom:1px solid var(--border);font-weight:600;">CHARLS</td><td style="padding:2px 4px;border-bottom:1px solid var(--border);">中国 | 45岁+ | ~1.7万 | 2011起</td></tr>
+      <tr><td style="padding:2px 4px;border-bottom:1px solid var(--border);font-weight:600;">CLHLS</td><td style="padding:2px 4px;border-bottom:1px solid var(--border);">中国 | 65岁+ | ~2万 | 1998起</td></tr>
+      <tr><td style="padding:2px 4px;border-bottom:1px solid var(--border);font-weight:600;">MHAS</td><td style="padding:2px 4px;border-bottom:1px solid var(--border);">墨西哥 | 50岁+ | ~1.5万</td></tr>
+      <tr><td style="padding:2px 4px;border-bottom:1px solid var(--border);font-weight:600;">KLoSA</td><td style="padding:2px 4px;border-bottom:1px solid var(--border);">韩国 | 45岁+ | ~1万</td></tr>
+      <tr><td style="padding:2px 4px;font-weight:600;">LASI</td><td style="padding:2px 4px;">印度 | 45岁+ | ~7万</td></tr>
+    </table>
+    <div class="section-label" style="margin-top:8px;">超级蓝海</div>
+    8库联合分析(Global Aging)是目前极少人涉足的领域。跨文化比较+大样本量=顶级期刊通行证
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- 11. UK Biobank -->
+<div class="panel" id="panel-ukb">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-db">旗舰</span>
+    <div class="card-title">多基因风险评分 PRS<br>基因-环境交互作用</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    <ol class="flow-steps">
+      <li>UK Biobank 提取50万英国人数据</li>
+      <li>构建PRS(多基因风险评分)</li>
+      <li>PRS × 环境因素交互分析</li>
+      <li>前瞻性队列——疾病发病预测</li>
+      <li>MR+观测性研究的双证据体系</li>
+    </ol>
+    <div class="section-label">数据维度</div>
+    基因型数据 · 影像数据(脑/心脏/腹部MRI) · 生物标志物 · 生活方式 · 长期随访电子健康记录
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Nature Genetics · Nat Commun · BMJ · Lancet系列 · JAMA Netw Open · PLoS Med</div>
+  </div>
+</div>
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-mid">进阶</span>
+    <div class="card-title">UKB影像组学<br>MRI衍生表型研究</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    UKB 影像子队列(>10万人) → 自动分割器官/结构 → 影像衍生表型(IDPs) → MR做暴露/结局 → 器官结构与疾病因果推断
+    <div class="section-label">独特优势</div>
+    全球最大规模统一标准的多模态影像队列，含脑/心脏/腹部/骨骼MRI，DEXA骨密度，颈动脉超声等
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Nat Commun · Radiology · Eur Heart J · Diabetes Care · Neurology</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- 12. 单细胞 -->
+<div class="panel" id="panel-scrnaseq">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-hot">极热</span>
+    <div class="card-title">单细胞公共数据重分析<br>5大核心策略</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">五大策略</div>
+    <ol class="flow-steps" style="margin-top:4px;">
+      <li><b>新细胞类群</b>：跨样本整合，鉴定未报道亚群</li>
+      <li><b>差异频率亚群</b>：疾病 vs 正常，频率变化</li>
+      <li><b>组间差异基因</b>：单细胞分辨率 DEGs</li>
+      <li><b>转录因子驱动</b>：SCENIC/pySCENIC 调控网络</li>
+      <li><b>细胞通讯</b>：CellChat/NicheNet 配体-受体分析</li>
+    </ol>
+    <div class="section-label">数据来源</div>
+    <div class="db-list">
+      <span class="db-tag">GEO</span>
+      <span class="db-tag">TISCH</span>
+      <span class="db-tag">Human Cell Atlas</span>
+      <span class="db-tag">Zenodo</span>
+      <span class="db-tag">GSA</span>
+    </div>
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Nat Commun · Cell Rep · Front Immunol · Brief Bioinform · J Transl Med · iScience</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- 13. 网络药理学 -->
+<div class="panel" id="panel-network-pharm">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-db">经典</span>
+    <div class="card-title">中药网络药理学<br>TCMSP → 成分-靶点-通路</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心流程</div>
+    <ol class="flow-steps">
+      <li>TCMSP 获取复方成分(OB≥30%, DL≥0.18)</li>
+      <li>SwissTargetPrediction / STITCH 预测靶点</li>
+      <li>GeneCards / OMIM / TTD 获取疾病靶点</li>
+      <li>Venny取交集 → STRING构建PPI网络</li>
+      <li>Cytoscape → MCODE选hub基因</li>
+      <li>GO/KEGG富集 → 分子对接(AutoDock)</li>
+    </ol>
+    <div class="section-label">核心公式</div>
+    OB≥30% + DL≥0.18 + 疾病靶点取交集 + PPI + 富集 + 分子对接
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Front Pharmacol · Evid-Based Compl Alt · J Ethnopharmacol · Front Immunol · Phytomedicine</div>
+  </div>
+</div>
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-mid">进阶</span>
+    <div class="card-title">网药+实验验证<br>干湿结合闭环</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心套路</div>
+    网药预测靶点/通路 → 动物模型验证(HE/PAS/ELISA/IHC/IF/Western blot) → 分子机制闭环。单纯网药已难发高分，干湿结合是趋势
+    <div class="section-label">2025 趋势</div>
+    网药 + MR 联合分析（药靶发现+因果验证）；网药 + 单细胞（细胞类型特异性靶点）；网药 + 代谢组学
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Phytomedicine · J Ethnopharmacol · Front Pharmacol · Front Immunol · J Transl Med</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- 14. 文献计量学 -->
+<div class="panel" id="panel-biblio">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-db">持久</span>
+    <div class="card-title">WoS/PubMed 文献计量<br>VOSviewer+CiteSpace 双工具</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心流程</div>
+    <ol class="flow-steps">
+      <li>Web of Science / PubMed 建检索式</li>
+      <li>导出全记录(含引文) → 数据清洗</li>
+      <li>VOSviewer: 作者/国家/关键词共现</li>
+      <li>CiteSpace: 关键词突现、研究前沿时间线</li>
+      <li>R-bibliometrix: 统计分析与高级图表</li>
+    </ol>
+    <div class="section-label">标配图表</div>
+    年度发文趋势 · 国家/机构合作网络 · 期刊双图叠加 · 关键词共现/聚类/突现 · 主题演化 · 高被引文献/作者排名
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Front系列(占25%) · Medicine · BMJ Open · J Am Heart Assoc · Int J Surg · Heliyon</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- 15. Nomogram -->
+<div class="panel" id="panel-nomogram">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-db">经典</span>
+    <div class="card-title">列线图预后模型<br>Nomogram × 多数据库验证</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心流程</div>
+    <ol class="flow-steps">
+      <li>选数据库(SEER/MIMIC/TCGA) + 临床变量</li>
+      <li>单因素+多因素Cox/Logistic回归</li>
+      <li>筛选独立预后因素 → 构建Nomogram</li>
+      <li>C-index/ROC-AUC 评估区分度</li>
+      <li>校准曲线评估校准度</li>
+      <li>DCA决策曲线评估临床净获益</li>
+      <li>Bootstrap/交叉验证+外部验证</li>
+    </ol>
+    <div class="section-label">高阶组合</div>
+    LASSO-Cox + Nomogram | 竞争风险Nomogram | 机器学习+SHAP可解释Nomogram | 动态Nomogram(在线工具/DynNom)
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">Front Oncol · Cancer Med · BMC Med Inform Decis Mak · Ann Surg Oncol · J Transl Med</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- 16. 药靶MR -->
+<div class="panel" id="panel-drug-mr">
+<div class="carousel">
+
+<div class="routine-card">
+  <div class="card-header">
+    <span class="tag tag-hot">新热</span>
+    <div class="card-title">药物靶点 MR<br>eQTL/pQTL → 成药基因筛选</div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">核心流程</div>
+    <ol class="flow-steps">
+      <li>DGIdb获取已知成药基因列表(>2500个)</li>
+      <li>血液/组织 eQTL + pQTL 数据获取 cis-QTL</li>
+      <li>成药基因 eQTL/pQTL 作工具变量 → MR</li>
+      <li>贝叶斯共定位(COLOC)验证共享因果变异</li>
+      <li>Phe-MR 评估靶点副作用/其他适应症</li>
+    </ol>
+    <div class="section-label">典型案例</div>
+    华西医院团队: 2532个成药基因 → 血液/骨骼肌eQTL/pQTL → MR → 11个肌少症潜在药靶 → 6个通过共定位验证
+    <div class="section-label">偏好期刊</div>
+    <div class="jrn">J Cachexia Sarcopenia Muscle · BMC Med · Nat Commun · Neurology · Stroke</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- ===== END OF PANELS ===== -->
 
 </div>
 
 <footer class="site-footer">
-  数据来源：NCBI PubMed/MEDLINE 公共数据库 · 自动更新 · 仅供学术研究参考
+  数据来源: PubMed · Science · Nature · PLOS Biology · 医咖会 · 公开报道 | 仅供学术参考 | 2026.06
 </footer>
 
 <script>
-// ═══════════ DATA ═══════════
-const DATA = {
-  past_week: {
-    label: "近一周", total: 8153,
-    domains: [
-      {name:"肿瘤学",count:1000,color:"#e74c3c"},
-      {name:"心血管疾病",count:910,color:"#e67e22"},
-      {name:"神经科学",count:947,color:"#9b59b6"},
-      {name:"免疫学",count:1000,color:"#2ecc71"},
-      {name:"传染病",count:916,color:"#1abc9c"},
-      {name:"代谢疾病",count:1000,color:"#f39c12"},
-      {name:"精准医学",count:63,color:"#3498db"},
-      {name:"AI医学",count:1000,color:"#2980b9"},
-      {name:"基因组学",count:1000,color:"#8e44ad"},
-      {name:"干细胞",count:317,color:"#16a085"}
-    ],
-    journals: [
-      {name:"Scientific reports",count:408},
-      {name:"PloS one",count:126},
-      {name:"Medicine",count:81},
-      {name:"Nature communications",count:52},
-      {name:"Microbiology resource announcements",count:42},
-      {name:"Journal of virology",count:31},
-      {name:"Neurology",count:29},
-      {name:"Neurobiology of disease",count:28},
-      {name:"Journal of the American Heart Association",count:27},
-      {name:"European heart journal",count:25},
-      {name:"Molecular therapy. Advances",count:23},
-      {name:"Diabetes, obesity & metabolism",count:23},
-      {name:"BMC cardiovascular disorders",count:22},
-      {name:"mBio",count:22},
-      {name:"NPJ digital medicine",count:21}
-    ],
-    keywords: [
-      {term:"disease",count:3915},{term:"clinical",count:3162},{term:"cell",count:2857},
-      {term:"risk",count:2539},{term:"cancer",count:1977},{term:"potential",count:1823},
-      {term:"cells",count:1716},{term:"treatment",count:1337},{term:"immune",count:1173},
-      {term:"health",count:1087},{term:"review",count:1077},{term:"learning",count:1076},
-      {term:"model",count:1044},{term:"therapeutic",count:1033},{term:"stroke",count:973},
-      {term:"expression",count:888},{term:"outcomes",count:851},{term:"virus",count:844},
-      {term:"diabetes",count:833},{term:"models",count:818}
-    ],
-    domainJournals: {
-      "肿瘤学":["Annals of surgical oncology","BMC cancer","Cancer research","Frontiers in oncology"],
-      "心血管疾病":["European heart journal","J Am Heart Assoc","JACC","Int J Cardiology"],
-      "神经科学":["Neurology","Neurobiology of disease","J Neurology","Alzheimer's & dementia"],
-      "免疫学":["Frontiers in immunology","J Immunology","Nature immunology","Cell reports"],
-      "传染病":["J Virology","mBio","Microbiology spectrum","Lancet infectious diseases"],
-      "代谢疾病":["Diabetes obesity & metabolism","Diabetes care","Obesity","Metabolism"],
-      "AI医学":["NPJ digital medicine","J Med Internet Res","Lancet Digital Health","Nature medicine"],
-      "基因组学":["Nature communications","Genome biology","Nucleic acids research","Genomics"],
-      "干细胞":["Stem cell reports","Cell stem cell","Stem cells translational med","Regenerative medicine"],
-      "精准医学":["J Personalized Medicine","Pharmacogenomics","Genetics in medicine","Precision Medicine"]
-    }
-  },
-  past_month: {
-    label: "近一月", total: 9585,
-    domains: [
-      {name:"肿瘤学",count:1000,color:"#e74c3c"},
-      {name:"心血管疾病",count:1000,color:"#e67e22"},
-      {name:"神经科学",count:1000,color:"#9b59b6"},
-      {name:"免疫学",count:1000,color:"#2ecc71"},
-      {name:"传染病",count:1000,color:"#1abc9c"},
-      {name:"代谢疾病",count:1000,color:"#f39c12"},
-      {name:"精准医学",count:585,color:"#3498db"},
-      {name:"AI医学",count:1000,color:"#2980b9"},
-      {name:"基因组学",count:1000,color:"#8e44ad"},
-      {name:"干细胞",count:1000,color:"#16a085"}
-    ],
-    journals: [
-      {name:"Scientific reports",count:279},
-      {name:"Frontiers in immunology",count:251},
-      {name:"Int J Mol Sci",count:211},
-      {name:"Nutrients",count:126},
-      {name:"bioRxiv",count:108},
-      {name:"PloS one",count:87},
-      {name:"J Clinical Medicine",count:75},
-      {name:"Frontiers in oncology",count:70},
-      {name:"Medicine",count:69},
-      {name:"Frontiers in endocrinology",count:49},
-      {name:"Frontiers in medicine",count:42},
-      {name:"Translational lung cancer research",count:41},
-      {name:"Cells",count:38},
-      {name:"Am J Preventive Cardiology",count:32},
-      {name:"Frontiers in microbiology",count:28}
-    ],
-    keywords: [
-      {term:"disease",count:4558},{term:"cell",count:4510},{term:"clinical",count:4256},
-      {term:"risk",count:2733},{term:"cancer",count:2523},{term:"cells",count:2337},
-      {term:"review",count:2038},{term:"treatment",count:1923},{term:"potential",count:1732},
-      {term:"immune",count:1687},{term:"therapeutic",count:1569},{term:"stem",count:1346},
-      {term:"health",count:1257},{term:"therapy",count:1211},{term:"tumor",count:1177},
-      {term:"model",count:1122},{term:"related",count:1088},{term:"outcomes",count:1035},
-      {term:"learning",count:1004},{term:"expression",count:957}
-    ]
-  },
-  past_6months: {
-    label: "近半年", total: 10000,
-    domains: [
-      {name:"肿瘤学",count:1000,color:"#e74c3c"},
-      {name:"心血管疾病",count:1000,color:"#e67e22"},
-      {name:"神经科学",count:1000,color:"#9b59b6"},
-      {name:"免疫学",count:1000,color:"#2ecc71"},
-      {name:"传染病",count:1000,color:"#1abc9c"},
-      {name:"代谢疾病",count:1000,color:"#f39c12"},
-      {name:"精准医学",count:1000,color:"#3498db"},
-      {name:"AI医学",count:1000,color:"#2980b9"},
-      {name:"基因组学",count:1000,color:"#8e44ad"},
-      {name:"干细胞",count:1000,color:"#16a085"}
-    ],
-    journals: [
-      {name:"Scientific reports",count:270},
-      {name:"Frontiers in immunology",count:200},
-      {name:"Int J Mol Sci",count:190},
-      {name:"Nutrients",count:100},
-      {name:"Cureus",count:90},
-      {name:"Frontiers in oncology",count:72},
-      {name:"Medicine",count:70},
-      {name:"J Clinical Medicine",count:68},
-      {name:"bioRxiv",count:65},
-      {name:"PloS one",count:50},
-      {name:"Cells",count:40},
-      {name:"Frontiers in endocrinology",count:35},
-      {name:"J Personalized Medicine",count:34},
-      {name:"Am J Preventive Cardiology",count:32},
-      {name:"Frontiers in medicine",count:30}
-    ],
-    keywords: [
-      {term:"disease",count:4600},{term:"clinical",count:4400},{term:"cell",count:4300},
-      {term:"risk",count:2900},{term:"cancer",count:2700},{term:"treatment",count:2300},
-      {term:"cells",count:2200},{term:"review",count:2100},{term:"potential",count:2000},
-      {term:"immune",count:1700},{term:"therapeutic",count:1650},{term:"stem",count:1400},
-      {term:"health",count:1350},{term:"therapy",count:1250},{term:"tumor",count:1200},
-      {term:"model",count:1100},{term:"learning",count:1050},{term:"related",count:1020},
-      {term:"outcomes",count:1000},{term:"expression",count:960}
-    ]
-  },
-  past_year: {
-    label: "近一年", total: 10000,
-    domains: [
-      {name:"肿瘤学",count:1000,color:"#e74c3c"},
-      {name:"心血管疾病",count:1000,color:"#e67e22"},
-      {name:"神经科学",count:1000,color:"#9b59b6"},
-      {name:"免疫学",count:1000,color:"#2ecc71"},
-      {name:"传染病",count:1000,color:"#1abc9c"},
-      {name:"代谢疾病",count:1000,color:"#f39c12"},
-      {name:"精准医学",count:1000,color:"#3498db"},
-      {name:"AI医学",count:1000,color:"#2980b9"},
-      {name:"基因组学",count:1000,color:"#8e44ad"},
-      {name:"干细胞",count:1000,color:"#16a085"}
-    ],
-    journals: [
-      {name:"Scientific reports",count:262},
-      {name:"Frontiers in immunology",count:197},
-      {name:"Int J Mol Sci",count:180},
-      {name:"Nutrients",count:94},
-      {name:"Cureus",count:86},
-      {name:"Frontiers in oncology",count:70},
-      {name:"Medicine",count:69},
-      {name:"J Clinical Medicine",count:66},
-      {name:"bioRxiv",count:63},
-      {name:"PloS one",count:48},
-      {name:"Cells",count:39},
-      {name:"Frontiers in endocrinology",count:34},
-      {name:"J Personalized Medicine",count:33},
-      {name:"Am J Preventive Cardiology",count:32},
-      {name:"Frontiers in medicine",count:29}
-    ],
-    keywords: [
-      {term:"disease",count:4721},{term:"clinical",count:4701},{term:"cell",count:4380},
-      {term:"risk",count:3090},{term:"cancer",count:2858},{term:"treatment",count:2446},
-      {term:"cells",count:2320},{term:"review",count:2225},{term:"potential",count:2090},
-      {term:"therapeutic",count:1776},{term:"immune",count:1668},{term:"stem",count:1411},
-      {term:"health",count:1353},{term:"therapy",count:1251},{term:"tumor",count:1246},
-      {term:"model",count:1101},{term:"learning",count:1050},{term:"related",count:1014},
-      {term:"outcomes",count:1000},{term:"expression",count:960}
-    ]
-  }
-};
-
-let currentRange = 'past_week';
-
-// ═══════════ Render ═══════════
-function renderAll() {
-  const d = DATA[currentRange];
-  
-  // Stats row
-  document.getElementById('statsRow').innerHTML = `
-    <div class="stat-card"><div class="stat-value">${(d.total/1000).toFixed(1)}k</div><div class="stat-label">文献总数</div></div>
-    <div class="stat-card"><div class="stat-value">10</div><div class="stat-label">医学领域</div></div>
-    <div class="stat-card"><div class="stat-value">${d.domains.reduce((a,b)=>a+b.count,0)}</div><div class="stat-label">领域合计</div></div>
-    <div class="stat-card"><div class="stat-value">${d.keywords.length}</div><div class="stat-label">热点关键词</div></div>
-    <div class="stat-card"><div class="stat-value">${d.journals.length}</div><div class="stat-label">Top 期刊</div></div>
-    <div class="stat-card"><div class="stat-value">4</div><div class="stat-label">时间维度</div></div>
-  `;
-
-  // Time tabs
-  document.getElementById('timeTabs').innerHTML = Object.keys(DATA).map(k => 
-    `<button class="time-tab${k===currentRange?' active':''}" onclick="switchRange('${k}')">${DATA[k].label}</button>`
-  ).join('');
-
-  // Domain chart
-  const maxCount = Math.max(...d.domains.map(x=>x.count));
-  document.getElementById('domainChart').innerHTML = `
-    <table class="domain-table">
-      ${d.domains.map(dm => `
-        <tr>
-          <td class="domain-name">${dm.name}</td>
-          <td class="domain-bar-cell">
-            <div class="domain-bar" style="width:${(dm.count/maxCount*100).toFixed(0)}%;background:${dm.color};"></div>
-          </td>
-          <td class="domain-count">${dm.count}</td>
-        </tr>
-      `).join('')}
-    </table>
-  `;
-
-  // Keyword cloud
-  const maxKW = Math.max(...d.keywords.map(k=>k.count));
-  const tagStyles = d.keywords.map(k => {
-    const ratio = k.count / maxKW;
-    if (ratio > 0.7) return 'tag-xl';
-    if (ratio > 0.4) return 'tag-lg';
-    if (ratio > 0.2) return 'tag-md';
-    return 'tag-sm';
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const target = btn.dataset.tab;
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + target).classList.add('active');
   });
-  const colors = ['#2c3e50','#34495e','#2980b9','#8e44ad','#16a085','#c0392b','#d35400','#27ae60'];
-  document.getElementById('keywordCloud').innerHTML = d.keywords.map((k,i) => {
-    const bg = colors[i % colors.length];
-    return `<span class="keyword-tag ${tagStyles[i]}" style="background:${bg}15;color:${bg};border:1px solid ${bg}30;">${k.term} <small style="opacity:0.7">${k.count}</small></span>`;
-  }).join('');
-
-  // Journal lists
-  renderJournalList('journalListWeek', d.journals);
-  
-  // Domain journals
-  const dj = DATA.past_week.domainJournals;
-  document.getElementById('domainJournals').innerHTML = Object.entries(dj).map(([domain, journals]) => `
-    <div class="method-card">
-      <h4>${domain}</h4>
-      <p style="font-size:12px;color:var(--text-secondary);">
-        ${journals.map(j => `<span style="display:inline-block;margin:2px 4px;background:var(--accent-bg);padding:1px 6px;border-radius:3px;">${j}</span>`).join('')}
-      </p>
-    </div>
-  `).join('');
-}
-
-function renderJournalList(elId, journals) {
-  document.getElementById(elId).innerHTML = journals.map((j,i) => `
-    <li class="journal-item">
-      <span class="journal-rank ${i<3?'top3':'normal'}">${i+1}</span>
-      <span class="journal-name" title="${j.name}">${j.name}</span>
-      <span class="journal-count">${j.count}篇</span>
-    </li>
-  `).join('');
-}
-
-function switchRange(range) {
-  currentRange = range;
-  renderAll();
-  // Also update the year journal list
-  if (range === 'past_year') {
-    renderJournalList('journalListYear', DATA.past_year.journals);
-  } else {
-    renderJournalList('journalListYear', DATA.past_year.journals);
-  }
-}
-
-// Init
-switchRange('past_week');
+});
 </script>
 
 </body>
