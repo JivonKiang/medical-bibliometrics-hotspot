@@ -47,8 +47,14 @@ body{font-family:var(--ff-h);background:var(--bg);color:var(--text);line-height:
 
 /* DASHBOARD */
 .d-title{font-family:var(--ff-h);font-size:26px;font-weight:800;color:var(--navy);margin-bottom:6px;line-height:1.3}
+.dash-label{display:inline-block;font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-bg);padding:3px 10px;border-radius:3px;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px}
 .d-sub{font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.7}
 .d-hint{font-size:12px;color:var(--accent);background:var(--accent-bg);padding:10px 16px;border-radius:var(--radius);margin-bottom:20px;display:none}
+.meth-c{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-top:12px;box-shadow:var(--shadow-sm)}
+.meth-c h4{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.meth-c p{font-size:12px;color:var(--text-muted);line-height:1.7;margin-bottom:6px}
+.meth-c p:last-child{margin-bottom:0}
+.meth-c .formula{font-family:monospace;font-size:11px;color:var(--navy);background:var(--accent-bg);padding:2px 6px;border-radius:3px}
 .stat-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
 .sc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;box-shadow:var(--shadow-sm)}
 .sc .sv{font-size:24px;font-weight:800;color:var(--navy)}
@@ -166,6 +172,7 @@ body{font-family:var(--ff-h);background:var(--bg);color:var(--text);line-height:
   .jw{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .jt{min-width:560px}
   .d-title{font-size:20px;line-height:1.3}
+  .dash-label{font-size:9px}
   .d-sub{font-size:12px}
   .d-hint{font-size:11px;padding:8px 10px;display:block}
   .hw-c{font-size:12px;padding:10px 14px}
@@ -186,6 +193,10 @@ body{font-family:var(--ff-h);background:var(--bg);color:var(--text);line-height:
   .stat-bar{grid-template-columns:repeat(2,1fr);gap:7px}
   .sc{padding:10px}.sc .sv{font-size:20px}.sc .sl{font-size:10px}
   .d-title{font-size:18px}
+  .dash-label{font-size:9px;padding:2px 8px;margin-bottom:8px}
+  .meth-c{padding:10px 12px}
+  .meth-c h4{font-size:10px}
+  .meth-c p{font-size:11px}
   .rt-pg-hd h3{font-size:17px}
   .rt-score-line{flex-wrap:wrap}
   .rt-mr{gap:6px}
@@ -268,9 +279,9 @@ function buildDash(){
   const nCats=new Set(R.map(r=>r.category)).size;
   const maxIF=Math.max(...R.map(r=>pf(r.journals[0].if)));
 
-  let h=`<div class="d-title">公共数据库发文套路图谱</div>`;
-  h+=`<div class="d-sub">覆盖 ${total} 种套路，按综合评分降序排列。评分 = 成文难度(25%) + 发文难度(20%) + IF上限(30%) + 创新性(15%) + 热度(10%)，目标 10 分以上期刊。</div>`;
-  h+=`<div class="d-hint">点击套路名查看详细分析、期刊信息与参考文献。点击期刊行展开文献清单。</div>`;
+  let h=`<div class="dash-label">Dashboard</div>`;
+  h+=`<div class="d-title">公共数据库发文套路图谱</div>`;
+  h+=`<div class="d-sub">覆盖 ${total} 种套路，按综合评分降序排列，目标 10 分以上期刊。点击套路名查看详细分析、期刊信息与参考文献。点击期刊行展开文献清单。</div>`;
 
   h+=`<div class="stat-bar">`;
   h+=`<div class="sc hi"><div class="sv">${total}</div><div class="sl">套路总数</div></div>`;
@@ -304,6 +315,8 @@ function buildDash(){
   h+=`<span>难度：</span><span class="hc hd1" style="padding:2px 8px">1极难</span><span class="hc hd2" style="padding:2px 8px">2</span><span class="hc hd3" style="padding:2px 8px;color:#3a3000">3中</span><span class="hc hd4" style="padding:2px 8px">4</span><span class="hc hd5" style="padding:2px 8px">5极易</span>`;
   h+=`<span style="margin-left:8px">创新/热度：</span><span class="hc hc1" style="padding:2px 8px">1</span><span class="hc hc2" style="padding:2px 8px">2</span><span class="hc hc3" style="padding:2px 8px;color:#3a3000">3</span><span class="hc hc4" style="padding:2px 8px">4</span><span class="hc hc5" style="padding:2px 8px">5</span>`;
   h+=`</div>`;
+  h+=`<div class="meth-c"><h4>综合评分计算</h4><p>综合评分 = <span class="formula">成文难度(25%) + 发文难度(20%) + IF上限(30%) + 创新性(15%) + 热度(10%)</span></p><p>各子项统一归一化至 0～100 区间后加权求和。评分越高代表该套路在发文成功率、期刊含金量与创新潜力之间越具性价比。</p></div>`;
+  h+=`<div class="meth-c"><h4>蓝海指数</h4><p>蓝海指数衡量该套路当前的"竞争拥挤度"。低竞争 + 高创新 + 中等难度 => 高蓝海价值。本总览中各维度的难度/创新/热度评分即构成蓝海指数的核心输入——<b>难度偏高（红区）但创新&热度也高（绿区）的套路，即为蓝海标的</b>，具备先发优势窗口。反之，难度低但创新&热度也低（全绿）的套路需警惕红海内卷。</p></div>`;
   v.innerHTML=h;
 }
 
