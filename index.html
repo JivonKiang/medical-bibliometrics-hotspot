@@ -2,14 +2,15 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0,user-scalable=yes">
 <title>公共数据库发文套路图谱</title>
 <style>
-:root{--navy:#1a2b4a;--accent:#3a6fb5;--accent-bg:#e8f0fa;--surface:#fff;--bg:#f8f7f5;--border:#e2ddd6;--text:#2c2c2c;--text-muted:#7a766b;--shadow-sm:0 1px 4px rgba(0,0,0,.06);--radius:6px;--nav-h:48px;--ff-h:"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif}
+:root{color-scheme:light;--navy:#1a2b4a;--accent:#3a6fb5;--accent-bg:#e8f0fa;--surface:#fff;--bg:#f8f7f5;--border:#e2ddd6;--text:#2c2c2c;--text-muted:#7a766b;--shadow-sm:0 1px 4px rgba(0,0,0,.06);--radius:6px;--nav-h:48px;--ff-h:"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif}
 /* Dark mode disabled for mobile readability */
-/* @media(prefers-color-scheme:dark){:root{--navy:#c8d8e8;--accent:#6a9fd8;--accent-bg:#1a2735;--surface:#1e2127;--bg:#16181c;--border:#2a2d34;--text:#d4d4d4;--text-muted:#9a968b;--shadow-sm:0 1px 4px rgba(0,0,0,.2)}} */
+/* @media(prefers-color-scheme:dark){:root{color-scheme:light;--navy:#c8d8e8;--accent:#6a9fd8;--accent-bg:#1a2735;--surface:#1e2127;--bg:#16181c;--border:#2a2d34;--text:#d4d4d4;--text-muted:#9a968b;--shadow-sm:0 1px 4px rgba(0,0,0,.2)}} */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;color-scheme:light}
 body{font-family:var(--ff-h);background:var(--bg);color:var(--text);line-height:1.5;-webkit-text-size-adjust:100%}
 
 /* LAYOUT */
@@ -66,11 +67,11 @@ body{font-family:var(--ff-h);background:var(--bg);color:var(--text);line-height:
 .sc-lo{background:linear-gradient(135deg,#ffe8e8,#f0c8c8)}
 
 /* HEATMAP */
-.hw{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:20px}
+.hw{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:clip;box-shadow:var(--shadow-sm);margin-bottom:20px}
 .hw-c{padding:12px 14px;font-size:13px;font-weight:600;color:var(--navy);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .hw-c span.srt{font-weight:400;font-size:10.5px;color:var(--text-muted)}
 .scroll-hint{display:none;font-size:10px;color:var(--text-muted);padding:4px 14px;text-align:center;background:var(--accent-bg)}
-.hs{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.hs{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
 .ht{width:100%;border-collapse:collapse;font-size:12px}
 .ht thead{background:#f5f3ee}
 /* @media(prefers-color-scheme:dark){.ht thead{background:#2a2d34}} */
@@ -178,7 +179,7 @@ body{font-family:var(--ff-h);background:var(--bg);color:var(--text);line-height:
   .d-hint{font-size:11px;padding:8px 10px;display:block}
   .hw-c{font-size:12px;padding:10px 14px}
   .hw-c span.srt{display:none}
-  .hs{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .hs{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
   .ht{min-width:720px;font-size:11px}
   .ht th{padding:7px 8px;font-size:9px}
   .ht td{padding:6px 8px}
