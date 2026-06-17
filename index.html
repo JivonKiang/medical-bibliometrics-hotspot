@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0,user-scalable=yes">
 <title>公共数据库发文套路图谱</title>
 <style>
-:root{color-scheme:light;--navy:#1a2b4a;--accent:#3a6fb5;--accent-bg:#e8f0fa;--surface:#fff;--bg:#f8f7f5;--border:#e2ddd6;--text:#2c2c2c;--text-muted:#7a766b;--shadow-sm:0 1px 4px rgba(0,0,0,.06);--radius:6px;--nav-h:48px;--ff-h:"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif}
+:root{color-scheme:light;--navy:#1a2b4a;--accent:#3a6fb5;--accent-bg:#e8f0fa;--surface:#fff;--bg:#fff;--border:#e2ddd6;--text:#2c2c2c;--text-muted:#7a766b;--shadow-sm:0 1px 4px rgba(0,0,0,.06);--radius:6px;--nav-h:48px;--ff-h:"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif}
 /* Dark mode disabled for mobile readability */
 /* @media(prefers-color-scheme:dark){:root{color-scheme:light;--navy:#c8d8e8;--accent:#6a9fd8;--accent-bg:#1a2735;--surface:#1e2127;--bg:#16181c;--border:#2a2d34;--text:#d4d4d4;--text-muted:#9a968b;--shadow-sm:0 1px 4px rgba(0,0,0,.2)}} */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -168,7 +168,7 @@ body{font-family:var(--ff-h);background:var(--bg);color:var(--text);line-height:
 /* RESPONSIVE */
 @media(max-width:900px){
   .sidebar{display:none}.mob-bar{display:flex}.mob-dr{display:flex}.dr-ov{display:block}
-  .main-area{margin-left:0;padding:calc(var(--nav-h)+14px) 10px 60px;max-width:100%}
+  main,.main-area{overflow-x:visible;margin-left:0;padding:calc(var(--nav-h)+14px) 10px 60px;max-width:100%}
   .rt-grid{grid-template-columns:1fr}.stat-bar{grid-template-columns:repeat(3,1fr)}
   .scroll-hint{display:block}
   .jw{overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -179,7 +179,7 @@ body{font-family:var(--ff-h);background:var(--bg);color:var(--text);line-height:
   .d-hint{font-size:11px;padding:8px 10px;display:block}
   .hw-c{font-size:12px;padding:10px 14px}
   .hw-c span.srt{display:none}
-  .hs{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  .hs{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;touch-action:pan-x pinch-zoom;-webkit-overflow-scrolling:touch}
   .ht{min-width:720px;font-size:11px}
   .ht th{padding:7px 8px;font-size:9px}
   .ht td{padding:6px 8px}
@@ -236,7 +236,7 @@ body{font-family:var(--ff-h);background:var(--bg);color:var(--text);line-height:
 })();
 
 // Load data then initialize
-fetch('data.json')
+fetch('data.json?v=20260617')
   .then(function(r){return r.json()})
   .then(function(data){
     window.R = data.routines;
