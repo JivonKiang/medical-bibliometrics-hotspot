@@ -280,7 +280,7 @@ function buildDash(){
 
   var h='<div class="d-title">公共数据库发文套路图谱</div>';
   h+='<div class="d-sub">交易视角 &middot; 蓝海指数驱动。识别尚未拥挤的高价值赛道，避开白热化红海。</div>';
-  h+='<div class="d-hint">新版评分 = 蓝海指数(60%) + 传统评分(40%)，奖励「顶刊认可 + 时间窗口 + 不拥挤」的早期赛道</div>';
+  h+='<div class="d-hint">新版评分 = 蓝海指数(60%) + 传统评分(40%)，奖励「顶刊认可 + 时间窗口 + 不拥挤」的早期赛道。评分计算说明书见页面底部 &#8595;</div>';
 
   h+='<div class="stat-bar">';
   h+='<div class="sc"><div class="sv">'+total+'</div><div class="sl">套路总数</div></div>';
@@ -290,19 +290,7 @@ function buildDash(){
   h+='<div class="sc"><div class="sv" style="color:var(--red)">'+nRed+'</div><div class="sl">红海预警</div></div>';
   h+='</div>';
 
-  /* SCORING METHODOLOGY */
-  h+='<div class="method-c"><h4>综合评分计算说明书 (交易视角)</h4><div class="ms">受股市「价值投资 + 成长空间 + 安全边际」框架启发，将每个发文套路视为一支资产标的进行多维打分</div>';
-  h+='<div class="method-g">';
-  h+='<div class="mi"><div class="mv">IF天花板</div><div class="mf">权重 30%</div><div class="md">对标期刊最高影响因子。IF越高=顶刊越认可="基本面"越强。上限40分封顶。</div></div>';
-  h+='<div class="mi"><div class="mv">时效新鲜度</div><div class="mf">权重 25%</div><div class="md">数据是否覆盖到近两年（2024-2026）。越新鲜="安全边际"越高，能在该赛道深耕的时间窗口越长。</div></div>';
-  h+='<div class="mi"><div class="mv">创新壁垒</div><div class="mf">权重 20%</div><div class="md">方法学复杂度与新颖度。壁垒越高=竞争对手难以复制="护城河"越宽。</div></div>';
-  h+='<div class="mi"><div class="mv">反拥挤度</div><div class="mf">权重 15%</div><div class="md">1 - [发文量拥挤(40%) + 增速拥挤(60%)]。总发文量大且爆发增长=高度拥挤="红海"，需谨慎。<br>爆发式增长尤其扣分：泡沫风险。</div></div>';
-  h+='<div class="mi"><div class="mv">增长健康度</div><div class="mf">权重 10%</div><div class="md">增速太慢=赛道冷清；爆发太快=泡沫风险。温和持续增长最受青睐。稳态上升=0.85，爆发增长仅0.15。</div></div>';
-  h+='</div>';
-  h+='<div style="margin-top:14px;font-size:11px;color:var(--text-faint);text-align:right">蓝海指数 = IF天花板*0.30 + 时效新鲜度*0.25 + 创新壁垒*0.20 + 反拥挤度*0.15 + 增长健康度*0.10 &nbsp;|&nbsp; 综合评分 = 蓝海指数*0.60 + 传统评分*0.40</div>';
-  h+='</div>';
-
-  h+='<div class="hw"><div class="hw-c">蓝海指数 &middot; 综合评分降序 <span class="srt">红:拥挤 | 蓝:蓝海 | 时效性:浅=旧 深=新 | 新版评分优先高IF+不拥挤+时间窗口</span></div>';
+<div class="hw"><div class="hw-c">蓝海指数 &middot; 综合评分降序 <span class="srt">红:拥挤 | 蓝:蓝海 | 时效性:浅=旧 深=新 | 新版评分优先高IF+不拥挤+时间窗口</span></div>';
   h+='<div class="scroll-hint">&larr; 左右滑动查看更多列 &rarr;</div>';
   h+='<div class="hs"><table class="ht"><thead><tr>';
   ['#','套路','类别','蓝海','综合','IF范围','时效性','趋势','市场'].forEach(function(th){h+='<th>'+th+'</th>'});
@@ -336,7 +324,20 @@ function buildDash(){
   h+='<span class="bo-badge bo-red">红海</span><span style="font-size:10px">过度拥挤</span>';
   h+='<span class="bo-badge bo-grey">灰海</span><span style="font-size:10px">饱和/衰退</span>';
   h+='</div>';
-  v.innerHTML=h;
+
+  /* SCORING METHODOLOGY */
+  h+='<div class="method-c"><h4>综合评分计算说明书 (交易视角)</h4><div class="ms">受股市「价值投资 + 成长空间 + 安全边际」框架启发，将每个发文套路视为一支资产标的进行多维打分</div>';
+  h+='<div class="method-g">';
+  h+='<div class="mi"><div class="mv">IF天花板</div><div class="mf">权重 30%</div><div class="md">对标期刊最高影响因子。IF越高=顶刊越认可="基本面"越强。上限40分封顶。</div></div>';
+  h+='<div class="mi"><div class="mv">时效新鲜度</div><div class="mf">权重 25%</div><div class="md">数据是否覆盖到近两年（2024-2026）。越新鲜="安全边际"越高，能在该赛道深耕的时间窗口越长。</div></div>';
+  h+='<div class="mi"><div class="mv">创新壁垒</div><div class="mf">权重 20%</div><div class="md">方法学复杂度与新颖度。壁垒越高=竞争对手难以复制="护城河"越宽。</div></div>';
+  h+='<div class="mi"><div class="mv">反拥挤度</div><div class="mf">权重 15%</div><div class="md">1 - [发文量拥挤(40%) + 增速拥挤(60%)]。总发文量大且爆发增长=高度拥挤="红海"，需谨慎。<br>爆发式增长尤其扣分：泡沫风险。</div></div>';
+  h+='<div class="mi"><div class="mv">增长健康度</div><div class="mf">权重 10%</div><div class="md">增速太慢=赛道冷清；爆发太快=泡沫风险。温和持续增长最受青睐。稳态上升=0.85，爆发增长仅0.15。</div></div>';
+  h+='</div>';
+  h+='<div style="margin-top:14px;font-size:11px;color:var(--text-faint);text-align:right">蓝海指数 = IF天花板*0.30 + 时效新鲜度*0.25 + 创新壁垒*0.20 + 反拥挤度*0.15 + 增长健康度*0.10 &nbsp;|&nbsp; 综合评分 = 蓝海指数*0.60 + 传统评分*0.40</div>';
+  h+='</div>';
+
+  h+='  v.innerHTML=h;
 }
 
 /* ROUTINE DETAIL */
