@@ -3,924 +3,442 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>公共数据库发文套路大全 — 医学文献计量学</title>
+<title>公共数据库发文套路识别 — 35种套路全景图谱</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root {
+  --sidebar-width: 270px;
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --border: #e2e8f0;
+  --primary: #2563eb;
+  --primary-light: #dbeafe;
+  --accent-1: #10b981;
+  --accent-2: #f59e0b;
+  --accent-3: #ef4444;
+  --accent-4: #8b5cf6;
+  --accent-5: #ec4899;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.04);
+  --radius: 8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  display: flex;
+  min-height: 100vh;
+}
+a { color: var(--primary); text-decoration: none; }
 
-  :root {
-    --bg: oklch(0.987 0.003 250);
-    --surface: oklch(1 0 0);
-    --text: oklch(0.16 0.008 250);
-    --text-secondary: oklch(0.38 0.015 250);
-    --text-muted: oklch(0.50 0.012 245);
-    --accent: oklch(0.48 0.18 250);
-    --accent-light: oklch(0.60 0.12 250);
-    --accent-bg: oklch(0.94 0.05 250);
-    --border: oklch(0.86 0.01 250);
-    --red: oklch(0.50 0.20 22);
-    --green: oklch(0.50 0.18 155);
-    --orange: oklch(0.55 0.16 65);
-    --purple: oklch(0.48 0.15 300);
-    --teal: oklch(0.50 0.12 190);
-    --pink: oklch(0.52 0.15 350);
-    --radius: 8px;
-  }
+/* ===== SIDEBAR ===== */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  overflow-y: auto;
+  background: #1e293b;
+  color: #e2e8f0;
+  z-index: 100;
+  padding: 16px 0 20px 0;
+  scrollbar-width: thin;
+  scrollbar-color: #475569 #1e293b;
+}
+.sidebar::-webkit-scrollbar { width: 5px; }
+.sidebar::-webkit-scrollbar-track { background: #1e293b; }
+.sidebar::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
 
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+.sidebar-header {
+  padding: 8px 20px 16px;
+  border-bottom: 1px solid #334155;
+  margin-bottom: 12px;
+}
+.sidebar-header h1 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: 0.3px;
+}
+.sidebar-header .subtitle {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
 
-  body{
-    font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    line-height:1.55;
-    font-size:14px;
-    -webkit-font-smoothing:antialiased;
-  }
+.sidebar-nav { padding: 0; }
+.sidebar-nav a {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 20px;
+  font-size: 13px;
+  color: #cbd5e1;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+.sidebar-nav a:hover {
+  background: #334155;
+  color: #f1f5f9;
+  border-left-color: var(--primary);
+}
+.sidebar-nav a .cat-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.sidebar-nav a .nav-text { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  .site-header{
-    background:var(--surface);
-    border-bottom:1px solid var(--border);
-    padding:8px 0;
-    position:sticky;top:0;z-index:100;
-    backdrop-filter:blur(10px);
-    background:oklch(1 0 0/0.93);
-  }
-  .header-inner{
-    max-width:1200px;margin:0 auto;padding:0 16px;
-    display:flex;align-items:center;justify-content:space-between;
-    gap:12px;
-  }
-  .logo{font-size:15px;font-weight:700;color:var(--accent);white-space:nowrap;}
-  .header-badge{
-    font-size:11px;padding:3px 10px;border-radius:12px;
-    background:var(--accent-bg);color:var(--accent);
-    font-weight:500;white-space:nowrap;
-  }
+.sidebar-section-header {
+  padding: 16px 20px 6px 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #64748b;
+}
 
-  /* ===== Stats Strip ===== */
-  .stats-strip{
-    max-width:1200px;margin:12px auto;padding:0 16px;
-    display:flex;gap:8px;flex-wrap:wrap;
-  }
-  .stat-pill{
-    flex:1;min-width:70px;background:var(--surface);
-    border:1px solid var(--border);border-radius:var(--radius);
-    padding:10px 12px;text-align:center;
-  }
-  .stat-pill .val{font-size:22px;font-weight:700;color:var(--accent);line-height:1.2;}
-  .stat-pill .lbl{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.category-colors = {
+  "临床指标": "#f59e0b",
+  "流调数据库": "#10b981",
+  "临床数据库": "#3b82f6",
+  "临床统计": "#ec4899",
+  "因果推断": "#8b5cf6",
+  "生信挖掘": "#06b6d4",
+  "生信前沿": "#f97316",
+  "图像分析": "#a855f7",
+  "中药/药理": "#14b8a6",
+  "综述/文献分析": "#64748b",
+  "大规模队列": "#ef4444",
+  "高级统计": "#6366f1",
+  "AI+医学": "#d946ef",
+}
 
-  /* ===== Main Container ===== */
-  .main-container{max-width:1200px;margin:16px auto;padding:0 16px;}
+/* ===== MAIN ===== */
+.main {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  padding: 32px 36px;
+  max-width: 1200px;
+}
 
-  /* ===== Tab Nav ===== */
-  .tab-nav{
-    display:flex;gap:4px;flex-wrap:wrap;
-    margin-bottom:16px;overflow-x:auto;
-    padding-bottom:4px;
-  }
-  .tab-nav::-webkit-scrollbar{height:3px}
-  .tab-nav::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-  .tab-btn{
-    padding:6px 14px;border:1px solid var(--border);
-    background:var(--surface);border-radius:var(--radius);
-    font-size:12px;cursor:pointer;white-space:nowrap;
-    color:var(--text-secondary);font-weight:500;
-    transition:all .15s;font-family:inherit;
-  }
-  .tab-btn:hover{background:var(--accent-bg);color:var(--accent);}
-  .tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+/* ===== OVERVIEW ===== */
+.overview {}
+.overview h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #0f172a;
+}
+.overview .desc {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
 
-  /* ===== Panels ===== */
-  .panel{display:none;}
-  .panel.active{display:block;}
+/* Summary cards */
+.summary-row {
+  display: flex; gap: 16px; margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+.summary-card {
+  flex: 1; min-width: 140px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.summary-card .num {
+  font-size: 32px; font-weight: 800; color: var(--primary);
+}
+.summary-card .label {
+  font-size: 13px; color: var(--text-secondary); margin-top: 4px;
+}
 
-  /* ===== Carousel ===== */
-  .carousel{
-    display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;
-    scroll-snap-type:x mandatory;
-  }
-  .carousel::-webkit-scrollbar{height:4px}
-  .carousel::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+/* Overview Table */
+.overview-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  font-size: 13px;
+}
+.overview-table thead {
+  background: #f1f5f9;
+  position: sticky; top: 0; z-index: 5;
+}
+.overview-table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #475569;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.overview-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.overview-table tr:hover { background: #f8fafc; }
+.overview-table tr:last-child td { border-bottom: none; }
 
-  .routine-card{
-    flex:0 0 340px;scroll-snap-align:start;
-    background:var(--surface);border:1px solid var(--border);
-    border-radius:var(--radius);overflow:hidden;
-    display:flex;flex-direction:column;
-  }
-  .routine-card .card-header{
-    padding:14px 16px 10px;border-bottom:1px solid var(--border);
-    display:flex;align-items:flex-start;gap:10px;
-  }
-  .routine-card .tag{
-    font-size:10px;font-weight:700;text-transform:uppercase;
-    letter-spacing:.5px;padding:3px 8px;border-radius:4px;
-    white-space:nowrap;flex-shrink:0;
-  }
-  .tag-db   {background:oklch(0.93 0.04 250);color:var(--accent);}
-  .tag-hot  {background:oklch(0.93 0.05 22);color:var(--red);}
-  .tag-mid  {background:oklch(0.93 0.04 65);color:var(--orange);}
-  .tag-new  {background:oklch(0.93 0.04 155);color:var(--green);}
-  .routine-card .card-title{
-    font-size:15px;font-weight:700;line-height:1.35;
-    color:var(--text);
-  }
-  .routine-card .card-body{
-    padding:12px 16px;font-size:12.5px;color:var(--text-secondary);
-    flex:1;line-height:1.7;
-  }
-  .routine-card .card-body .section-label{
-    font-size:10px;font-weight:700;text-transform:uppercase;
-    letter-spacing:.8px;color:var(--text-muted);margin:10px 0 4px;
-  }
-  .routine-card .card-body .db-list{
-    display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;
-  }
-  .routine-card .card-body .db-tag{
-    font-size:10px;padding:2px 8px;border-radius:4px;
-    background:var(--bg);color:var(--text-secondary);
-    font-family:'JetBrains Mono',monospace;font-weight:500;
-  }
-  .routine-card .card-body .flow-steps{
-    list-style:none;padding:0;margin:4px 0;
-  }
-  .routine-card .card-body .flow-steps li{
-    padding:2px 0;padding-left:16px;position:relative;
-    font-size:12px;
-  }
-  .routine-card .card-body .flow-steps li::before{
-    content:'→';position:absolute;left:0;color:var(--accent);
-    font-weight:700;font-family:'JetBrains Mono',monospace;font-size:11px;
-  }
-  .routine-card .card-body .jrn{
-    font-size:11px;color:var(--text-muted);font-style:italic;
-    margin-top:4px;line-height:1.6;
-  }
+.badge-cat {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+}
+.badge-cat.cat-clinical { background: #f59e0b; }
+.badge-cat.cat-survey { background: #10b981; }
+.badge-cat.cat-clinical-db { background: #3b82f6; }
+.badge-cat.cat-causal { background: #8b5cf6; }
+.badge-cat.cat-bioinfo { background: #06b6d4; }
+.badge-cat.cat-bioinfo-adv { background: #f97316; }
+.badge-cat.cat-imaging { background: #a855f7; }
+.badge-cat.cat-tcm { background: #14b8a6; }
+.badge-cat.cat-biblio { background: #64748b; }
+.badge-cat.cat-cohort { background: #ef4444; }
+.badge-cat.cat-stats { background: #6366f1; }
+.badge-cat.cat-ai { background: #d946ef; }
 
-  /* ===== Footer ===== */
-  .site-footer{
-    text-align:center;padding:24px 16px;font-size:11px;
-    color:var(--text-muted);border-top:1px solid var(--border);
-    margin-top:24px;
-  }
+.stars { color: #f59e0b; letter-spacing: 1px; }
+.difficulty-bar {
+  display: inline-flex; gap: 2px;
+}
+.difficulty-bar span {
+  width: 12px; height: 12px; border-radius: 3px;
+}
+.difficulty-bar .filled { background: var(--primary); }
+.difficulty-bar .empty { background: #e2e8f0; }
+.vdiv { width: 12px; }
 
-  /* ===== Responsive ===== */
-  @media(max-width:768px){
-    .routine-card{flex:0 0 290px;}
-    .header-inner{gap:8px;flex-wrap:wrap;}
-    .logo{font-size:13px;}
-    .stat-pill .val{font-size:18px;}
-    .stat-pill .lbl{font-size:10px;}
-    .tab-btn{font-size:11px;padding:5px 10px;}
-  }
+/* ===== DETAIL SECTIONS ===== */
+.routine-section {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 2px solid #e2e8f0;
+}
+.routine-section:first-of-type { margin-top: 40px; }
+.routine-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px;
+}
+.routine-header .routine-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: #fff; flex-shrink: 0;
+}
+.routine-header h3 {
+  font-size: 20px; font-weight: 700;
+}
+.routine-header .cat-tag {
+  font-size: 12px; padding: 3px 10px; border-radius: 12px;
+  font-weight: 600;
+}
+
+.routine-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.info-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.info-card h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #334155;
+  display: flex; align-items: center; gap: 6px;
+}
+.info-card h4::before {
+  content: '';
+  width: 4px; height: 16px; background: var(--primary);
+  border-radius: 2px; display: inline-block;
+}
+.info-card p, .info-card ul {
+  font-size: 13px; color: #475569; line-height: 1.7;
+}
+.info-card ul { padding-left: 18px; }
+.info-card ul li { margin-bottom: 4px; }
+
+/* Metrics row */
+.metrics-row {
+  display: flex; gap: 12px; flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+.metric-badge {
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 12px;
+  text-align: center;
+  min-width: 70px;
+}
+.metric-badge .metric-val {
+  font-size: 16px; font-weight: 700; color: var(--primary);
+}
+.metric-badge .metric-label {
+  font-size: 11px; color: var(--text-secondary); margin-top: 2px;
+}
+
+/* Journal Table */
+.journal-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 13px;
+}
+.journal-table thead { background: #f8fafc; }
+.journal-table th {
+  padding: 8px 12px; text-align: left;
+  font-weight: 600; color: #64748b; font-size: 12px;
+}
+.journal-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.journal-table tr:last-child td { border-bottom: none; }
+.journal-if { font-weight: 700; color: #0f172a; }
+.cas-badge {
+  display: inline-block;
+  padding: 2px 8px; border-radius: 4px;
+  font-size: 11px; font-weight: 600;
+}
+.cas-q1 { background: #dbeafe; color: #1e40af; }
+.cas-q2 { background: #dcfce7; color: #166534; }
+.cas-q3 { background: #fef3c7; color: #92400e; }
+.cas-q4 { background: #fee2e2; color: #991b1b; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { width: 220px; }
+  .main { margin-left: 220px; padding: 20px; }
+  .routine-grid { grid-template-columns: 1fr; }
+  .summary-row { flex-direction: column; }
+}
+
+/* Back to top */
+.back-to-top {
+  position: fixed; bottom: 24px; right: 24px;
+  width: 40px; height: 40px; border-radius: 20px;
+  background: var(--primary); color: #fff; border: none;
+  cursor: pointer; font-size: 20px; display: none;
+  align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+  z-index: 50;
+}
+.back-to-top.visible { display: flex; }
+
+/* accordion for journal section */
+.journal-toggle {
+  cursor: pointer;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 12px;
+  display: inline-block;
+}
+.journal-table-wrapper { overflow-x: auto; }
 </style>
 </head>
 <body>
-
-<header class="site-header">
-  <div class="header-inner">
-    <span class="logo">公共数据库发文套路大全</span>
-    <span class="header-badge">2026.06 更新</span>
-  </div>
-</header>
-
-<div class="stats-strip">
-  <div class="stat-pill"><div class="val">16+</div><div class="lbl">发文套路</div></div>
-  <div class="stat-pill"><div class="val">20+</div><div class="lbl">公共数据库</div></div>
-  <div class="stat-pill"><div class="val">4万+</div><div class="lbl">2024 年发文量</div></div>
-  <div class="stat-pill"><div class="val">0 实验</div><div class="lbl">纯数据驱动</div></div>
-</div>
-
-<div class="main-container">
-
-<!-- ===== TAB NAVIGATION ===== -->
-<div class="tab-nav" id="tab-nav">
-  <button class="tab-btn active" data-tab="tyg">TYG 指数系列</button>
-  <button class="tab-btn" data-tab="mr">孟德尔随机化</button>
-  <button class="tab-btn" data-tab="geo-tcga">生信挖掘系列</button>
-  <button class="tab-btn" data-tab="virtual-ko">虚拟敲除系列</button>
-  <button class="tab-btn" data-tab="nhanes">NHANES 系列</button>
-  <button class="tab-btn" data-tab="mimic">MIMIC 重症系列</button>
-  <button class="tab-btn" data-tab="seer">SEER 肿瘤系列</button>
-  <button class="tab-btn" data-tab="faers">FAERS 药物警戒</button>
-  <button class="tab-btn" data-tab="gbd">GBD 疾病负担</button>
-  <button class="tab-btn" data-tab="aging">老龄化队列系列</button>
-  <button class="tab-btn" data-tab="ukb">UK Biobank 系列</button>
-  <button class="tab-btn" data-tab="scrnaseq">单细胞挖掘系列</button>
-  <button class="tab-btn" data-tab="network-pharm">网络药理学系列</button>
-  <button class="tab-btn" data-tab="biblio">文献计量学系列</button>
-  <button class="tab-btn" data-tab="nomogram">临床预测模型系列</button>
-  <button class="tab-btn" data-tab="drug-mr">药靶孟德尔随机化</button>
-</div>
-
-<!-- ===== PANELS ===== -->
-
-<!-- 1. TYG 指数系列 -->
-<div class="panel active" id="panel-tyg">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-hot">极热</span>
-    <div class="card-title">TyG 指数 × NHANES<br>横断面关联研究</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    TyG = Ln[TG×FBG/2]，作为胰岛素抵抗替代指标 → 选某疾病（CVD/糖尿病/代谢综合征）→ 选某人群分层（年龄/性别/种族）→ Logistic/Cox回归 → 得出 TyG 与结局的关联
-    <div class="section-label">常用数据库</div>
-    <div class="db-list">
-      <span class="db-tag">NHANES</span>
-      <span class="db-tag">MIMIC-IV</span>
-      <span class="db-tag">CHARLS</span>
-      <span class="db-tag">UK Biobank</span>
-    </div>
-    <div class="section-label">衍生指标</div>
-    TyG-WC（腰围）、TyG-WHtR（腰高比）、TyG-BMI、TyG-WC、TyG+hsCRP联合
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Cardiovasc Diabetol (IF 8.5–9.3)<br>Sci Reports · Front Endocrinol<br>Lipids Health Dis · Diabetol Metab Syndr</div>
-  </div>
-</div>
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-db">数据库</span>
-    <div class="card-title">TyG × MIMIC-IV<br>重症预后研究</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    MIMIC-IV 提取 ICU 患者 → 计算 TyG/TyG-BMI/TyG-WC → Cox 回归 → 28天/90天/5年死亡率预测 → RCS 曲线找非线性关系
-    <div class="section-label">关键差异</div>
-    不同于 NHANES 的普通人群关联，MIMIC 版本强调"急性重症环境下"TyG 的预后价值，可做亚组分析（脓毒症/心衰/卒中）
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Cardiovasc Diabetol · Diabetol Metab Syndr · BMC Cardiovasc Disord · Front Cardiovasc Med</div>
-  </div>
-</div>
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-mid">进阶</span>
-    <div class="card-title">TyG 轨迹分析<br>纵向队列研究</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    利用 CHARLS/HRS 等多波数据 → 计算多时间点 TyG → 潜类别轨迹模型(LCMM)识别 TyG 变化轨迹组 → 关联远期结局
-    <div class="section-label">优势</div>
-    从单次测量升级为纵向轨迹，回应审稿人"单次测量无法反映长期暴露"的质疑，IF 更高
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Cardiovasc Diabetol · J Clin Endocrinol Metab · Diabetes Care</div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- 2. 孟德尔随机化 -->
-<div class="panel" id="panel-mr">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-hot">极热</span>
-    <div class="card-title">双样本 MR 标准套路<br>暴露 → 结局因果推断</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心流程</div>
-    <ol class="flow-steps">
-      <li>GWAS catalog / OpenGWAS 选暴露&结局</li>
-      <li>筛选工具变量（P<5e-8, LD clump r²<0.001）</li>
-      <li>IVW 主分析 + MR-Egger/加权中位数/简单中位数敏感性</li>
-      <li>异质性检验 + 水平多效性检验 + Leave-one-out</li>
-      <li>散点图/森林图/漏斗图可视化</li>
-    </ol>
-    <div class="section-label">常用数据库</div>
-    <div class="db-list">
-      <span class="db-tag">GWAS Catalog</span>
-      <span class="db-tag">FinnGen</span>
-      <span class="db-tag">UK Biobank</span>
-      <span class="db-tag">IEU OpenGWAS</span>
-    </div>
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Int J Surg · BMC Med · Eur J Epidemiol · JAMA Netw Open · Front系列(已设限)</div>
-  </div>
-</div>
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-mid">进阶</span>
-    <div class="card-title">MR+NHANES 联合分析<br>关联+因果双重证据</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    NHANES 观测性分析证明关联 → GWAS MR 证明因果关系 → 双数据库交叉验证 → 证据等级大幅提升
-    <div class="section-label">现状</div>
-    目前仅发表约 134 篇联合分析文献，仍属蓝海。几乎所有临床科室都可用
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Cardiovasc Diabetol · BMC Med · Environ Health Perspect</div>
-  </div>
-</div>
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-mid">高阶</span>
-    <div class="card-title">多变量 MR / 中介 MR<br>机制通路解析</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    MVMR 同时放入多个暴露，排除混杂路径 → 两步法中介 MR：暴露→中介→结局，计算中介比例 → 双向 MR 排除反向因果
-    <div class="section-label">2025 新趋势</div>
-    Frontiers 系列要求外部验证（2024.7）；药物靶点 MR 兴起（见单独分类）；免疫细胞 MR（731种免疫表型作暴露）
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- 3. 生信挖掘（GEO/TCGA） -->
-<div class="panel" id="panel-geo-tcga">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-hot">极热</span>
-    <div class="card-title">肿瘤预后模型构建<br>差异基因 → LASSO → Risk Score</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心流程</div>
-    <ol class="flow-steps">
-      <li>TCGA 获取癌种表达+临床数据</li>
-      <li>差异表达分析(limma/DESeq2) → DEGs</li>
-      <li>GO/KEGG 富集 → PPI网络(STRING+Cytoscape)</li>
-      <li>LASSO+Cox 筛选核心基因 → Risk Score公式</li>
-      <li>KM生存曲线+ROC → GEO外部验证</li>
-    </ol>
-    <div class="section-label">热点表型（绑定即创新）</div>
-    铁死亡 · 铜死亡 · 焦亡 · m6A · 自噬 · 免疫检查点 · 细胞衰老 · 乳酸化
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Front Oncol · Front Genet · J Transl Med · Sci Reports · BMC Cancer · Aging</div>
-  </div>
-</div>
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-mid">进阶</span>
-    <div class="card-title">机器学习增强版<br>101种算法 × 多组学</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    TCGA+GEO多队列 → 差异基因+WGCNA → 101种算法组合(CoxBoost/RF/SuperPC/LASSO/RSF) → 留一交叉验证 → 选最优模型 → 单细胞验证
-    <div class="section-label">加分点</div>
-    Transformer/深度学习预后模型；免疫亚型分组(TIMER/CIBERSORT/ssGSEA)；药物敏感性预测(oncoPredict)；单细胞数据验证
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Brief Bioinform · Comput Biol Med · Front Immunol · Int J Biol Sci</div>
-  </div>
-</div>
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-new">持久</span>
-    <div class="card-title">泛癌分析<br>Pan-Cancer</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    单一基因/通路 → 在 TCGA 33种癌种中逐一分析 → 表达差异+预后+突变+免疫浸润+药物敏感 → 全景图谱
-    <div class="section-label">风险</div>
-    低质重复严重。必须有强故事逻辑（某基因为何跨癌种重要？），单纯堆分析图表已难发
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">J Transl Med · Front Immunol · iScience · eLife</div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- 4. 虚拟敲除 -->
-<div class="panel" id="panel-virtual-ko">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-hot">新热</span>
-    <div class="card-title">scTenifoldKnk 虚拟敲除<br>单细胞数据基因功能验证</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    <ol class="flow-steps">
-      <li>整合公共单细胞数据(GEO scRNA-seq)</li>
-      <li>鉴定目标细胞亚群 → 筛选关键基因</li>
-      <li>scTenifoldKnk 构建基因调控网络</li>
-      <li>模拟敲除：比较敲除前后表达变化</li>
-      <li>观察通路/干性/免疫微环境改变</li>
-    </ol>
-    <div class="section-label">典型案例</div>
-    哈医大团队：敲除5个干性核心基因 → 观察TNBC干性通路变化 → 纯生信45天接收
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Cell Proliferat · npj Precis Oncol · Front Immunol · J Transl Med</div>
-  </div>
-</div>
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-new">前沿</span>
-    <div class="card-title">Geneformer 虚拟扰动<br>AI驱动基因功能预测</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    基于Transformer的Geneformer模型 → 预训练于千万级单细胞数据 → 针对特定基因做 in silico perturbation → 预测敲除/过表达后的全局转录变化 → 解码细胞通讯网络
-    <div class="section-label">典型应用</div>
-    胶质瘤 SLC1A3 虚拟敲除 → 揭示免疫抑制微环境调控机制；HCC 动态演化虚拟扰动分析
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">npj Precis Oncol · Front Immunol · Nature系列子刊</div>
-  </div>
-</div>
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-db">经典</span>
-    <div class="card-title">表达分组模拟敲除<br>高表达 vs 低表达组对比</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    按目标基因表达中位数分高/低组 → 差异基因 → GO/KEGG/免疫浸润对比 → 代谢重编程分析 → 推断该基因"敲除"效应。最基础的虚拟敲除策略
-    <div class="section-label">局限</div>
-    无法模拟真实敲除的动态过程，只能做"快照"对比。适合入门，高分需升级到 scTenifoldKnk 或 Geneformer
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Front Oncol · Front Genet · BMC Genomics · Sci Reports</div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- 5. NHANES -->
-<div class="panel" id="panel-nhanes">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-hot">极热</span>
-    <div class="card-title">单因素关联分析<br>某暴露 × 某结局</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">模板公式</div>
-    某指标 + 某疾病 + 某特定人群 → Logistic/Cox回归 → 关联结论
-    <div class="section-label">Science 警告</div>
-    2025年Science报道：低质论文泛滥。2014-2021年均4篇/年 → 2024年190+篇（仅单因素模板）。147种期刊发表341篇此类论文。28项抑郁症研究中仅13项经校正后仍显著
-    <div class="section-label">常见操作</div>
-    无合理依据下选择性截取特定年份/年龄 → 刻意寻找显著P值。ChatGPT辅助批量生成
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Sci Reports · BMC Public Health · BMJ Open · Front Nutr · Nutrients</div>
-  </div>
-</div>
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-mid">进阶</span>
-    <div class="card-title">组合指标 + 外部验证<br>高分升级策略</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    选题升级：单一指标→组合指标（胰岛素抵抗+炎症 / 血脂+体型 / 代谢+衰老）；方法升级：加限制性立方样条(RCS)找非线性；验证升级：必须做外部验证（另一数据库或独立队列）
-    <div class="section-label">2026 趋势</div>
-    NHANES + CHARLS/ELSA 跨数据库验证，利用不同国家/种族的队列数据做泛化性验证
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Cardiovasc Diabetol · Environ Int · Ecotoxicol Environ Saf · J Clin Endocrinol Metab</div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- 6. MIMIC -->
-<div class="panel" id="panel-mimic">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-hot">热门</span>
-    <div class="card-title">ICU 临床预测模型<br>MIMIC-IV 回顾性队列</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心流程</div>
-    <ol class="flow-steps">
-      <li>MIMIC-IV 提取 ICU 人群（脓毒症/心衰/卒中/AKI…）</li>
-      <li>选指标（SHR/NLR/PLR/TyG/LDH…）</li>
-      <li>Cox回归 → KM曲线 → RCS非线性</li>
-      <li>机器学习(随机森林/XGBoost/LightGBM) → 列线图</li>
-      <li>MIMIC-III 或 eICU-CRD 外部验证</li>
-    </ol>
-    <div class="section-label">新指标赛道</div>
-    应激性高血糖比(SHR) · 甘油三酯-葡萄糖-体重指数(TyG-BMI) · TG/HDL-C · 乳酸脱氢酶/白蛋白比(LAR)
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Cardiovasc Diabetol · Crit Care · BMC Med Inform Decis Mak · J Clin Med · Front Med</div>
-  </div>
-</div>
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-mid">高阶</span>
-    <div class="card-title">可解释机器学习<br>SHAP + 列线图</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    MIMIC-IV 数据 → XGBoost/LightGBM预测 → SHAP值解释特征重要性 → 将ML模型转化为列线图 → 临床易用性提升
-    <div class="section-label">优势</div>
-    结合ML的预测能力 + Nomogram的可解释性 + SHAP的全局/局部解释 → 符合临床医生使用习惯
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">BMC Med Inform Decis Mak · J Biomed Inform · Comput Biol Med</div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- 7. SEER -->
-<div class="panel" id="panel-seer">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-db">经典</span>
-    <div class="card-title">SEER 肿瘤预后分析<br>生存分析 + 列线图</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心流程</div>
-    <ol class="flow-steps">
-      <li>SEER*Stat 按癌种/分期/年份提取数据</li>
-      <li>Kaplan-Meier生存分析 + Log-rank</li>
-      <li>Cox回归筛选独立预后因素</li>
-      <li>LASSO-Cox构建列线图(Nomogram)</li>
-      <li>C-index/校准曲线/DCA评价 + 内部验证</li>
-    </ol>
-    <div class="section-label">覆盖癌种</div>
-    乳腺癌/肺癌/结直肠癌/胃癌/前列腺癌/胰腺癌/肝癌/甲状腺癌等30+癌种
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Front Oncol · Cancer Med · BMC Cancer · Ann Surg Oncol · J Surg Oncol</div>
-  </div>
-</div>
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-mid">进阶</span>
-    <div class="card-title">竞争风险模型<br>Fine-Gray 亚分布风险</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    传统 Cox 将竞争事件视为删失 → 改用 Fine-Gray 竞争风险模型 → 更准确地评估特定原因死亡 → 累计发生率函数(CIF)可视化
-    <div class="section-label">适用场景</div>
-    老年肿瘤患者（死于其他原因概率高）、多原发癌、肿瘤特异性死亡 vs 其他原因死亡
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Cancer Med · Ann Surg Oncol · Clin Transl Oncol · J Cancer Res Clin Oncol</div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- 8. FAERS -->
-<div class="panel" id="panel-faers">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-hot">极热</span>
-    <div class="card-title">比例失衡分析<br>药物-不良事件信号挖掘</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心流程</div>
-    <ol class="flow-steps">
-      <li>FAERS 下载季度数据，去重（保留最新 CASEID）</li>
-      <li>标准化药物名和不良事件(MedDRA PT)</li>
-      <li>ROR(报告比值比)/PRR(比例报告比)/BCPNN/EBGM 四种方法</li>
-      <li>按性别/年龄/严重程度分层分析</li>
-      <li>敏感性分析排除竞争偏倚</li>
-    </ol>
-    <div class="section-label">行业震荡</div>
-    2025年 Expert Opin Drug Saf 宣布不再接收 FAERS 主动投稿！2021年100篇 → 2024年600+篇。Front Pharmacol 要求外部验证。2025年8月多篇撤稿
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Expert Opin Drug Saf（已关）· Front Pharmacol（限）· Sci Reports · J Clin Pharmacol · Drug Saf</div>
-  </div>
-</div>
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-new">新兴</span>
-    <div class="card-title">跨数据库验证<br>FAERS + VigiBase + JADER</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    同一药物-事件对在 FAERS(美)+VigiBase(WHO全球)+JADER(日)+EudraVigilance(欧) 四个数据库中同时验证 → 信号一致性 → 提升可信度
-    <div class="section-label">趋势</div>
-    单一FAERS数据库越来越难发表。多数据库交叉验证 + 药物流行病学方法(sequence symmetry analysis等)是生存之道
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Drug Saf · Pharmacoepidemiol Drug Saf · J Clin Pharmacol · BMJ Open</div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- 9. GBD -->
-<div class="panel" id="panel-gbd">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-hot">极热</span>
-    <div class="card-title">GBD 疾病负担分析<br>地区 × 病种 × 年份</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    <ol class="flow-steps">
-      <li>GBD 2021 数据库免费下载</li>
-      <li>选地区(全球/国家/区域/省) × 病种 × 人群(年龄/性别)</li>
-      <li>指标：发病率/患病率/死亡率/DALYs/YLLs/YLDs</li>
-      <li>Joinpoint回归 → APC(年度变化百分比)</li>
-      <li>SDI(社会人口指数)关联分析</li>
-      <li>BAPC模型预测未来趋势(到2030/2040/2050)</li>
-    </ol>
-    <div class="section-label">核心公式</div>
-    地区 + 病种 + 年龄/性别人群 → 趋势分析 + SDI关联 + 未来预测
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">BMJ · Lancet系列 · BMC Public Health · Front Public Health · J Glob Health</div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- 10. 老龄化队列 -->
-<div class="panel" id="panel-aging">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-hot">极热</span>
-    <div class="card-title">CHARLS 中国老龄化<br>纵向队列 × 共病/轨迹</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">数据库概览</div>
-    中国45岁+人群，基线约1.7万人，覆盖150个县区。多波随访(2011/2013/2015/2018/2020)，含体检+血液+认知
-    <div class="section-label">热门研究方向</div>
-    抑郁-功能残疾双向关联；认知衰退轨迹；多发病共病模式；肌少症与衰弱；心血管-代谢指标交互；社会参与与健康老龄化
-    <div class="section-label">2025 趋势</div>
-    2025年仅上半年CHARLS发文量已接近去年全年，满屏一区。Global Aging 8大数据库联合分析(CHARLS+HRS+ELSA+SHARE+CLHLS+MHAS+KLoSA+LASI)是超级蓝海
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">JAMA Netw Open · BMC Med · BMC Geriatr · J Affect Disord · Soc Sci Med · Lancet Public Health</div>
-  </div>
-</div>
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-db">数据库</span>
-    <div class="card-title">Global Aging 8大数据库<br>跨国家/种族联合分析</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">8大数据库速览</div>
-    <table style="width:100%;font-size:11px;border-collapse:collapse;">
-      <tr><td style="padding:2px 4px;border-bottom:1px solid var(--border);font-weight:600;">HRS</td><td style="padding:2px 4px;border-bottom:1px solid var(--border);">美国 | 50岁+ | ~2万 | 1992起</td></tr>
-      <tr><td style="padding:2px 4px;border-bottom:1px solid var(--border);font-weight:600;">ELSA</td><td style="padding:2px 4px;border-bottom:1px solid var(--border);">英国 | 50岁+ | ~1万 | 2002起</td></tr>
-      <tr><td style="padding:2px 4px;border-bottom:1px solid var(--border);font-weight:600;">SHARE</td><td style="padding:2px 4px;border-bottom:1px solid var(--border);">欧洲 | 50岁+ | ~14万 | 2004起</td></tr>
-      <tr><td style="padding:2px 4px;border-bottom:1px solid var(--border);font-weight:600;">CHARLS</td><td style="padding:2px 4px;border-bottom:1px solid var(--border);">中国 | 45岁+ | ~1.7万 | 2011起</td></tr>
-      <tr><td style="padding:2px 4px;border-bottom:1px solid var(--border);font-weight:600;">CLHLS</td><td style="padding:2px 4px;border-bottom:1px solid var(--border);">中国 | 65岁+ | ~2万 | 1998起</td></tr>
-      <tr><td style="padding:2px 4px;border-bottom:1px solid var(--border);font-weight:600;">MHAS</td><td style="padding:2px 4px;border-bottom:1px solid var(--border);">墨西哥 | 50岁+ | ~1.5万</td></tr>
-      <tr><td style="padding:2px 4px;border-bottom:1px solid var(--border);font-weight:600;">KLoSA</td><td style="padding:2px 4px;border-bottom:1px solid var(--border);">韩国 | 45岁+ | ~1万</td></tr>
-      <tr><td style="padding:2px 4px;font-weight:600;">LASI</td><td style="padding:2px 4px;">印度 | 45岁+ | ~7万</td></tr>
-    </table>
-    <div class="section-label" style="margin-top:8px;">超级蓝海</div>
-    8库联合分析(Global Aging)是目前极少人涉足的领域。跨文化比较+大样本量=顶级期刊通行证
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- 11. UK Biobank -->
-<div class="panel" id="panel-ukb">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-db">旗舰</span>
-    <div class="card-title">多基因风险评分 PRS<br>基因-环境交互作用</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    <ol class="flow-steps">
-      <li>UK Biobank 提取50万英国人数据</li>
-      <li>构建PRS(多基因风险评分)</li>
-      <li>PRS × 环境因素交互分析</li>
-      <li>前瞻性队列——疾病发病预测</li>
-      <li>MR+观测性研究的双证据体系</li>
-    </ol>
-    <div class="section-label">数据维度</div>
-    基因型数据 · 影像数据(脑/心脏/腹部MRI) · 生物标志物 · 生活方式 · 长期随访电子健康记录
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Nature Genetics · Nat Commun · BMJ · Lancet系列 · JAMA Netw Open · PLoS Med</div>
-  </div>
-</div>
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-mid">进阶</span>
-    <div class="card-title">UKB影像组学<br>MRI衍生表型研究</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    UKB 影像子队列(>10万人) → 自动分割器官/结构 → 影像衍生表型(IDPs) → MR做暴露/结局 → 器官结构与疾病因果推断
-    <div class="section-label">独特优势</div>
-    全球最大规模统一标准的多模态影像队列，含脑/心脏/腹部/骨骼MRI，DEXA骨密度，颈动脉超声等
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Nat Commun · Radiology · Eur Heart J · Diabetes Care · Neurology</div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- 12. 单细胞 -->
-<div class="panel" id="panel-scrnaseq">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-hot">极热</span>
-    <div class="card-title">单细胞公共数据重分析<br>5大核心策略</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">五大策略</div>
-    <ol class="flow-steps" style="margin-top:4px;">
-      <li><b>新细胞类群</b>：跨样本整合，鉴定未报道亚群</li>
-      <li><b>差异频率亚群</b>：疾病 vs 正常，频率变化</li>
-      <li><b>组间差异基因</b>：单细胞分辨率 DEGs</li>
-      <li><b>转录因子驱动</b>：SCENIC/pySCENIC 调控网络</li>
-      <li><b>细胞通讯</b>：CellChat/NicheNet 配体-受体分析</li>
-    </ol>
-    <div class="section-label">数据来源</div>
-    <div class="db-list">
-      <span class="db-tag">GEO</span>
-      <span class="db-tag">TISCH</span>
-      <span class="db-tag">Human Cell Atlas</span>
-      <span class="db-tag">Zenodo</span>
-      <span class="db-tag">GSA</span>
-    </div>
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Nat Commun · Cell Rep · Front Immunol · Brief Bioinform · J Transl Med · iScience</div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- 13. 网络药理学 -->
-<div class="panel" id="panel-network-pharm">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-db">经典</span>
-    <div class="card-title">中药网络药理学<br>TCMSP → 成分-靶点-通路</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心流程</div>
-    <ol class="flow-steps">
-      <li>TCMSP 获取复方成分(OB≥30%, DL≥0.18)</li>
-      <li>SwissTargetPrediction / STITCH 预测靶点</li>
-      <li>GeneCards / OMIM / TTD 获取疾病靶点</li>
-      <li>Venny取交集 → STRING构建PPI网络</li>
-      <li>Cytoscape → MCODE选hub基因</li>
-      <li>GO/KEGG富集 → 分子对接(AutoDock)</li>
-    </ol>
-    <div class="section-label">核心公式</div>
-    OB≥30% + DL≥0.18 + 疾病靶点取交集 + PPI + 富集 + 分子对接
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Front Pharmacol · Evid-Based Compl Alt · J Ethnopharmacol · Front Immunol · Phytomedicine</div>
-  </div>
-</div>
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-mid">进阶</span>
-    <div class="card-title">网药+实验验证<br>干湿结合闭环</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心套路</div>
-    网药预测靶点/通路 → 动物模型验证(HE/PAS/ELISA/IHC/IF/Western blot) → 分子机制闭环。单纯网药已难发高分，干湿结合是趋势
-    <div class="section-label">2025 趋势</div>
-    网药 + MR 联合分析（药靶发现+因果验证）；网药 + 单细胞（细胞类型特异性靶点）；网药 + 代谢组学
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Phytomedicine · J Ethnopharmacol · Front Pharmacol · Front Immunol · J Transl Med</div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- 14. 文献计量学 -->
-<div class="panel" id="panel-biblio">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-db">持久</span>
-    <div class="card-title">WoS/PubMed 文献计量<br>VOSviewer+CiteSpace 双工具</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心流程</div>
-    <ol class="flow-steps">
-      <li>Web of Science / PubMed 建检索式</li>
-      <li>导出全记录(含引文) → 数据清洗</li>
-      <li>VOSviewer: 作者/国家/关键词共现</li>
-      <li>CiteSpace: 关键词突现、研究前沿时间线</li>
-      <li>R-bibliometrix: 统计分析与高级图表</li>
-    </ol>
-    <div class="section-label">标配图表</div>
-    年度发文趋势 · 国家/机构合作网络 · 期刊双图叠加 · 关键词共现/聚类/突现 · 主题演化 · 高被引文献/作者排名
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Front系列(占25%) · Medicine · BMJ Open · J Am Heart Assoc · Int J Surg · Heliyon</div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- 15. Nomogram -->
-<div class="panel" id="panel-nomogram">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-db">经典</span>
-    <div class="card-title">列线图预后模型<br>Nomogram × 多数据库验证</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心流程</div>
-    <ol class="flow-steps">
-      <li>选数据库(SEER/MIMIC/TCGA) + 临床变量</li>
-      <li>单因素+多因素Cox/Logistic回归</li>
-      <li>筛选独立预后因素 → 构建Nomogram</li>
-      <li>C-index/ROC-AUC 评估区分度</li>
-      <li>校准曲线评估校准度</li>
-      <li>DCA决策曲线评估临床净获益</li>
-      <li>Bootstrap/交叉验证+外部验证</li>
-    </ol>
-    <div class="section-label">高阶组合</div>
-    LASSO-Cox + Nomogram | 竞争风险Nomogram | 机器学习+SHAP可解释Nomogram | 动态Nomogram(在线工具/DynNom)
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">Front Oncol · Cancer Med · BMC Med Inform Decis Mak · Ann Surg Oncol · J Transl Med</div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- 16. 药靶MR -->
-<div class="panel" id="panel-drug-mr">
-<div class="carousel">
-
-<div class="routine-card">
-  <div class="card-header">
-    <span class="tag tag-hot">新热</span>
-    <div class="card-title">药物靶点 MR<br>eQTL/pQTL → 成药基因筛选</div>
-  </div>
-  <div class="card-body">
-    <div class="section-label">核心流程</div>
-    <ol class="flow-steps">
-      <li>DGIdb获取已知成药基因列表(>2500个)</li>
-      <li>血液/组织 eQTL + pQTL 数据获取 cis-QTL</li>
-      <li>成药基因 eQTL/pQTL 作工具变量 → MR</li>
-      <li>贝叶斯共定位(COLOC)验证共享因果变异</li>
-      <li>Phe-MR 评估靶点副作用/其他适应症</li>
-    </ol>
-    <div class="section-label">典型案例</div>
-    华西医院团队: 2532个成药基因 → 血液/骨骼肌eQTL/pQTL → MR → 11个肌少症潜在药靶 → 6个通过共定位验证
-    <div class="section-label">偏好期刊</div>
-    <div class="jrn">J Cachexia Sarcopenia Muscle · BMC Med · Nat Commun · Neurology · Stroke</div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- ===== END OF PANELS ===== -->
-
-</div>
-
-<footer class="site-footer">
-  数据来源: PubMed · Science · Nature · PLOS Biology · 医咖会 · 公开报道 | 仅供学术参考 | 2026.06
-</footer>
+<div class="sidebar">
+<div class="sidebar-header"><h1>发文套路图谱</h1><div class="subtitle">35 种套路 · 全谱系覆盖</div></div>
+<nav class="sidebar-nav">
+<a href="#overview"><span class="cat-dot" style="background:#2563eb"></span><span class="nav-text">全景总览 Dashboard</span></a>
+<div class="sidebar-section-header">因果推断</div>
+<a href="#mr"><span class="cat-dot" style="background:#8b5cf6"></span><span class="nav-text">孟德尔随机化(MR)</span></a>
+<a href="#drug_target_mr"><span class="cat-dot" style="background:#8b5cf6"></span><span class="nav-text">药靶孟德尔随机化</span></a>
+<a href="#gut_microbiota_mr"><span class="cat-dot" style="background:#8b5cf6"></span><span class="nav-text">肠道菌群MR</span></a>
+<a href="#pqtl_mr"><span class="cat-dot" style="background:#8b5cf6"></span><span class="nav-text">pQTL 蛋白质组MR</span></a>
+<a href="#metabolomics_mr"><span class="cat-dot" style="background:#8b5cf6"></span><span class="nav-text">代谢组学 MR</span></a>
+<a href="#placebo_mr"><span class="cat-dot" style="background:#8b5cf6"></span><span class="nav-text">双向MR+阴性对照</span></a>
+<div class="sidebar-section-header">临床数据库</div>
+<a href="#mimic"><span class="cat-dot" style="background:#3b82f6"></span><span class="nav-text">MIMIC-IV 数据库</span></a>
+<a href="#eicu"><span class="cat-dot" style="background:#3b82f6"></span><span class="nav-text">eICU-CRD 数据库</span></a>
+<a href="#faers"><span class="cat-dot" style="background:#3b82f6"></span><span class="nav-text">FAERS 药物警戒</span></a>
+<div class="sidebar-section-header">流调数据库</div>
+<a href="#nhanes"><span class="cat-dot" style="background:#10b981"></span><span class="nav-text">NHANES数据库</span></a>
+<a href="#seer"><span class="cat-dot" style="background:#10b981"></span><span class="nav-text">SEER 肿瘤登记</span></a>
+<a href="#gbd"><span class="cat-dot" style="background:#10b981"></span><span class="nav-text">GBD 全球疾病负担</span></a>
+<a href="#aging_cohort"><span class="cat-dot" style="background:#10b981"></span><span class="nav-text">老龄化队列 (CHARLS/ELSA等)</span></a>
+<div class="sidebar-section-header">大规模队列</div>
+<a href="#ukb"><span class="cat-dot" style="background:#ef4444"></span><span class="nav-text">UK Biobank</span></a>
+<div class="sidebar-section-header">临床指标</div>
+<a href="#tyg"><span class="cat-dot" style="background:#f59e0b"></span><span class="nav-text">TYG指数系列</span></a>
+<div class="sidebar-section-header">临床统计</div>
+<a href="#nomogram"><span class="cat-dot" style="background:#ec4899"></span><span class="nav-text">临床预测模型/Nomogram</span></a>
+<a href="#causal_inference"><span class="cat-dot" style="background:#94a3b8"></span><span class="nav-text">因果推断 (DID/RDD/PSM)</span></a>
+<div class="sidebar-section-header">生信挖掘</div>
+<a href="#geo_tcga"><span class="cat-dot" style="background:#06b6d4"></span><span class="nav-text">生信挖掘 GEO/TCGA</span></a>
+<a href="#cerna"><span class="cat-dot" style="background:#06b6d4"></span><span class="nav-text">ceRNA 网络</span></a>
+<a href="#immune_infiltration"><span class="cat-dot" style="background:#06b6d4"></span><span class="nav-text">免疫浸润分析</span></a>
+<a href="#methylation"><span class="cat-dot" style="background:#06b6d4"></span><span class="nav-text">DNA甲基化分析</span></a>
+<a href="#gdsc_drug"><span class="cat-dot" style="background:#06b6d4"></span><span class="nav-text">药物敏感性分析 (GDSC)</span></a>
+<a href="#ppi"><span class="cat-dot" style="background:#06b6d4"></span><span class="nav-text">PPI 蛋白互作网络</span></a>
+<a href="#immune_lncrna"><span class="cat-dot" style="background:#06b6d4"></span><span class="nav-text">免疫相关lncRNA Signature</span></a>
+<a href="#target"><span class="cat-dot" style="background:#06b6d4"></span><span class="nav-text">TARGET 儿童肿瘤</span></a>
+<div class="sidebar-section-header">生信前沿</div>
+<a href="#virtual_ko"><span class="cat-dot" style="background:#f97316"></span><span class="nav-text">虚拟敲除分析</span></a>
+<a href="#single_cell"><span class="cat-dot" style="background:#f97316"></span><span class="nav-text">单细胞挖掘</span></a>
+<a href="#cell_death"><span class="cat-dot" style="background:#f97316"></span><span class="nav-text">程序性死亡 (铁死亡/铜死亡/焦亡等)</span></a>
+<a href="#rna_modification"><span class="cat-dot" style="background:#f97316"></span><span class="nav-text">RNA修饰 (m6A/m5C/m7G/m1A)</span></a>
+<a href="#circadian"><span class="cat-dot" style="background:#f97316"></span><span class="nav-text">昼夜节律基因</span></a>
+<a href="#multi_omics"><span class="cat-dot" style="background:#f97316"></span><span class="nav-text">多组学整合</span></a>
+<div class="sidebar-section-header">图像分析</div>
+<a href="#radiomics"><span class="cat-dot" style="background:#a855f7"></span><span class="nav-text">影像组学 (Radiomics)</span></a>
+<div class="sidebar-section-header">中药/药理</div>
+<a href="#network_pharma"><span class="cat-dot" style="background:#14b8a6"></span><span class="nav-text">网络药理学</span></a>
+<div class="sidebar-section-header">AI+医学</div>
+<a href="#nlp_medical"><span class="cat-dot" style="background:#d946ef"></span><span class="nav-text">医学NLP+电子病历</span></a>
+<div class="sidebar-section-header">综述/文献分析</div>
+<a href="#bibliometrics"><span class="cat-dot" style="background:#64748b"></span><span class="nav-text">文献计量学</span></a>
+</nav>
+</div>
+<div class="main">
+<section id="overview" class="overview"><h2>全景总览 Dashboard</h2><p class="desc">覆盖 35 种公共数据库发文套路，从成文难度、发文难度、期刊IF、中科院分区、创新性、热度六大维度综合评估。点击左侧导航直达各套路详情。</p><div class="summary-row"><div class="summary-card"><div class="num">35</div><div class="label">套路总数</div></div><div class="summary-card"><div class="num">13</div><div class="label">类别覆盖</div></div><div class="summary-card"><div class="num">3.0<span style="font-size:14px;color:#64748b">/5</span></div><div class="label">平均成文难度</div></div><div class="summary-card"><div class="num">2.9<span style="font-size:14px;color:#64748b">/5</span></div><div class="label">平均发文难度</div></div><div class="summary-card"><div class="num">64.8</div><div class="label">最高可投IF</div></div></div><div style="overflow-x:auto;max-height:70vh;overflow-y:auto;margin-bottom:20px"><table class="overview-table"><thead><tr><th>套路名称</th><th>类别</th><th>成文难度</th><th>发文难度</th><th>创新性</th><th>热度</th><th>推荐期刊IF范围</th><th>中科院分区</th></tr></thead><tbody><tr><td><a href="#tyg" style="font-weight:600">TYG指数系列</a></td><td><span class="badge-cat cat-clinical">临床指标</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>4.4 ~ 9.3</td><td style="font-size:12px">医学1区/医学2区/综合性2区</td></tr><tr><td><a href="#mr" style="font-weight:600">孟德尔随机化(MR)</a></td><td><span class="badge-cat cat-causal">因果推断</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span> <span style="font-size:11px;color:#64748b">困难</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span> <span style="font-size:11px;color:#64748b">困难</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td>6.6 ~ 16.6</td><td style="font-size:12px">医学1区/医学2区/生物学1区/综合性1区</td></tr><tr><td><a href="#drug_target_mr" style="font-weight:600">药靶孟德尔随机化</a></td><td><span class="badge-cat cat-causal">因果推断</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span> <span style="font-size:11px;color:#64748b">困难</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td>6.8 ~ 16.6</td><td style="font-size:12px">医学1区/综合性1区</td></tr><tr><td><a href="#geo_tcga" style="font-weight:600">生信挖掘 GEO/TCGA</a></td><td><span class="badge-cat cat-bioinfo">生信挖掘</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td>3.8 ~ 5.2</td><td style="font-size:12px">医学2区/医学3区/生物学2区</td></tr><tr><td><a href="#virtual_ko" style="font-weight:600">虚拟敲除分析</a></td><td><span class="badge-cat cat-bioinfo-adv">生信前沿</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span></td><td>5.8 ~ 48.0</td><td style="font-size:12px">生物学1区/生物学2区</td></tr><tr><td><a href="#nhanes" style="font-weight:600">NHANES数据库</a></td><td><span class="badge-cat cat-survey">流调数据库</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td>4.4 ~ 10.5</td><td style="font-size:12px">医学2区/环境科学1区</td></tr><tr><td><a href="#mimic" style="font-weight:600">MIMIC-IV 数据库</a></td><td><span class="badge-cat cat-clinical-db">临床数据库</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td>4.0 ~ 27.1</td><td style="font-size:12px">医学1区/医学2区</td></tr><tr><td><a href="#eicu" style="font-weight:600">eICU-CRD 数据库</a></td><td><span class="badge-cat cat-clinical-db">临床数据库</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>3.8 ~ 15.1</td><td style="font-size:12px">医学1区/医学2区/医学3区/综合性2区</td></tr><tr><td><a href="#seer" style="font-weight:600">SEER 肿瘤登记</a></td><td><span class="badge-cat cat-survey">流调数据库</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>3.8 ~ 45.3</td><td style="font-size:12px">医学1区/医学2区/医学3区</td></tr><tr><td><a href="#faers" style="font-weight:600">FAERS 药物警戒</a></td><td><span class="badge-cat cat-clinical-db">临床数据库</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>3.4 ~ 9.1</td><td style="font-size:12px">医学1区/医学2区/医学3区</td></tr><tr><td><a href="#gbd" style="font-weight:600">GBD 全球疾病负担</a></td><td><span class="badge-cat cat-survey">流调数据库</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td>4.3 ~ 15.1</td><td style="font-size:12px">医学1区/医学2区</td></tr><tr><td><a href="#aging_cohort" style="font-weight:600">老龄化队列 (CHARLS/ELSA等)</a></td><td><span class="badge-cat cat-survey">流调数据库</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>4.1 ~ 13.8</td><td style="font-size:12px">医学1区/医学2区</td></tr><tr><td><a href="#ukb" style="font-weight:600">UK Biobank</a></td><td><span class="badge-cat cat-cohort">大规模队列</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span> <span style="font-size:11px;color:#64748b">困难</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span> <span style="font-size:11px;color:#64748b">困难</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td>13.8 ~ 38.7</td><td style="font-size:12px">医学1区/生物学1区/综合性1区</td></tr><tr><td><a href="#single_cell" style="font-weight:600">单细胞挖掘</a></td><td><span class="badge-cat cat-bioinfo-adv">生信前沿</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span> <span style="font-size:11px;color:#64748b">困难</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>7.3 ~ 29.5</td><td style="font-size:12px">医学1区/医学2区/生物学1区/综合性1区</td></tr><tr><td><a href="#network_pharma" style="font-weight:600">网络药理学</a></td><td><span class="badge-cat cat-tcm">中药/药理</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td>3.8 ~ 7.9</td><td style="font-size:12px">医学1区/医学2区/医学3区</td></tr><tr><td><a href="#bibliometrics" style="font-weight:600">文献计量学</a></td><td><span class="badge-cat cat-biblio">综述/文献分析</span></td><td><span class="stars">&#9733;&#9734;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">极易</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td>1.6 ~ 4.7</td><td style="font-size:12px">医学2区/医学3区/医学4区/管理学2区</td></tr><tr><td><a href="#nomogram" style="font-weight:600">临床预测模型/Nomogram</a></td><td><span class="badge-cat cat-stats">临床统计</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>3.8 ~ 15.3</td><td style="font-size:12px">医学1区/医学2区/医学3区</td></tr><tr><td><a href="#radiomics" style="font-weight:600">影像组学 (Radiomics)</a></td><td><span class="badge-cat cat-imaging">图像分析</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <span style="font-size:11px;color:#64748b">极难</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>4.7 ~ 19.7</td><td style="font-size:12px">医学1区/医学2区/工程技术1区</td></tr><tr><td><a href="#gut_microbiota_mr" style="font-weight:600">肠道菌群MR</a></td><td><span class="badge-cat cat-causal">因果推断</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td>5.2 ~ 24.5</td><td style="font-size:12px">医学1区/生物学1区/生物学2区/综合性1区</td></tr><tr><td><a href="#cerna" style="font-weight:600">ceRNA 网络</a></td><td><span class="badge-cat cat-bioinfo">生信挖掘</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td>3.7 ~ 5.3</td><td style="font-size:12px">医学2区/生物学2区</td></tr><tr><td><a href="#pqtl_mr" style="font-weight:600">pQTL 蛋白质组MR</a></td><td><span class="badge-cat cat-causal">因果推断</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span> <span style="font-size:11px;color:#64748b">困难</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td>14.3 ~ 64.8</td><td style="font-size:12px">医学1区/生物学1区/综合性1区</td></tr><tr><td><a href="#immune_infiltration" style="font-weight:600">免疫浸润分析</a></td><td><span class="badge-cat cat-bioinfo">生信挖掘</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>4.7 ~ 10.4</td><td style="font-size:12px">医学1区/医学2区/生物学2区</td></tr><tr><td><a href="#cell_death" style="font-weight:600">程序性死亡 (铁死亡/铜死亡/焦亡等)</a></td><td><span class="badge-cat cat-bioinfo-adv">生信前沿</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td>4.7 ~ 7.3</td><td style="font-size:12px">医学2区/生物学2区</td></tr><tr><td><a href="#rna_modification" style="font-weight:600">RNA修饰 (m6A/m5C/m7G/m1A)</a></td><td><span class="badge-cat cat-bioinfo-adv">生信前沿</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>3.7 ~ 7.3</td><td style="font-size:12px">医学2区/医学3区/生物学2区/综合性2区</td></tr><tr><td><a href="#methylation" style="font-weight:600">DNA甲基化分析</a></td><td><span class="badge-cat cat-bioinfo">生信挖掘</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td>3.0 ~ 5.9</td><td style="font-size:12px">医学1区/医学2区/医学3区/生物学2区</td></tr><tr><td><a href="#gdsc_drug" style="font-weight:600">药物敏感性分析 (GDSC)</a></td><td><span class="badge-cat cat-bioinfo">生信挖掘</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td>2.7 ~ 6.1</td><td style="font-size:12px">医学2区/医学3区</td></tr><tr><td><a href="#metabolomics_mr" style="font-weight:600">代谢组学 MR</a></td><td><span class="badge-cat cat-causal">因果推断</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span> <span style="font-size:11px;color:#64748b">困难</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>4.1 ~ 16.6</td><td style="font-size:12px">医学1区/生物学1区/生物学2区/综合性1区</td></tr><tr><td><a href="#circadian" style="font-weight:600">昼夜节律基因</a></td><td><span class="badge-cat cat-bioinfo-adv">生信前沿</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td>3.0 ~ 5.2</td><td style="font-size:12px">医学2区/医学3区/生物学2区/生物学3区</td></tr><tr><td><a href="#multi_omics" style="font-weight:600">多组学整合</a></td><td><span class="badge-cat cat-bioinfo-adv">生信前沿</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <span style="font-size:11px;color:#64748b">极难</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>5.2 ~ 16.6</td><td style="font-size:12px">医学2区/生物学1区/综合性1区</td></tr><tr><td><a href="#target" style="font-weight:600">TARGET 儿童肿瘤</a></td><td><span class="badge-cat cat-bioinfo">生信挖掘</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span></td><td>3.7 ~ 4.7</td><td style="font-size:12px">医学2区/医学3区/生物学2区</td></tr><tr><td><a href="#ppi" style="font-weight:600">PPI 蛋白互作网络</a></td><td><span class="badge-cat cat-bioinfo">生信挖掘</span></td><td><span class="stars">&#9733;&#9734;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">极易</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span></td><td>3.7 ~ 4.7</td><td style="font-size:12px">医学2区/生物学2区/生物学3区</td></tr><tr><td><a href="#immune_lncrna" style="font-weight:600">免疫相关lncRNA Signature</a></td><td><span class="badge-cat cat-bioinfo">生信挖掘</span></td><td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">简单</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>4.7 ~ 7.3</td><td style="font-size:12px">医学2区/生物学2区</td></tr><tr><td><a href="#causal_inference" style="font-weight:600">因果推断 (DID/RDD/PSM)</a></td><td><span class="badge-cat cat-biblio">高级统计</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span> <span style="font-size:11px;color:#64748b">困难</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td><td>4.4 ~ 93.7</td><td style="font-size:12px">医学1区/医学2区</td></tr><tr><td><a href="#placebo_mr" style="font-weight:600">双向MR+阴性对照</a></td><td><span class="badge-cat cat-causal">因果推断</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span> <span style="font-size:11px;color:#64748b">困难</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>7.7 ~ 16.6</td><td style="font-size:12px">医学1区/生物学1区/综合性1区</td></tr><tr><td><a href="#nlp_medical" style="font-weight:600">医学NLP+电子病历</a></td><td><span class="badge-cat cat-ai">AI+医学</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <span style="font-size:11px;color:#64748b">极难</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span> <span style="font-size:11px;color:#64748b">中等</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td><td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td><td>3.8 ~ 12.4</td><td style="font-size:12px">医学1区/医学2区/医学3区/综合性2区</td></tr></tbody></table></div></section><section id="tyg" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #f59e0b, #d97706)">&#9881;</div><div><h3>TYG指数系列</h3><span class="badge-cat cat-clinical">临床指标</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>甘油三酯-葡萄糖(TyG)指数作为胰岛素抵抗替代指标，结合TyG-BMI、TyG-WC、TyG-WHtR等衍生指数，与代谢综合征、心血管疾病、NAFLD、糖尿病等结局做关联分析或预测模型。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>NHANES</li><li>CHARLS</li><li>中国健康与营养调查(CHNS)</li><li>MIMIC-IV</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>数据清洗 → 指数计算 → 基线特征描述 → 回归分析(Logistic/Cox) → RCS剂量反应 → 亚组分析 → 预测模型构建</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Cardiovascular Diabetology</td><td class="journal-if">9.3</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>>500篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Frontiers in Endocrinology</td><td class="journal-if">5.2</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>300篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Lipids in Health and Disease</td><td class="journal-if">4.5</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>200篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">BMC Public Health</td><td class="journal-if">4.4</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~100篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Scientific Reports</td><td class="journal-if">4.6</td><td><span class="cas-badge cas-q2">综合性2区</span></td><td>~80篇</td><td>2019-至今</td></tr></tbody></table></div></div></section><section id="mr" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #8b5cf6, #7c3aed)">&#8596;</div><div><h3>孟德尔随机化(MR)</h3><span class="badge-cat cat-causal">因果推断</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>利用遗传变异作为工具变量推断暴露与结局的因果关系，经典两样本MR、双向MR、多变量MR、网络MR等方法，是目前最火的公共数据库发文范式。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>IEU OpenGWAS</li><li>FinnGen</li><li>UK Biobank GWAS</li><li>GWAS Catalog</li><li>Open Targets Genetics</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>暴露GWAS数据获取 → 工具变量筛选(F<10剔除弱工具) → 两样本MR分析(IVW为主) → 敏感性分析(MR-Egger/加权中位数/留一法) → 异质性/多效性检验 → 共定位分析</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Nature Communications</td><td class="journal-if">16.6</td><td><span class="cas-badge cas-q1">综合性1区</span></td><td>~300篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">BMC Medicine</td><td class="journal-if">9.3</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>>400篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">eLife</td><td class="journal-if">7.7</td><td><span class="cas-badge cas-q1">生物学1区</span></td><td>~150篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">EBioMedicine</td><td class="journal-if">11.1</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~100篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Journal of Affective Disorders</td><td class="journal-if">6.6</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>200篇</td><td>2021-至今</td></tr></tbody></table></div></div></section><section id="drug_target_mr" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #8b5cf6, #7c3aed)">&#8596;</div><div><h3>药靶孟德尔随机化</h3><span class="badge-cat cat-causal">因果推断</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>利用pQTL/eQTL作为工具变量，评估药物靶点对疾病结局的因果效应。可用于老药新用筛选和新靶点发现，转化价值极高。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>UKB-PPP (Olink蛋白组)</li><li>deCODE pQTL</li><li>Fenland pQTL</li><li>eQTLGen</li><li>GTEx eQTL</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>蛋白质/基因表达GWAS数据获取 → 顺式pQTL/eQTL筛选 → 两样本MR → 共定位(coloc)验证 → 药靶数据库交叉验证(DrugBank/TTD) → 安全性评估(PheWAS)</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Nature Communications</td><td class="journal-if">16.6</td><td><span class="cas-badge cas-q1">综合性1区</span></td><td>~80篇</td><td>2022-至今</td></tr><tr><td style="font-weight:600">Cell Reports Medicine</td><td class="journal-if">14.3</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~30篇</td><td>2023-至今</td></tr><tr><td style="font-weight:600">BMC Medicine</td><td class="journal-if">9.3</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~60篇</td><td>2022-至今</td></tr><tr><td style="font-weight:600">Clinical and Translational Medicine</td><td class="journal-if">10.6</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~20篇</td><td>2023-至今</td></tr><tr><td style="font-weight:600">Translational Psychiatry</td><td class="journal-if">6.8</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~40篇</td><td>2022-至今</td></tr></tbody></table></div></div></section><section id="geo_tcga" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #06b6d4, #0891b2)">&#128187;</div><div><h3>生信挖掘 GEO/TCGA</h3><span class="badge-cat cat-bioinfo">生信挖掘</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>基于GEO和TCGA公共转录组数据，筛选差异表达基因(DEGs)，构建预后模型/诊断模型，是最经典的生信发文套路。可升级为GEO+TCGA双队列验证设计提升分数。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>GEO</li><li>TCGA</li><li>ICGC</li><li>ArrayExpress</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>数据集筛选 → 差异分析 → GO/KEGG富集 → PPI网络 → hub基因筛选 → Cox/Lasso预后模型 → Nomogram列线图 → 外部验证</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Frontiers in Oncology</td><td class="journal-if">4.7</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>2000篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">Cancer Medicine</td><td class="journal-if">4.0</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>1000篇</td><td>2017-至今</td></tr><tr><td style="font-weight:600">BMC Cancer</td><td class="journal-if">3.8</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>>800篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">Journal of Cancer</td><td class="journal-if">3.9</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>>500篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Aging</td><td class="journal-if">5.2</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>>600篇</td><td>2018-至今</td></tr></tbody></table></div></div></section><section id="virtual_ko" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #f97316, #ea580c)">&#128640;</div><div><h3>虚拟敲除分析</h3><span class="badge-cat cat-bioinfo-adv">生信前沿</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>利用scTenifoldKnk、Geneformer等AI工具在单细胞水平进行虚拟基因敲除，预测基因扰动后转录网络变化，无需湿实验即可获得类敲除表型数据。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>GEO单细胞数据</li><li>Human Cell Atlas</li><li>Tabula Sapiens</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>单细胞数据获取 → 数据预处理 → 虚拟敲除(scTenifoldKnk/Geneformer) → 差异网络分析 → 通路富集 → 表型预测与实验验证建议</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Nature Methods</td><td class="journal-if">48.0</td><td><span class="cas-badge cas-q1">生物学1区</span></td><td>极少(<10篇)</td><td>2023-至今</td></tr><tr><td style="font-weight:600">Genome Biology</td><td class="journal-if">12.3</td><td><span class="cas-badge cas-q1">生物学1区</span></td><td>~20篇</td><td>2022-至今</td></tr><tr><td style="font-weight:600">Bioinformatics</td><td class="journal-if">5.8</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>~30篇</td><td>2022-至今</td></tr></tbody></table></div></div></section><section id="nhanes" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #10b981, #059669)">&#128202;</div><div><h3>NHANES数据库</h3><span class="badge-cat cat-survey">流调数据库</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>美国国家健康与营养调查，横断面数据，涵盖人口学、膳食、体检、实验室检查等多维度变量。适合做横断面关联分析、趋势分析和预测模型。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>NHANES</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>周期数据下载与合并 → 变量筛选与清洗 → 加权分析设计 → 基线特征描述 → 多变量回归 → 亚组/交互分析 → RCS曲线 → 预测模型/列线图</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Journal of the American Heart Association</td><td class="journal-if">5.4</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>300篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">Nutrients</td><td class="journal-if">5.9</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>400篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Environmental Health Perspectives</td><td class="journal-if">10.5</td><td><span class="cas-badge cas-q1">环境科学1区</span></td><td>>200篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">BMC Public Health</td><td class="journal-if">4.4</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>200篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Diabetology & Metabolic Syndrome</td><td class="journal-if">4.8</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~100篇</td><td>2019-至今</td></tr></tbody></table></div></div></section><section id="mimic" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #3b82f6, #2563eb)">&#9762;</div><div><h3>MIMIC-IV 数据库</h3><span class="badge-cat cat-clinical-db">临床数据库</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>麻省理工学院-贝斯以色列医院ICU重症监护数据库，含超过30万住院患者数据。涵盖生命体征、化验、用药、诊断代码、护理记录等结构化+非结构化数据。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>MIMIC-IV</li><li>MIMIC-III</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>CITI认证获取访问权限 → PostgreSQL数据提取(SQL) → 研究队列构建(纳入/排除) → 基线特征 → 回归分析 → 生存分析 → 机器学习预测模型 → 外部验证(eICU-CRD)</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Critical Care</td><td class="journal-if">8.8</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~150篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Intensive Care Medicine</td><td class="journal-if">27.1</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~30篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Critical Care Medicine</td><td class="journal-if">8.8</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~80篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">eClinicalMedicine (Lancet子刊)</td><td class="journal-if">15.1</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~30篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">Journal of Clinical Medicine</td><td class="journal-if">4.0</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~200篇</td><td>2019-至今</td></tr></tbody></table></div></div></section><section id="eicu" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #3b82f6, #2563eb)">&#9762;</div><div><h3>eICU-CRD 数据库</h3><span class="badge-cat cat-clinical-db">临床数据库</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>飞利浦eICU合作研究数据库，覆盖全美200+家医院ICU数据，超过20万患者。与MIMIC-IV互补，常做双中心验证设计。近年发文量激增。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>eICU-CRD</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>PhysioNet申请 → PostgreSQL数据提取 → 队列构建 → 与MIMIC-IV联合验证 → Logistic/Cox回归 → 机器学习(XGBoost/RF) → SHAP可解释性 → 列线图</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">eClinicalMedicine</td><td class="journal-if">15.1</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~40篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">Critical Care</td><td class="journal-if">8.8</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~60篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">BMC Medical Informatics and Decision Making</td><td class="journal-if">3.8</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>>100篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Scientific Reports</td><td class="journal-if">4.6</td><td><span class="cas-badge cas-q2">综合性2区</span></td><td>>100篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Frontiers in Medicine</td><td class="journal-if">4.7</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~80篇</td><td>2021-至今</td></tr></tbody></table></div></div></section><section id="seer" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #10b981, #059669)">&#128202;</div><div><h3>SEER 肿瘤登记</h3><span class="badge-cat cat-survey">流调数据库</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>美国国家癌症研究所SEER(Surveillance, Epidemiology, and End Results)肿瘤登记数据库，覆盖美国34%人口的肿瘤发病、治疗和生存数据。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>SEER</li><li>SEER-Medicare</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>SEER*Stat数据提取 → 研究队列筛选(ICD-O-3) → 基线特征 → 生存分析(Kaplan-Meier) → Cox竞争风险模型 → Nomogram列线图 → 决策曲线分析(DCA)</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Journal of Clinical Oncology</td><td class="journal-if">45.3</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>>300篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">International Journal of Surgery</td><td class="journal-if">15.3</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~100篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Cancer Medicine</td><td class="journal-if">4.0</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>500篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">Frontiers in Oncology</td><td class="journal-if">4.7</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>300篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">BMC Cancer</td><td class="journal-if">3.8</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>>200篇</td><td>2018-至今</td></tr></tbody></table></div></div></section><section id="faers" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #3b82f6, #2563eb)">&#9762;</div><div><h3>FAERS 药物警戒</h3><span class="badge-cat cat-clinical-db">临床数据库</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>FDA不良事件报告系统，超过2000万份药物不良反应报告。用于药物安全性信号挖掘、真实世界不良反应谱描述、药物-不良事件关联分析。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>FAERS</li><li>OpenFDA</li><li>VigiBase(WHO)</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>季度数据下载与合并 → 去重与标准化 → 比例失衡分析(ROR/PRR/Bayesian) → 信号筛选 → 时间趋势 → 药物类别对比 → 敏感性分析</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Drug Safety</td><td class="journal-if">4.6</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>300篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">Frontiers in Pharmacology</td><td class="journal-if">5.6</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>400篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Expert Opinion on Drug Safety</td><td class="journal-if">3.4</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>>200篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">British Journal of Clinical Pharmacology</td><td class="journal-if">3.7</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>~150篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Pharmacological Research</td><td class="journal-if">9.1</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~80篇</td><td>2021-至今</td></tr></tbody></table></div></div></section><section id="gbd" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #10b981, #059669)">&#128202;</div><div><h3>GBD 全球疾病负担</h3><span class="badge-cat cat-survey">流调数据库</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>IHME全球疾病负担研究，覆盖204个国家和地区、369种疾病/伤害的发病率、患病率、死亡率、DALY等指标。适合做全球/区域疾病负担趋势、年龄-时期-队列(APC)分析。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>GBD 2019/2021</li><li>IHME Data Catalog</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>GBD Results Tool下载 → 指标选取(发病率/患病率/DALY/死亡率) → Joinpoint回归趋势 → APC模型分解 → EAPC估算 → 全球/区域对比 → 风险因素归因</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Lancet 系列子刊</td><td class="journal-if">15.1+</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~200篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">BMJ Global Health</td><td class="journal-if">8.4</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~100篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Journal of Global Health</td><td class="journal-if">4.3</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~150篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Frontiers in Public Health</td><td class="journal-if">5.2</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>300篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">BMC Public Health</td><td class="journal-if">4.4</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>200篇</td><td>2020-至今</td></tr></tbody></table></div></div></section><section id="aging_cohort" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #10b981, #059669)">&#128202;</div><div><h3>老龄化队列 (CHARLS/ELSA等)</h3><span class="badge-cat cat-survey">流调数据库</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>全球多个老龄化纵向队列的统称：CHARLS(中国)、ELSA(英国)、HRS(美国)、SHARE(欧洲)、CHARLS(中国)、CLHLS(中国老年健康)、KLoSA(韩国)，适合老龄化相关横断面+纵向研究。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>CHARLS</li><li>ELSA</li><li>HRS</li><li>SHARE</li><li>CHNS</li><li>CLHLS</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>问卷+体检+血液数据下载 → 变量清洗 → 基线特征 → 横断面关联 → 纵向随访(广义估计方程GEE/混合效应模型) → 生存分析 → 跨国对比</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">JAMA Network Open</td><td class="journal-if">13.8</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>>100篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Age and Ageing</td><td class="journal-if">6.7</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~200篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">BMC Geriatrics</td><td class="journal-if">4.1</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>300篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Frontiers in Public Health</td><td class="journal-if">5.2</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>200篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Journal of Affective Disorders</td><td class="journal-if">6.6</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>150篇</td><td>2020-至今</td></tr></tbody></table></div></div></section><section id="ukb" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #ef4444, #dc2626)">&#128300;</div><div><h3>UK Biobank</h3><span class="badge-cat cat-cohort">大规模队列</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>英国生物银行，全球最大的前瞻性队列之一，50万参与者，涵盖基因分型、影像、蛋白组、代谢组。数据维度极丰富，适合深度表型-基因型关联研究。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>UK Biobank</li><li>UKB-PPP(蛋白组)</li><li>UKB Brain Imaging</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>UKB申请与数据下载 → 表型数据清洗 → 基因型QC → GWAS/PheWAS → 孟德尔随机化 → 生存分析/Cox模型 → 多基因风险评分(PRS) → 影像-基因关联</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Nature Genetics</td><td class="journal-if">31.8</td><td><span class="cas-badge cas-q1">生物学1区</span></td><td>>200篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Nature Communications</td><td class="journal-if">16.6</td><td><span class="cas-badge cas-q1">综合性1区</span></td><td>>300篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">The Lancet Digital Health</td><td class="journal-if">23.8</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~50篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">European Heart Journal</td><td class="journal-if">38.7</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~80篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">JAMA Network Open</td><td class="journal-if">13.8</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>>100篇</td><td>2020-至今</td></tr></tbody></table></div></div></section><section id="single_cell" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #f97316, #ea580c)">&#128640;</div><div><h3>单细胞挖掘</h3><span class="badge-cat cat-bioinfo-adv">生信前沿</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>基于公共单细胞测序数据(scRNA-seq/scATAC-seq)，做细胞亚群注释、轨迹推断、细胞通讯、肿瘤微环境异质性分析。近年来发文量爆发。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>GEO</li><li>TISCH</li><li>Human Cell Atlas</li><li>Tabula Sapiens</li><li>CancerSEA</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>数据下载 → 质控(Seurat) → 归一化/降维(PCA/UMAP) → 聚类 → 细胞注释(SingleR/CellTypist) → 差异分析 → 拟时序(Monocle/Slingshot) → 细胞通讯(CellChat) → 功能验证</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Nature Communications</td><td class="journal-if">16.6</td><td><span class="cas-badge cas-q1">综合性1区</span></td><td>~200篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">Cancer Discovery</td><td class="journal-if">29.5</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~30篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Genome Biology</td><td class="journal-if">12.3</td><td><span class="cas-badge cas-q1">生物学1区</span></td><td>~100篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Frontiers in Immunology</td><td class="journal-if">7.3</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>300篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">eLife</td><td class="journal-if">7.7</td><td><span class="cas-badge cas-q1">生物学1区</span></td><td>~80篇</td><td>2021-至今</td></tr></tbody></table></div></div></section><section id="network_pharma" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #14b8a6, #0d9488)">&#127807;</div><div><h3>网络药理学</h3><span class="badge-cat cat-tcm">中药/药理</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>通过数据库检索中药成分-靶点-疾病关联，构建药物-靶点-通路网络。门槛低，适合中医药和天然产物研究，常与分子对接验证结合。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>TCMSP</li><li>BATMAN-TCM</li><li>SwissTargetPrediction</li><li>GeneCards</li><li>STRING</li><li>DisGeNET</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>中药有效成分筛选(OB≥30%, DL≥0.18) → 靶点预测 → 疾病靶点获取 → 交集分析 → PPI网络 → GO/KEGG富集 → 网络拓扑分析 → 分子对接 → MD模拟(进阶)</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Frontiers in Pharmacology</td><td class="journal-if">5.6</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>2000篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">Phytomedicine</td><td class="journal-if">7.9</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~500篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Journal of Ethnopharmacology</td><td class="journal-if">5.0</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>800篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">Evidence-Based Complementary and Alternative Medicine</td><td class="journal-if">3.8</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>>1000篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">Pharmaceutical Biology</td><td class="journal-if">3.8</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>~300篇</td><td>2019-至今</td></tr></tbody></table></div></div></section><section id="bibliometrics" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #64748b, #475569)">&#128214;</div><div><h3>文献计量学</h3><span class="badge-cat cat-biblio">综述/文献分析</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">1/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>利用CiteSpace、VOSviewer、Bibliometrix等工具对特定领域进行文献计量分析，可视化研究热点、趋势、国家/机构合作网络等。门槛最低的SCI套路。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>Web of Science (WoS)</li><li>Scopus</li><li>PubMed</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>检索策略制定 → 文献筛选 → 数据导出 → VOSviewer/CiteSpace可视化 → 发文趋势 → 国家/机构/作者合作网络 → 关键词共现/突现 → 文献共被引 → 研究前沿识别</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Scientometrics</td><td class="journal-if">3.5</td><td><span class="cas-badge cas-q2">管理学2区</span></td><td>>2000篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">Journal of Informetrics</td><td class="journal-if">3.3</td><td><span class="cas-badge cas-q2">管理学2区</span></td><td>~500篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">Frontiers in Oncology</td><td class="journal-if">4.7</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>500篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Medicine</td><td class="journal-if">1.6</td><td><span class="cas-badge cas-q4">医学4区</span></td><td>>1000篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">BMJ Open</td><td class="journal-if">2.9</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>~400篇</td><td>2019-至今</td></tr></tbody></table></div></div></section><section id="nomogram" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #ec4899, #db2777)">&#128200;</div><div><h3>临床预测模型/Nomogram</h3><span class="badge-cat cat-stats">临床统计</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>构建临床预测模型（诊断/预后），用列线图(Nomogram)可视化。可基于NHANES/SEER/MIMIC等数据库的临床变量建模，强调区分度(AUC/C-index)和校准度(Calibration)。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>SEER</li><li>NHANES</li><li>MIMIC-IV</li><li>CHARLS</li><li>自有临床数据</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>变量选择(Lasso/逐步回归) → 模型构建(Logistic/Cox) → Nomogram → ROC/AUC评估 → 校准曲线 → DCA决策曲线 → Bootstrap内部验证 → 外部验证</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">International Journal of Surgery</td><td class="journal-if">15.3</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~300篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Journal of Translational Medicine</td><td class="journal-if">6.1</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>400篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">BMC Medical Research Methodology</td><td class="journal-if">4.5</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~200篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Journal of Clinical Medicine</td><td class="journal-if">4.0</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>300篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">BMC Cancer</td><td class="journal-if">3.8</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>>200篇</td><td>2019-至今</td></tr></tbody></table></div></div></section><section id="radiomics" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #a855f7, #9333ea)">&#128247;</div><div><h3>影像组学 (Radiomics)</h3><span class="badge-cat cat-imaging">图像分析</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>从CT/MRI/PET医学影像中高通量提取定量特征，结合机器学习构建诊断/预后模型。TCIA提供大量公开癌症影像数据，是深度学习+医学影像的黄金交叉点。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>TCIA (The Cancer Imaging Archive)</li><li>Kaggle</li><li>Grand Challenge</li><li>MIDRC</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>影像数据获取(TCIA) → ROI分割(ITK-SNAP/3D Slicer) → 特征提取(PyRadiomics) → 特征筛选 → 机器学习模型(SVM/RF/XGBoost/CNN) → 模型评估与验证 → SHAP可解释性</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Radiology</td><td class="journal-if">19.7</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~100篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">European Radiology</td><td class="journal-if">5.9</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>>300篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Medical Image Analysis</td><td class="journal-if">11.6</td><td><span class="cas-badge cas-q1">工程技术1区</span></td><td>~50篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Frontiers in Oncology</td><td class="journal-if">4.7</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>400篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Cancers</td><td class="journal-if">5.2</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>200篇</td><td>2020-至今</td></tr></tbody></table></div></div></section><section id="gut_microbiota_mr" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #8b5cf6, #7c3aed)">&#8596;</div><div><h3>肠道菌群MR</h3><span class="badge-cat cat-causal">因果推断</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>利用MiBioGen等肠道菌群GWAS数据做孟德尔随机化，推断特定菌属/菌种对疾病的因果效应。2023-2025年发文量爆发，是MR领域最火的分支之一。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>MiBioGen</li><li>FinnGen</li><li>GWAS Catalog</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>菌群GWAS数据(MiBioGen) → 工具变量筛选 → 两样本MR(正向) → 反向MR → 多变量MR → 共定位 → Cochrane交互验证 → 菌群功能预测(PICRUSt2)</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Nature Communications</td><td class="journal-if">16.6</td><td><span class="cas-badge cas-q1">综合性1区</span></td><td>~60篇</td><td>2022-至今</td></tr><tr><td style="font-weight:600">Gut</td><td class="journal-if">24.5</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~30篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">Microbiome</td><td class="journal-if">13.8</td><td><span class="cas-badge cas-q1">生物学1区</span></td><td>~40篇</td><td>2022-至今</td></tr><tr><td style="font-weight:600">BMC Medicine</td><td class="journal-if">9.3</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~50篇</td><td>2022-至今</td></tr><tr><td style="font-weight:600">Frontiers in Microbiology</td><td class="journal-if">5.2</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>>100篇</td><td>2022-至今</td></tr></tbody></table></div></div></section><section id="cerna" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #06b6d4, #0891b2)">&#128187;</div><div><h3>ceRNA 网络</h3><span class="badge-cat cat-bioinfo">生信挖掘</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>构建lncRNA-miRNA-mRNA竞争性内源RNA(ceRNA)调控网络，从非编码RNA角度揭示疾病分子机制。经典三联体：差异lncRNA + 靶miRNA + 靶mRNA，构建预后模型。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>TCGA</li><li>GEO</li><li>miRDB</li><li>miRTarBase</li><li>TargetScan</li><li>starBase(ENCORI)</li><li>Lnc2Cancer</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>差异lncRNA/miRNA/mRNA筛选 → miRNA靶标预测 → ceRNA网络构建(Cytoscape) → GO/KEGG富集 → Cox回归预后模型 → Kaplan-Meier验证</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Frontiers in Oncology</td><td class="journal-if">4.7</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>500篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Frontiers in Genetics</td><td class="journal-if">3.7</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>>400篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Journal of Cellular and Molecular Medicine</td><td class="journal-if">5.3</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>300篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">Cancer Cell International</td><td class="journal-if">5.3</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~200篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Aging</td><td class="journal-if">5.2</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>~250篇</td><td>2018-距今</td></tr></tbody></table></div></div></section><section id="pqtl_mr" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #8b5cf6, #7c3aed)">&#8596;</div><div><h3>pQTL 蛋白质组MR</h3><span class="badge-cat cat-causal">因果推断</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>利用大规模血浆蛋白pQTL数据做孟德尔随机化，发现循环蛋白与疾病因果关系。结合UKB-PPP(Olink 3000+蛋白)、deCODE(4900+蛋白)，代表MR最前沿方向。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>UKB-PPP (Olink)</li><li>deCODE pQTL</li><li>Fenland</li><li>Sun BB 2023 Nature</li><li>INTERVAL</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>pQTL汇总数据获取 → 顺式工具变量筛选 → 两样本MR → 共定位(coloc) → 药物靶点富集 → 通路网络分析 → PhenoScanner排除混杂</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Nature</td><td class="journal-if">64.8</td><td><span class="cas-badge cas-q1">综合性1区</span></td><td>~20篇</td><td>2023-至今</td></tr><tr><td style="font-weight:600">Nature Genetics</td><td class="journal-if">31.8</td><td><span class="cas-badge cas-q1">生物学1区</span></td><td>~30篇</td><td>2022-至今</td></tr><tr><td style="font-weight:600">Nature Communications</td><td class="journal-if">16.6</td><td><span class="cas-badge cas-q1">综合性1区</span></td><td>~40篇</td><td>2023-至今</td></tr><tr><td style="font-weight:600">Science Translational Medicine</td><td class="journal-if">16.6</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~10篇</td><td>2023-至今</td></tr><tr><td style="font-weight:600">Cell Reports Medicine</td><td class="journal-if">14.3</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~20篇</td><td>2023-至今</td></tr></tbody></table></div></div></section><section id="immune_infiltration" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #06b6d4, #0891b2)">&#128187;</div><div><h3>免疫浸润分析</h3><span class="badge-cat cat-bioinfo">生信挖掘</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>基于转录组数据评估肿瘤微环境中免疫细胞浸润水平，分析与预后/治疗响应的关系。用CIBERSORT/ESTIMATE/TIMER/ssGSEA等算法，是生信分析标配组件。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>TCGA</li><li>GEO</li><li>TIMER 2.0</li><li>TISIDB</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>基因表达矩阵获取 → 免疫浸润评估(CIBERSORT/ESTIMATE/ssGSEA/MCP-counter) → 免疫分型 → 差异免疫细胞 → 预后关联 → 免疫检查点表达 → TIDE免疫治疗响应预测</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Frontiers in Immunology</td><td class="journal-if">7.3</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>1000篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Journal for ImmunoTherapy of Cancer</td><td class="journal-if">10.4</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~150篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Frontiers in Oncology</td><td class="journal-if">4.7</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>800篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">Cancer Immunology Research</td><td class="journal-if">10.1</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~100篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Aging</td><td class="journal-if">5.2</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>>400篇</td><td>2019-至今</td></tr></tbody></table></div></div></section><section id="cell_death" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #f97316, #ea580c)">&#128640;</div><div><h3>程序性死亡 (铁死亡/铜死亡/焦亡等)</h3><span class="badge-cat cat-bioinfo-adv">生信前沿</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>基于铁死亡(Ferroptosis)、铜死亡(Cuproptosis)、焦亡(Pyroptosis)、坏死性凋亡(Necroptosis)、双硫死亡(Disulfidptosis)等新型程序性死亡基因集，构建预后模型或分型。2023-2025年国自然热点延伸至生信。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>TCGA</li><li>GEO</li><li>FerrDb</li><li>GeneCards</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>程序性死亡基因集获取 → 差异表达筛选 → 一致性聚类分子分型 → TME分析 → Cox/Lasso预后模型 → Nomogram → 药物敏感性预测(GDSC/CTRP) → 免疫治疗响应</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Frontiers in Immunology</td><td class="journal-if">7.3</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>600篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Frontiers in Oncology</td><td class="journal-if">4.7</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>500篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Frontiers in Cell and Developmental Biology</td><td class="journal-if">5.5</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>>300篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">Journal of Translational Medicine</td><td class="journal-if">6.1</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~200篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">Aging</td><td class="journal-if">5.2</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>~300篇</td><td>2020-至今</td></tr></tbody></table></div></div></section><section id="rna_modification" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #f97316, #ea580c)">&#128640;</div><div><h3>RNA修饰 (m6A/m5C/m7G/m1A)</h3><span class="badge-cat cat-bioinfo-adv">生信前沿</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>基于m6A、m5C、m7G、m1A等RNA修饰调控基因构建预后模型或分子分型。m6A最成熟，m7G(2023)、m5C/m1A紧随其后。表观转录组学热点。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>TCGA</li><li>GEO</li><li>RMBase</li><li>m6AVar</li><li>GeneCards</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>RNA修饰调控基因集获取 → 差异筛选 → 分子分型(ConsensusClusterPlus) → 免疫微环境分析 → 预后模型(Cox/Lasso) → GO/KEGG富集 → 药物敏感性 → 免疫检查点</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Frontiers in Immunology</td><td class="journal-if">7.3</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>400篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">Frontiers in Oncology</td><td class="journal-if">4.7</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>300篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">Frontiers in Genetics</td><td class="journal-if">3.7</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>>200篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">Scientific Reports</td><td class="journal-if">4.6</td><td><span class="cas-badge cas-q2">综合性2区</span></td><td>~150篇</td><td>2022-至今</td></tr><tr><td style="font-weight:600">BMC Cancer</td><td class="journal-if">3.8</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>~100篇</td><td>2022-至今</td></tr></tbody></table></div></div></section><section id="methylation" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #06b6d4, #0891b2)">&#128187;</div><div><h3>DNA甲基化分析</h3><span class="badge-cat cat-bioinfo">生信挖掘</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>利用TCGA/GEO的450K/850K甲基化芯片数据，筛选甲基化驱动基因，结合转录组构建多组学预后模型。表观遗传学经典范式，可与表达数据联合增强说服力。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>TCGA</li><li>GEO</li><li>MethHC</li><li>DiseaseMeth</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>甲基化数据下载 → 数据预处理/归一化(ChAMP/minfi) → 差异甲基化位点(DMP) → 差异甲基化区域(DMR) → 甲基化驱动基因筛选(MethylMix) → 结合表达数据 → 预后模型构建</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Epigenetics</td><td class="journal-if">4.0</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>~200篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Clinical Epigenetics</td><td class="journal-if">5.9</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~150篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Frontiers in Oncology</td><td class="journal-if">4.7</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>200篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Epigenomics</td><td class="journal-if">3.0</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>~100篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Cancers</td><td class="journal-if">5.2</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~150篇</td><td>2020-至今</td></tr></tbody></table></div></div></section><section id="gdsc_drug" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #06b6d4, #0891b2)">&#128187;</div><div><h3>药物敏感性分析 (GDSC)</h3><span class="badge-cat cat-bioinfo">生信挖掘</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>利用GDSC/CTRP癌细胞系药物敏感性数据，分析基因表达/突变与药物IC50的关联，筛选潜在敏感/耐药药物。为生信预后模型增加治疗指导价值。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>GDSC</li><li>CTRP</li><li>DepMap</li><li>CellMiner</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>基因表达/突变数据获取 → 药物敏感性数据(GDSC/CTRP) → 相关性分析 → 差异药物敏感性分组 → 耐药机制探索 → 潜在治疗药物推荐</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Frontiers in Pharmacology</td><td class="journal-if">5.6</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>300篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Frontiers in Oncology</td><td class="journal-if">4.7</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>250篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Cancer Chemotherapy and Pharmacology</td><td class="journal-if">2.7</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>~100篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Journal of Translational Medicine</td><td class="journal-if">6.1</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~100篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Cancers</td><td class="journal-if">5.2</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~150篇</td><td>2020-至今</td></tr></tbody></table></div></div></section><section id="metabolomics_mr" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #8b5cf6, #7c3aed)">&#8596;</div><div><h3>代谢组学 MR</h3><span class="badge-cat cat-causal">因果推断</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>利用血浆代谢物GWAS数据做孟德尔随机化，推断循环代谢物与疾病的因果关系。可结合pQTL MR做多组学因果推断，2024-2025年新兴热点。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>GWAS Catalog (metabolites)</li><li>Metabolon</li><li>Nightingale</li><li>FinnGen</li><li>IEU OpenGWAS</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>代谢物GWAS汇总数据获取 → IV筛选 → 两样本MR → 代谢通路富集分析(MetaboAnalyst) → pQTL+代谢物多组学MR → 交叉验证</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Nature Communications</td><td class="journal-if">16.6</td><td><span class="cas-badge cas-q1">综合性1区</span></td><td>~30篇</td><td>2023-至今</td></tr><tr><td style="font-weight:600">BMC Medicine</td><td class="journal-if">9.3</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~40篇</td><td>2023-至今</td></tr><tr><td style="font-weight:600">eLife</td><td class="journal-if">7.7</td><td><span class="cas-badge cas-q1">生物学1区</span></td><td>~20篇</td><td>2023-至今</td></tr><tr><td style="font-weight:600">Frontiers in Molecular Biosciences</td><td class="journal-if">5.0</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>~60篇</td><td>2024-至今</td></tr><tr><td style="font-weight:600">Metabolites</td><td class="journal-if">4.1</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>~50篇</td><td>2023-至今</td></tr></tbody></table></div></div></section><section id="circadian" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #f97316, #ea580c)">&#128640;</div><div><h3>昼夜节律基因</h3><span class="badge-cat cat-bioinfo-adv">生信前沿</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>基于核心昼夜节律基因(CLOCK/BMAL1/PER/CRY/NR1D1/RORA等)构建预后模型或分子分型。2024年Nature子刊多篇相关文章，属于细分热点。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>TCGA</li><li>GEO</li><li>Circadian Gene Database</li><li>GeneCards</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>昼夜节律基因集获取 → 差异表达 → 分子分型 → 免疫TME分析 → Cox/Lasso预后模型 → 节律基因甲基化分析 → 功能富集</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Aging</td><td class="journal-if">5.2</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>~100篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Frontiers in Oncology</td><td class="journal-if">4.7</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~80篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Frontiers in Genetics</td><td class="journal-if">3.7</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>~60篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">Journal of Biological Rhythms</td><td class="journal-if">3.0</td><td><span class="cas-badge cas-q3">生物学3区</span></td><td>~30篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">BMC Cancer</td><td class="journal-if">3.8</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>~50篇</td><td>2021-至今</td></tr></tbody></table></div></div></section><section id="multi_omics" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #f97316, #ea580c)">&#128640;</div><div><h3>多组学整合</h3><span class="badge-cat cat-bioinfo-adv">生信前沿</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>整合转录组+基因组+甲基化+蛋白组等多维度数据，构建多组学预测模型或分子分型。MOFA/iCluster/SIMLR等算法加持，综合性期刊偏好。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>TCGA (多组学)</li><li>cBioPortal</li><li>LinkedOmics</li><li>UALCAN</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>多组学数据下载(TCGA) → 各层数据预处理 → 多组学整合(MOFA+/iCluster/DIABLO) → 分子亚型 → 多组学预后模型 → 单组学vs多组学比较 → 生物学解释</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Nature Communications</td><td class="journal-if">16.6</td><td><span class="cas-badge cas-q1">综合性1区</span></td><td>~100篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Cell Reports</td><td class="journal-if">8.8</td><td><span class="cas-badge cas-q1">生物学1区</span></td><td>~50篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Genome Biology</td><td class="journal-if">12.3</td><td><span class="cas-badge cas-q1">生物学1区</span></td><td>~40篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">Briefings in Bioinformatics</td><td class="journal-if">9.5</td><td><span class="cas-badge cas-q1">生物学1区</span></td><td>~30篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">Cancers</td><td class="journal-if">5.2</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~100篇</td><td>2020-至今</td></tr></tbody></table></div></div></section><section id="target" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #06b6d4, #0891b2)">&#128187;</div><div><h3>TARGET 儿童肿瘤</h3><span class="badge-cat cat-bioinfo">生信挖掘</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>NCI TARGET(Therapeutically Applicable Research to Generate Effective Treatments)儿童肿瘤基因组数据库，数据量小但竞争低，适合做儿童肿瘤方向的差异化分析。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>TARGET</li><li>Kids First</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>TARGET数据下载 → 差异基因筛选 → GO/KEGG富集 → PPI网络 → 预后模型 → 与成人肿瘤对比 → 儿童肿瘤独特分子特征</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Frontiers in Oncology</td><td class="journal-if">4.7</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~100篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Frontiers in Genetics</td><td class="journal-if">3.7</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>~60篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">BMC Cancer</td><td class="journal-if">3.8</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>~30篇</td><td>2019-至今</td></tr></tbody></table></div></div></section><section id="ppi" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #06b6d4, #0891b2)">&#128187;</div><div><h3>PPI 蛋白互作网络</h3><span class="badge-cat cat-bioinfo">生信挖掘</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">1/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>构建差异基因的蛋白-蛋白互作网络，通过Cytoscape拓扑分析(MCODE/cytoHubba)筛选核心模块和Hub基因。最经典的生信分析子步骤，可独立成文或嵌入其他套路。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>STRING</li><li>BioGRID</li><li>IntAct</li><li>HPRD</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>差异基因列表 → STRING PPI网络 → Cytoscape可视化 → MCODE模块分析 → cytoHubba Hub基因排序 → 生存验证 → 功能富集</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Frontiers in Oncology</td><td class="journal-if">4.7</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>500篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">Frontiers in Genetics</td><td class="journal-if">3.7</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>>400篇</td><td>2018-至今</td></tr><tr><td style="font-weight:600">Journal of Cellular Biochemistry</td><td class="journal-if">3.8</td><td><span class="cas-badge cas-q3">生物学3区</span></td><td>>300篇</td><td>2018-至今</td></tr></tbody></table></div></div></section><section id="immune_lncrna" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #06b6d4, #0891b2)">&#128187;</div><div><h3>免疫相关lncRNA Signature</h3><span class="badge-cat cat-bioinfo">生信挖掘</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">2/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>筛选与免疫基因共表达的lncRNAs构建预后签名，结合免疫微环境和免疫治疗响应预测。将lncRNA热点与免疫热点结合，提升文章层次。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>TCGA</li><li>GEO</li><li>ImmPort</li><li>ImmLnc</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>免疫基因集(ImmPort)获取 → 免疫-lncRNA共表达筛选 → Cox/Lasso预后签名 → 免疫浸润分析 → TME评估 → 免疫检查点 → TIDE/SubMap治疗响应 → ceRNA网络</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Frontiers in Immunology</td><td class="journal-if">7.3</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>500篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Frontiers in Oncology</td><td class="journal-if">4.7</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>>400篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Aging</td><td class="journal-if">5.2</td><td><span class="cas-badge cas-q2">生物学2区</span></td><td>~300篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Journal of Cellular and Molecular Medicine</td><td class="journal-if">5.3</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~200篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Cancer Cell International</td><td class="journal-if">5.3</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~150篇</td><td>2019-至今</td></tr></tbody></table></div></div></section><section id="causal_inference" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #64748b, #475569)">&#128218;</div><div><h3>因果推断 (DID/RDD/PSM)</h3><span class="badge-cat cat-biblio">高级统计</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>利用双重差分(DID)、断点回归(RDD)、倾向性评分匹配(PSM)等准实验方法推断因果关系，比传统回归更稳健。适合政策评估、自然实验场景。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>NHANES</li><li>CHARLS</li><li>HRS</li><li>ELSA</li><li>UK Biobank</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>自然实验/政策冲击识别 → PSM匹配 → DID模型设定 → 平行趋势检验 → 安慰剂检验 → 异质性处理效应 → 稳健性分析</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">JAMA Network Open</td><td class="journal-if">13.8</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~80篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">BMJ</td><td class="journal-if">93.7</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~20篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Social Science & Medicine</td><td class="journal-if">5.4</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~100篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">BMC Public Health</td><td class="journal-if">4.4</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~80篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">International Journal of Epidemiology</td><td class="journal-if">10.2</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~30篇</td><td>2019-至今</td></tr></tbody></table></div></div></section><section id="placebo_mr" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #8b5cf6, #7c3aed)">&#8596;</div><div><h3>双向MR+阴性对照</h3><span class="badge-cat cat-causal">因果推断</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>正向MR+反向MR+阴性对照结局(如罕见病/无关联疾病)的三角验证设计。加入阴性对照极大增强因果推断可信度，Nature子刊级标配。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>IEU OpenGWAS</li><li>FinnGen</li><li>UK Biobank</li><li>GWAS Catalog</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>暴露→结局正向MR → 结局→暴露反向MR → 阴性对照分析 → 共定位(coloc) → 多变量MR(排除混杂) → 网络MR → 三角验证整合</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Nature Communications</td><td class="journal-if">16.6</td><td><span class="cas-badge cas-q1">综合性1区</span></td><td>~50篇</td><td>2022-至今</td></tr><tr><td style="font-weight:600">BMC Medicine</td><td class="journal-if">9.3</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~80篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">eLife</td><td class="journal-if">7.7</td><td><span class="cas-badge cas-q1">生物学1区</span></td><td>~40篇</td><td>2022-至今</td></tr><tr><td style="font-weight:600">Diabetes Care</td><td class="journal-if">16.2</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~30篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">Stroke</td><td class="journal-if">8.4</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~40篇</td><td>2021-至今</td></tr></tbody></table></div></div></section><section id="nlp_medical" class="routine-section"><div class="routine-header"><div class="routine-icon" style="background:linear-gradient(135deg, #d946ef, #c026d3)">&#129302;</div><div><h3>医学NLP+电子病历</h3><span class="badge-cat cat-ai">AI+医学</span></div></div><div class="metrics-row"><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">成文难度</div></div><div class="metric-badge"><div class="metric-val">3/5</div><div class="metric-label">发文难度</div></div><div class="metric-badge"><div class="metric-val">5/5</div><div class="metric-label">创新性</div></div><div class="metric-badge"><div class="metric-val">4/5</div><div class="metric-label">当前热度</div></div></div><div class="routine-grid"><div class="info-card"><h4>核心套路</h4><p>利用MIMIC-IV/eICU-CRD中临床笔记(NOTEEVENTS)文本数据，应用NLP/LLM进行信息提取、表型识别或预后预测。生物医学NLP交叉方向。</p></div><div class="info-card"><h4>常用数据库</h4><ul><li>MIMIC-IV NOTEEVENTS</li><li>eICU-CRD</li><li>BioCreative</li><li>n2c2</li></ul></div><div class="info-card"><h4>分析流程</h4><ul style="list-style:none;padding-left:0"><li style="padding:3px 0;font-size:12px"><span style="color:var(--primary);margin-right:6px">1.</span>临床文本提取 → 预处理(分词/实体识别) → 特征工程(BERT/BioBERT/ClinicalBERT/GPT) → 信息提取 → 表型分类 → 与传统变量对比 → 模型解释</li></ul></div></div><div class="info-card"><h4>偏好期刊（含发文量 · IF · 中科院分区 · 时间范围）</h4><div class="journal-table-wrapper"><table class="journal-table"><thead><tr><th>期刊名称</th><th>影响因子(IF)</th><th>中科院分区</th><th>发文量</th><th>时间范围</th></tr></thead><tbody><tr><td style="font-weight:600">Journal of the American Medical Informatics Association</td><td class="journal-if">6.6</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~150篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">Journal of Biomedical Informatics</td><td class="journal-if">4.6</td><td><span class="cas-badge cas-q2">医学2区</span></td><td>~100篇</td><td>2019-至今</td></tr><tr><td style="font-weight:600">npj Digital Medicine</td><td class="journal-if">12.4</td><td><span class="cas-badge cas-q1">医学1区</span></td><td>~30篇</td><td>2021-至今</td></tr><tr><td style="font-weight:600">BMC Medical Informatics and Decision Making</td><td class="journal-if">3.8</td><td><span class="cas-badge cas-q3">医学3区</span></td><td>~50篇</td><td>2020-至今</td></tr><tr><td style="font-weight:600">Scientific Reports</td><td class="journal-if">4.6</td><td><span class="cas-badge cas-q2">综合性2区</span></td><td>~80篇</td><td>2020-至今</td></tr></tbody></table></div></div></section>
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
 
 <script>
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const target = btn.dataset.tab;
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('panel-' + target).classList.add('active');
+// Back to top visibility
+window.addEventListener('scroll', function() {
+  var btn = document.getElementById('backToTop');
+  if (window.scrollY > 400) { btn.classList.add('visible'); }
+  else { btn.classList.remove('visible'); }
+});
+
+// Highlight active nav item
+const sections = document.querySelectorAll('.routine-section');
+const navLinks = document.querySelectorAll('.sidebar-nav a');
+
+window.addEventListener('scroll', function() {
+  let current = 'overview';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 100;
+    if (window.scrollY >= sectionTop) {
+      current = section.getAttribute('id');
+    }
+  });
+  navLinks.forEach(link => {
+    link.style.background = '';
+    link.style.color = '#cbd5e1';
+    if (link.getAttribute('href') === '#' + current) {
+      link.style.background = '#334155';
+      link.style.color = '#f1f5f9';
+    }
   });
 });
 </script>
-
+</div>
 </body>
 </html>
