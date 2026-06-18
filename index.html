@@ -29,11 +29,11 @@ body{font-family:var(--ff);background:var(--bg);color:var(--text);line-height:1.
 .dr-ov.show{display:block;opacity:1}
 .mob-dr{display:none;position:fixed;top:0;left:0;bottom:0;width:280px;max-width:85vw;background:var(--surface);z-index:220;transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);overflow-y:auto;box-shadow:4px 0 24px rgba(0,0,0,.12);border-radius:0 12px 12px 0}
 .mob-dr.show{transform:translateX(0)}
-.dr-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,var(--accent-light) 0%,var(--surface) 100%)}
-.dr-hd h2{font-size:15px;font-weight:700;color:var(--navy);letter-spacing:-.3px}
+.dr-hd{display:flex;align-items:center;justify-content:flex-end;padding:8px 12px;border-bottom:1px solid var(--border)}
 .dr-cls{background:none;border:none;font-size:26px;cursor:pointer;color:var(--text-muted);padding:8px 12px;border-radius:var(--radius-sm);touch-action:manipulation;line-height:1;transition:background .15s;display:flex;align-items:center;justify-content:center}
 .dr-cls:hover{background:var(--border)}
-.dr-nav{padding:8px 0}
+.dr-nav-hd{padding:14px 20px 10px;font-size:18px;font-weight:800;color:var(--navy);letter-spacing:-.4px;background:linear-gradient(180deg,var(--accent-light) 0%,var(--surface) 100%)}
+.dr-nav{padding:0}
 .dr-nav .side-dash{padding:14px 20px;font-size:14px;font-weight:600;color:var(--accent);cursor:pointer;border-bottom:1px solid var(--border)}
 .dr-nav .side-dash.act{background:var(--accent-light)}
 .dr-nav .cat-tgl{display:block;width:100%;text-align:left;background:none;border:none;padding:12px 20px;font-size:13px;font-weight:700;color:var(--text-muted);cursor:pointer;text-transform:uppercase;letter-spacing:.8px;touch-action:manipulation;border-bottom:1px solid #f1f5f9}
@@ -224,7 +224,7 @@ body{font-family:var(--ff);background:var(--bg);color:var(--text);line-height:1.
   .d-eyebrow{font-size:9px;padding:3px 10px}
   .d-sub{font-size:12.5px}
   .hw-c{font-size:12px;padding:12px 16px;gap:8px}
-  .hs{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;touch-action:pan-x pinch-zoom}
+  .hs{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;touch-action:manipulation}
   .ht{min-width:720px;font-size:11px}
   .ht th{padding:8px;font-size:9.5px}
   .ht td{padding:7px 8px}
@@ -263,7 +263,8 @@ body{font-family:var(--ff);background:var(--bg);color:var(--text);line-height:1.
 </nav>
 <div class="dr-ov" id="drOv"></div>
 <aside class="mob-dr" id="mobDr">
-  <div class="dr-hd"><h2>35 种发文套路</h2><button class="dr-cls" id="drCls" aria-label="关闭">&times;</button></div>
+  <div class="dr-hd"><button class="dr-cls" id="drCls" aria-label="关闭">&times;</button></div>
+  <div class="dr-nav-hd">35 种发文套路</div>
   <nav class="dr-nav" id="drNav"></nav>
 </aside>
 
