@@ -31,10 +31,7 @@ def generate_html(reports: dict, output_path: Path):
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="color-scheme" content="only light">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#f8fafc">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>医学研究热点文献计量报告</title>
     <style>
         :root {{
@@ -52,22 +49,6 @@ def generate_html(reports: dict, output_path: Path):
             --border: #e2e8f0;
             --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
             --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
-            color-scheme: only light;
-        }}
-        /* Force light mode regardless of device setting */
-        @media (prefers-color-scheme: dark) {{
-            :root {{
-                color-scheme: only light;
-                --primary: #2563eb; --primary-dark: #1d4ed8; --secondary: #7c3aed;
-                --accent: #06b6d4; --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
-                --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --text-light: #64748b;
-                --border: #e2e8f0;
-            }}
-            body {{ background: #f8fafc; color: #1e293b; }}
-            .header {{ background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); color: white; }}
-            .footer {{ background: #f8fafc; color: #1e293b; }}
-            table thead {{ background: #f1f5f9; }}
-            .keyword-tag {{ background: linear-gradient(135deg,#eff6ff 0%,#f0f9ff 100%); border-color:#bfdbfe; }}
         }}
 
         * {{
@@ -81,7 +62,6 @@ def generate_html(reports: dict, output_path: Path):
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            forced-color-adjust: none;
             -webkit-tap-highlight-color: transparent;
         }}
 
@@ -403,8 +383,8 @@ def generate_html(reports: dict, output_path: Path):
 
         @media (max-width: 768px) {{
             .header h1 {{ font-size: 1.75rem; }}
-            .header {{ padding: 2rem max(1rem,env(safe-area-inset-right,1rem)) 2rem max(1rem,env(safe-area-inset-left,1rem)); }}
-            .container {{ padding: 1rem max(1rem,env(safe-area-inset-right,1rem)) 4rem max(1rem,env(safe-area-inset-left,1rem)); }}
+            .header {{ padding: 2rem 1rem; }}
+            .container {{ padding: 1rem 1rem 4rem; }}
             .charts-grid {{ grid-template-columns: 1fr; }}
             .domain-grid {{ grid-template-columns: 1fr; }}
             .time-selector {{ gap: 0.35rem; }}
