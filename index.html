@@ -2,26 +2,21 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="color-scheme" content="only light">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0,user-scalable=yes,viewport-fit=cover">
-<meta name="theme-color" content="#ffffff">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0,user-scalable=yes">
 <title>公共数据库发文套路图谱</title>
 <style>
-:root{color-scheme:only light;--navy:#1a2b4a;--accent:#3a6fb5;--accent-bg:#e8f0fa;--surface:#fff;--bg:#fff;--border:#e2ddd6;--text:#2c2c2c;--text-muted:#7a766b;--shadow-sm:0 1px 4px rgba(0,0,0,.06);--radius:6px;--nav-h:48px;--ff-h:"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif}
-/* Force light mode on all devices, disable dark mode auto-switch */
-@media(prefers-color-scheme:dark){:root{color-scheme:only light;--navy:#1a2b4a;--accent:#3a6fb5;--accent-bg:#e8f0fa;--surface:#fff;--bg:#fff;--border:#e2ddd6;--text:#2c2c2c;--text-muted:#7a766b;--shadow-sm:0 1px 4px rgba(0,0,0,.06)}.ht thead{background:#f5f3ee}.jt thead{background:#f5f3ee}.art-list-wrap{background:#fafaf7}.rt-pg-hd h3{color:#1a2b4a}}
+:root{--navy:#1a2b4a;--accent:#3a6fb5;--accent-bg:#e8f0fa;--surface:#fff;--bg:#fff;--border:#e2ddd6;--text:#2c2c2c;--text-muted:#7a766b;--shadow-sm:0 1px 4px rgba(0,0,0,.06);--radius:6px;--nav-h:48px;--ff-h:"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;color-scheme:only light;forced-color-adjust:none}
-body{font-family:var(--ff-h);background:var(--bg);color:var(--text);line-height:1.5;-webkit-text-size-adjust:100%;forced-color-adjust:none;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:var(--ff-h);background:var(--bg);color:var(--text);line-height:1.5;-webkit-text-size-adjust:100%}
 
 /* LAYOUT */
-.mob-bar{display:none;position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--surface);border-bottom:1px solid var(--border);z-index:100;align-items:center;justify-content:space-between;padding:0 14px}
+.mob-bar{display:none;position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--surface);border-bottom:1px solid var(--border);z-index:210;align-items:center;justify-content:space-between;padding:0 14px}
 .mob-logo{font-weight:700;font-size:15px;color:var(--navy)}
 .mob-btn{background:none;border:none;font-size:22px;cursor:pointer;color:var(--navy);padding:4px 8px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .dr-ov{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:200}
 .dr-ov.show{display:block}
-.mob-dr{display:none;position:fixed;top:0;left:0;bottom:0;width:280px;max-width:82vw;background:var(--surface);z-index:210;transform:translateX(-100%);transition:transform .25s ease;overflow-y:auto;box-shadow:2px 0 12px rgba(0,0,0,.15)}
+.mob-dr{display:none;position:fixed;top:0;left:0;bottom:0;width:280px;max-width:82vw;background:var(--surface);z-index:220;transform:translateX(-100%);transition:transform .25s ease;overflow-y:auto;box-shadow:2px 0 12px rgba(0,0,0,.15)}
 .mob-dr.show{transform:translateX(0)}
 .dr-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border)}
 .dr-hd h2{font-size:15px;font-weight:700;color:var(--navy)}
@@ -165,8 +160,8 @@ body{font-family:var(--ff-h);background:var(--bg);color:var(--text);line-height:
 
 /* RESPONSIVE */
 @media(max-width:900px){
-  .sidebar{display:none}.mob-bar{display:flex;padding:0 max(14px,env(safe-area-inset-right,14px)) 0 max(14px,env(safe-area-inset-left,14px))}.mob-dr{display:flex}.dr-ov{display:block}
-  main,.main-area{overflow-x:visible;margin-left:0;padding:calc(var(--nav-h)+max(14px,env(safe-area-inset-top,14px))) max(10px,env(safe-area-inset-right,10px)) max(60px,env(safe-area-inset-bottom,60px)) max(10px,env(safe-area-inset-left,10px));max-width:100%}
+  .sidebar{display:none}.mob-bar{display:flex}.mob-dr{display:flex}
+  main,.main-area{overflow-x:visible;margin-left:0;padding:calc(var(--nav-h)+14px) 10px 60px;max-width:100%}
   .rt-grid{grid-template-columns:1fr}.stat-bar{grid-template-columns:repeat(3,1fr)}
   .scroll-hint{display:block}
   .jw{overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -177,7 +172,7 @@ body{font-family:var(--ff-h);background:var(--bg);color:var(--text);line-height:
   .d-hint{font-size:11px;padding:8px 10px;display:block}
   .hw-c{font-size:12px;padding:10px 14px}
   .hw-c span.srt{display:none}
-  .hs{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;touch-action:pan-x pinch-zoom;-webkit-overflow-scrolling:touch}
+  .hs{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;touch-action:pan-x pinch-zoom}
   .ht{min-width:720px;font-size:11px}
   .ht th{padding:7px 8px;font-size:9px}
   .ht td{padding:6px 8px}
@@ -227,19 +222,17 @@ body{font-family:var(--ff-h);background:var(--bg);color:var(--text);line-height:
 </main>
 
 <script>
-// Show loading indicator
 (function(){
   var dash = document.getElementById('v-dash');
   if(dash) dash.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px">数据加载中...</div>';
 })();
 
-// Load data then initialize
 fetch('data.json?v=20260617')
   .then(function(r){return r.json()})
   .then(function(data){
     window.R = data.routines;
     window.CATS = eval('(' + data.categories_js + ')');
-    
+
 const TM={"因果推断":"tag-causal","临床数据库":"tag-clinical-db","流调数据库":"tag-survey","大规模队列":"tag-cohort","临床指标":"tag-clinical","临床统计":"tag-stats","生信挖掘":"tag-bioinfo","生信前沿":"tag-bioinfo-adv","图像分析":"tag-imaging","中药/药理":"tag-tcm","AI+医学":"tag-ai","文献分析":"tag-biblio"};
 const IM={"因果推断":"MR","临床数据库":"DB","流调数据库":"EP","大规模队列":"UK","临床指标":"TYG","临床统计":"ST","生信挖掘":"BI","生信前沿":"BF","图像分析":"IM","中药/药理":"TC","AI+医学":"AI","文献分析":"BL"};
 const rm={};R.forEach(r=>rm[r.id]=r);
@@ -250,23 +243,21 @@ function scCls(v){if(v>=80)return"sc-top";if(v>=60)return"sc-hi";if(v>=40)return
 function rnkCls(i){if(i===0)return"rnk1";if(i===1)return"rnk2";if(i===2)return"rnk3";return"rnk-m"}
 function casCls(c){if(c.includes("1区"))return"cq1";if(c.includes("2区"))return"cq2";if(c.includes("3区"))return"cq3";return"cq4"}
 
-/* BUILD NAV */
 function buildNav(el){
   let h='<div class="side-dash act" data-rid="dashboard" onclick="showDash()">&#8212; 全景总览</div>';
   CATS.forEach(cat=>{
-    h+=`<button class="cat-tgl" data-cat="${cat.id}" aria-expanded="true"><span class="arr">&#9660;</span>${cat.nm}</button>`;
+    h+='<button class="cat-tgl" data-cat="'+cat.id+'" aria-expanded="true"><span class="arr">&#9660;</span>'+cat.nm+'</button>';
     const n=cat.ids.length;
-    h+=`<div class="cat-grp" id="cg-${cat.id}" style="max-height:${n*52+8}px">`;
+    h+='<div class="cat-grp" id="cg-'+cat.id+'" style="max-height:'+(n*52+8)+'px">';
     cat.ids.forEach(rid=>{
       const r=rm[rid];if(!r)return;
-      h+=`<a data-rid="${rid}" onclick="showRt('${rid}');event.preventDefault()"><span class="dot" style="background:${cat.cl}"></span>${r.name}</a>`;
+      h+='<a data-rid="'+rid+'" onclick="showRt(\''+rid+'\');event.preventDefault()"><span class="dot" style="background:'+cat.cl+'"></span>'+r.name+'</a>';
     });
     h+='</div>';
   });
   el.innerHTML=h;
 }
 
-/* DASHBOARD */
 function buildDash(){
   const v=document.getElementById('v-dash');
   if(v.dataset.built)return;
@@ -277,50 +268,49 @@ function buildDash(){
   const nCats=new Set(R.map(r=>r.category)).size;
   const maxIF=Math.max(...R.map(r=>pf(r.journals[0].if)));
 
-  let h=`<div class="dash-label">Dashboard</div>`;
-  h+=`<div class="d-title">公共数据库发文套路图谱</div>`;
-  h+=`<div class="d-sub">覆盖 ${total} 种套路，按综合评分降序排列，目标 10 分以上期刊。点击套路名查看详细分析、期刊信息与参考文献。点击期刊行展开文献清单。</div>`;
+  let h='<div class="dash-label">Dashboard</div>';
+  h+='<div class="d-title">公共数据库发文套路图谱</div>';
+  h+='<div class="d-sub">覆盖 '+total+' 种套路，按综合评分降序排列，目标 10 分以上期刊。点击套路名查看详细分析、期刊信息与参考文献。点击期刊行展开文献清单。</div>';
 
-  h+=`<div class="stat-bar">`;
-  h+=`<div class="sc hi"><div class="sv">${total}</div><div class="sl">套路总数</div></div>`;
-  h+=`<div class="sc"><div class="sv">${nCats}</div><div class="sl">类别覆盖</div></div>`;
-  h+=`<div class="sc"><div class="sv">${avgW}<span style="font-size:13px;color:var(--text-muted)">/5</span></div><div class="sl">均成文难度</div></div>`;
-  h+=`<div class="sc"><div class="sv">${avgP}<span style="font-size:13px;color:var(--text-muted)">/5</span></div><div class="sl">均发文难度</div></div>`;
-  h+=`<div class="sc"><div class="sv">${maxIF.toFixed(1)}</div><div class="sl">最高 IF</div></div>`;
-  h+=`</div>`;
+  h+='<div class="stat-bar">';
+  h+='<div class="sc hi"><div class="sv">'+total+'</div><div class="sl">套路总数</div></div>';
+  h+='<div class="sc"><div class="sv">'+nCats+'</div><div class="sl">类别覆盖</div></div>';
+  h+='<div class="sc"><div class="sv">'+avgW+'<span style="font-size:13px;color:var(--text-muted)">/5</span></div><div class="sl">均成文难度</div></div>';
+  h+='<div class="sc"><div class="sv">'+avgP+'<span style="font-size:13px;color:var(--text-muted)">/5</span></div><div class="sl">均发文难度</div></div>';
+  h+='<div class="sc"><div class="sv">'+maxIF.toFixed(1)+'</div><div class="sl">最高 IF</div></div>';
+  h+='</div>';
 
-  h+=`<div class="hw"><div class="hw-c">六维对比 &middot; 综合评分降序 <span class="srt">难度:1红(最难)&rarr;5绿(最易) | 创新/热度:1红(低)&rarr;5绿(高)</span></div>`;
-  h+=`<div class="scroll-hint">&larr; 左右滑动查看更多列 &rarr;</div>`;
-  h+=`<div class="hs"><table class="ht"><thead><tr>`;
-  ['#','套路','类别','评分','成文','发文','创新','热度','蓝海','IF范围','分区'].forEach(th=>h+=`<th>${th}</th>`);
-  h+=`</tr></thead><tbody>`;
+  h+='<div class="hw"><div class="hw-c">六维对比 &middot; 综合评分降序 <span class="srt">难度:1红(最难)&rarr;5绿(最易) | 创新/热度:1红(低)&rarr;5绿(高)</span></div>';
+  h+='<div class="scroll-hint">&larr; 左右滑动查看更多列 &rarr;</div>';
+  h+='<div class="hs"><table class="ht"><thead><tr>';
+  ['#','套路','类别','评分','成文','发文','创新','热度','蓝海','IF范围','分区'].forEach(th=>h+='<th>'+th+'</th>');
+  h+='</tr></thead><tbody>';
   R.forEach((r,i)=>{
     const cat=r.category;const minF=Math.min(...r.journals.map(j=>pf(j.if)));const maxF=Math.max(...r.journals.map(j=>pf(j.if)));
     const cases=[...new Set(r.journals.map(j=>j.cas))].join(" / ");const ifC=maxF>=10?"if-h":(maxF>=5?"if-m":"if-l");
     const bciRaw=(r.innovation*r.hotness)/(r.difficulty_write||1);const bci=Math.round((bciRaw-0.2)/(25-0.2)*100);
-    h+=`<tr><td><span class="rnk ${rnkCls(i)}">${i+1}</span></td>`;
-    h+=`<td><a href="javascript:void(0)" onclick="showRt('${r.id}');event.preventDefault()" style="touch-action:manipulation;-webkit-tap-highlight-color:transparent">${r.name}</a></td>`;
-    h+=`<td><span class="tag-sm ${TM[cat]||''}">${cat}</span></td>`;
-    h+=`<td><span class="sc-badge ${scCls(r.composite)}">${r.composite}</span></td>`;
-    h+=`<td><span class="hc ${hD(r.difficulty_write)}">${r.difficulty_write}</span></td>`;
-    h+=`<td><span class="hc ${hD(r.difficulty_pub)}">${r.difficulty_pub}</span></td>`;
-    h+=`<td><span class="hc ${hI(r.innovation)}">${r.innovation}</span></td>`;
-    h+=`<td><span class="hc ${hI(r.hotness)}">${r.hotness}</span></td>`;
-    h+=`<td><span class="sc-badge ${scCls(bci)}">${bci}</span></td>`;
-    h+=`<td><span class="${ifC}">${minF.toFixed(1)}~${maxF.toFixed(1)}</span></td>`;
-    h+=`<td style="font-size:11px;color:var(--text-muted);max-width:160px;white-space:normal">${cases}</td></tr>`;
+    h+='<tr><td><span class="rnk '+rnkCls(i)+'">'+(i+1)+'</span></td>';
+    h+='<td><a href="javascript:void(0)" onclick="showRt(\''+r.id+'\');event.preventDefault()" style="touch-action:manipulation;-webkit-tap-highlight-color:transparent">'+r.name+'</a></td>';
+    h+='<td><span class="tag-sm '+(TM[cat]||'')+'">'+cat+'</span></td>';
+    h+='<td><span class="sc-badge '+scCls(r.composite)+'">'+r.composite+'</span></td>';
+    h+='<td><span class="hc '+hD(r.difficulty_write)+'">'+r.difficulty_write+'</span></td>';
+    h+='<td><span class="hc '+hD(r.difficulty_pub)+'">'+r.difficulty_pub+'</span></td>';
+    h+='<td><span class="hc '+hI(r.innovation)+'">'+r.innovation+'</span></td>';
+    h+='<td><span class="hc '+hI(r.hotness)+'">'+r.hotness+'</span></td>';
+    h+='<td><span class="sc-badge '+scCls(bci)+'">'+bci+'</span></td>';
+    h+='<td><span class="'+ifC+'">'+minF.toFixed(1)+'~'+maxF.toFixed(1)+'</span></td>';
+    h+='<td style="font-size:11px;color:var(--text-muted);max-width:160px;white-space:normal">'+cases+'</td></tr>';
   });
-  h+=`</tbody></table></div></div>`;
-  h+=`<div style="display:flex;gap:10px;align-items:center;font-size:11px;color:var(--text-muted);margin-top:8px;flex-wrap:wrap">`;
-  h+=`<span>难度：</span><span class="hc hd1" style="padding:2px 8px">1极难</span><span class="hc hd2" style="padding:2px 8px">2</span><span class="hc hd3" style="padding:2px 8px;color:#3a3000">3中</span><span class="hc hd4" style="padding:2px 8px">4</span><span class="hc hd5" style="padding:2px 8px">5极易</span>`;
-  h+=`<span style="margin-left:8px">创新/热度：</span><span class="hc hc1" style="padding:2px 8px">1</span><span class="hc hc2" style="padding:2px 8px">2</span><span class="hc hc3" style="padding:2px 8px;color:#3a3000">3</span><span class="hc hc4" style="padding:2px 8px">4</span><span class="hc hc5" style="padding:2px 8px">5</span>`;
-  h+=`</div>`;
-  h+=`<div class="meth-c"><h4>综合评分计算</h4><p>综合评分 = <span class="formula">成文难度(25%) + 发文难度(20%) + IF上限(30%) + 创新性(15%) + 热度(10%)</span></p><p>各子项统一归一化至 0～100 区间后加权求和。评分越高代表该套路在发文成功率、期刊含金量与创新潜力之间越具性价比。</p></div>`;
-  h+=`<div class="meth-c"><h4>蓝海指数</h4><p>蓝海指数衡量该套路当前的"竞争拥挤度"。低竞争 + 高创新 + 中等难度 => 高蓝海价值。本总览中各维度的难度/创新/热度评分即构成蓝海指数的核心输入——<b>难度偏高（红区）但创新&热度也高（绿区）的套路，即为蓝海标的</b>，具备先发优势窗口。反之，难度低但创新&热度也低（全绿）的套路需警惕红海内卷。</p></div>`;
+  h+='</tbody></table></div></div>';
+  h+='<div style="display:flex;gap:10px;align-items:center;font-size:11px;color:var(--text-muted);margin-top:8px;flex-wrap:wrap">';
+  h+='<span>难度：</span><span class="hc hd1" style="padding:2px 8px">1极难</span><span class="hc hd2" style="padding:2px 8px">2</span><span class="hc hd3" style="padding:2px 8px;color:#3a3000">3中</span><span class="hc hd4" style="padding:2px 8px">4</span><span class="hc hd5" style="padding:2px 8px">5极易</span>';
+  h+='<span style="margin-left:8px">创新/热度：</span><span class="hc hc1" style="padding:2px 8px">1</span><span class="hc hc2" style="padding:2px 8px">2</span><span class="hc hc3" style="padding:2px 8px;color:#3a3000">3</span><span class="hc hc4" style="padding:2px 8px">4</span><span class="hc hc5" style="padding:2px 8px">5</span>';
+  h+='</div>';
+  h+='<div class="meth-c"><h4>综合评分计算</h4><p>综合评分 = <span class="formula">成文难度(25%) + 发文难度(20%) + IF上限(30%) + 创新性(15%) + 热度(10%)</span></p><p>各子项统一归一化至 0～100 区间后加权求和。评分越高代表该套路在发文成功率、期刊含金量与创新潜力之间越具性价比。</p></div>';
+  h+='<div class="meth-c"><h4>蓝海指数</h4><p>蓝海指数衡量该套路当前的"竞争拥挤度"。低竞争 + 高创新 + 中等难度 => 高蓝海价值。本总览中各维度的难度/创新/热度评分即构成蓝海指数的核心输入——<b>难度偏高（红区）但创新&热度也高（绿区）的套路，即为蓝海标的</b>，具备先发优势窗口。反之，难度低但创新&热度也低（全绿）的套路需警惕红海内卷。</p></div>';
   v.innerHTML=h;
 }
 
-/* ROUTINE DETAIL */
 function showRt(rid){
   const r=rm[rid];if(!r)return;
   const ma=document.getElementById('mainArea');
@@ -328,75 +318,72 @@ function showRt(rid){
   if(!view){
     view=document.createElement('section');view.className='view';view.id='v-'+rid;ma.appendChild(view);
     const cat=r.category;
-    let h=`<button class="rt-back" onclick="showDash()">&larr; 返回总览</button>`;
-    h+=`<div class="rt-pg-hd"><div class="rt-ico">${IM[cat]||cat[0]}</div><div><h3>${r.name}</h3><div class="rt-score-line"><span class="sc-badge ${scCls(r.composite)}">综合评分 ${r.composite}</span><span class="tag-sm ${TM[cat]||''}">${cat}</span></div></div></div>`;
-    h+=`<div class="rt-mr">`;
-    h+=`<div class="rt-mb"><div class="mv">${r.difficulty_write}/5</div><div class="ml">成文难度</div></div>`;
-    h+=`<div class="rt-mb"><div class="mv">${r.difficulty_pub}/5</div><div class="ml">发文难度</div></div>`;
-    h+=`<div class="rt-mb"><div class="mv">${r.innovation}/5</div><div class="ml">创新性</div></div>`;
-    h+=`<div class="rt-mb"><div class="mv">${r.hotness}/5</div><div class="ml">热度</div></div>`;
-    h+=`</div>`;
-    h+=`<div class="rt-grid">`;
-    h+=`<div class="rt-c"><h4>核心套路</h4><p>${r.core}</p></div>`;
-    h+=`<div class="rt-c"><h4>常用数据库</h4><ul>${r.databases.map(d=>`<li>${d}</li>`).join('')}</ul></div>`;
-    h+=`<div class="rt-c"><h4>分析流程</h4><ul class="slst">${r.flow.map((s,i)=>`<li><span class="si">${i+1}</span>${s}</li>`).join('')}</ul></div>`;
-    h+=`</div>`;
+    let h='<button class="rt-back" onclick="showDash()">&larr; 返回总览</button>';
+    h+='<div class="rt-pg-hd"><div class="rt-ico">'+(IM[cat]||cat[0])+'</div><div><h3>'+r.name+'</h3><div class="rt-score-line"><span class="sc-badge '+scCls(r.composite)+'">综合评分 '+r.composite+'</span><span class="tag-sm '+(TM[cat]||'')+'">'+cat+'</span></div></div></div>';
+    h+='<div class="rt-mr">';
+    h+='<div class="rt-mb"><div class="mv">'+r.difficulty_write+'/5</div><div class="ml">成文难度</div></div>';
+    h+='<div class="rt-mb"><div class="mv">'+r.difficulty_pub+'/5</div><div class="ml">发文难度</div></div>';
+    h+='<div class="rt-mb"><div class="mv">'+r.innovation+'/5</div><div class="ml">创新性</div></div>';
+    h+='<div class="rt-mb"><div class="mv">'+r.hotness+'/5</div><div class="ml">热度</div></div>';
+    h+='</div>';
+    h+='<div class="rt-grid">';
+    h+='<div class="rt-c"><h4>核心套路</h4><p>'+r.core+'</p></div>';
+    h+='<div class="rt-c"><h4>常用数据库</h4><ul>'+r.databases.map(function(d){return'<li>'+d+'</li>'}).join('')+'</ul></div>';
+    h+='<div class="rt-c"><h4>分析流程</h4><ul class="slst">'+r.flow.map(function(s,i){return'<li><span class="si">'+(i+1)+'</span>'+s+'</li>'}).join('')+'</ul></div>';
+    h+='</div>';
 
-    /* JOURNAL TABLE - EXPANDABLE */
-    const totalArts=(r.journals||[]).reduce((s,j)=>s+(j.articles||[]).length,0);
-    h+=`<div class="jw"><div class="jw-hd">匹配期刊 (${r.journals.length}个) &middot; 共 ${totalArts} 篇文献 &middot; 点击行展开</div>`;
-    h+=`<table class="jt"><thead><tr><th></th><th>期刊</th><th>IF</th><th>中科院分区</th><th>发文量</th><th>覆盖时段</th></tr></thead><tbody>`;
-    r.journals.forEach((j,ji)=>{
+    const totalArts=(r.journals||[]).reduce(function(s,j){return s+(j.articles||[]).length},0);
+    h+='<div class="jw"><div class="jw-hd">匹配期刊 ('+r.journals.length+'个) &middot; 共 '+totalArts+' 篇文献 &middot; 点击行展开</div>';
+    h+='<table class="jt"><thead><tr><th></th><th>期刊</th><th>IF</th><th>中科院分区</th><th>发文量</th><th>覆盖时段</th></tr></thead><tbody>';
+    r.journals.forEach(function(j,ji){
       const arts=j.articles||[];
       const artCount=arts.length;
-      h+=`<tr class="jr-row" data-ji="${ji}" onclick="toggleArticles(event,'${rid}',${ji})"><td><span class="j-expand">&#9654;</span></td><td style="font-weight:600">${j.name}<span class="art-count">${artCount}篇</span></td><td style="font-weight:700">${j.if}</td><td><span class="${casCls(j.cas)}">${j.cas}</span></td><td>${j.pub_count}</td><td>${j.period}</td></tr>`;
-      /* Article list row */
+      h+='<tr class="jr-row" data-ji="'+ji+'" onclick="toggleArticles(event,\''+rid+'\','+ji+')"><td><span class="j-expand">&#9654;</span></td><td style="font-weight:600">'+j.name+'<span class="art-count">'+artCount+'篇</span></td><td style="font-weight:700">'+j.if+'</td><td><span class="'+casCls(j.cas)+'">'+j.cas+'</span></td><td>'+j.pub_count+'</td><td>'+j.period+'</td></tr>';
       if(arts.length>0){
-        h+=`<tr class="art-list-row"><td colspan="6"><div class="art-list-wrap"><div class="art-list-inner">`;
-        arts.forEach(a=>{
-          const pmidUrl=a.pmid&&!a.generated?`<a class="art-pmid" href="https://pubmed.ncbi.nlm.nih.gov/${a.pmid}/" target="_blank" rel="noopener">PMID:${a.pmid}</a>`:(a.generated?`<span class="art-gen">代表文献</span>`:`<span class="art-gen">PMID:${a.pmid}</span>`);
-          h+=`<div class="art-item"><div class="art-title">${a.title}</div><div class="art-meta"><span class="art-year">${a.year}</span><span>${a.authors}</span><span>${a.journal}</span>${pmidUrl}</div></div>`;
+        h+='<tr class="art-list-row"><td colspan="6"><div class="art-list-wrap"><div class="art-list-inner">';
+        arts.forEach(function(a){
+          const pmidUrl=a.pmid&&!a.generated?'<a class="art-pmid" href="https://pubmed.ncbi.nlm.nih.gov/'+a.pmid+'/" target="_blank" rel="noopener">PMID:'+a.pmid+'</a>':(a.generated?'<span class="art-gen">代表文献</span>':'<span class="art-gen">PMID:'+a.pmid+'</span>');
+          h+='<div class="art-item"><div class="art-title">'+a.title+'</div><div class="art-meta"><span class="art-year">'+a.year+'</span><span>'+a.authors+'</span><span>'+a.journal+'</span>'+pmidUrl+'</div></div>';
         });
-        h+=`</div></div></td></tr>`;
+        h+='</div></div></td></tr>';
       }
     });
-    h+=`</tbody></table></div>`;
+    h+='</tbody></table></div>';
 
-    if(r.references&&r.references.length){h+=`<div class="rf-c"><h4>关键参考文献</h4><ul>`;r.references.forEach(ref=>{h+=`<li>${ref}</li>`;});h+=`</ul></div>`;}
+    if(r.references&&r.references.length){h+='<div class="rf-c"><h4>关键参考文献</h4><ul>';r.references.forEach(function(ref){h+='<li>'+ref+'</li>'});h+='</ul></div>';}
     view.innerHTML=h;
   }
 
-  document.querySelectorAll('#mainArea > .view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('#mainArea > .view').forEach(function(v){v.classList.remove('active')});
   view.classList.add('active');
   view.scrollIntoView({behavior:'smooth',block:'start'});
-  document.querySelectorAll('#sNav a,#drNav a').forEach(a=>a.classList.remove('act'));
-  const navLink=document.querySelector(`#sNav a[data-rid="${rid}"],#drNav a[data-rid="${rid}"]`);
+  document.querySelectorAll('#sNav a,#drNav a').forEach(function(a){a.classList.remove('act')});
+  const navLink=document.querySelector('#sNav a[data-rid="'+rid+'"],#drNav a[data-rid="'+rid+'"]');
   if(navLink)navLink.classList.add('act');
-  document.querySelectorAll('#sNav .side-dash,#drNav .side-dash').forEach(d=>d.classList.remove('act'));
+  document.querySelectorAll('#sNav .side-dash,#drNav .side-dash').forEach(function(d){d.classList.remove('act')});
   if(window.innerWidth<=900)closeDr();
 }
 
-/* TOGGLE ARTICLES */
 function toggleArticles(e,rid,ji){
   e.stopPropagation();
   const view=document.getElementById('v-'+rid);
   if(!view)return;
-  const row=view.querySelector(`tr.jr-row[data-ji="${ji}"]`);
+  const row=view.querySelector('tr.jr-row[data-ji="'+ji+'"]');
   if(!row)return;
   row.classList.toggle('expanded');
 }
 
 function showDash(){
   buildDash();const dash=document.getElementById('v-dash');
-  document.querySelectorAll('#mainArea > .view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('#mainArea > .view').forEach(function(v){v.classList.remove('active')});
   dash.classList.add('active');dash.scrollIntoView({behavior:'smooth',block:'start'});
-  document.querySelectorAll('#sNav a,#drNav a').forEach(a=>a.classList.remove('act'));
-  document.querySelectorAll('#sNav .side-dash,#drNav .side-dash').forEach(d=>d.classList.add('act'));
+  document.querySelectorAll('#sNav a,#drNav a').forEach(function(a){a.classList.remove('act')});
+  document.querySelectorAll('#sNav .side-dash,#drNav .side-dash').forEach(function(d){d.classList.add('act')});
   if(window.innerWidth<=900)closeDr();
 }
 
 function setupTgl(el){
-  el.querySelectorAll('.cat-tgl').forEach(btn=>{
+  el.querySelectorAll('.cat-tgl').forEach(function(btn){
     btn.addEventListener('click',function(e){
       e.preventDefault();const cid=this.dataset.cat;const grp=document.getElementById('cg-'+cid);
       if(!grp)return;this.classList.toggle('folded');grp.classList.toggle('folded');
@@ -412,16 +399,12 @@ function init(){
   const sN=document.getElementById('sNav'),dN=document.getElementById('drNav');
   buildNav(sN);buildNav(dN);setupTgl(sN);setupTgl(dN);
   document.getElementById('mobBtn').addEventListener('click',function(e){e.preventDefault();e.stopPropagation();openDr()});
-  document.getElementById('mobBtn').addEventListener('touchend',function(e){e.preventDefault();openDr()});
   document.getElementById('drCls').addEventListener('click',function(e){e.preventDefault();e.stopPropagation();closeDr()});
   document.getElementById('drOv').addEventListener('click',closeDr);
   const mdr=document.getElementById('mobDr');
   mdr.addEventListener('click',function(e){if(e.target===mdr)closeDr()});
   dN.addEventListener('click',function(e){if(e.target.closest('a')||e.target.closest('.side-dash'))setTimeout(closeDr,220)});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeDr()});
-  let touchX=0;
-  mdr.addEventListener('touchstart',function(e){touchX=e.touches[0].clientX},false);
-  mdr.addEventListener('touchmove',function(e){const dx=e.touches[0].clientX-touchX;if(dx<-40){closeDr()}},false);
   buildDash();
 }
 init();
