@@ -201,6 +201,11 @@ body{font-family:var(--ff);background:var(--bg);color:var(--text);line-height:1.
 .cq3{color:#78350f;background:#ffedd5;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600}
 .cq4{color:#7f1d1d;background:#fee2e2;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600}
 
+
+/* Article with Chinese title - translated reference marker */
+.art-item-cn{background:linear-gradient(135deg,#fef2f2 0%,#fff5f5 100%);border-left:3px solid #fca5a5;padding-left:14px!important;border-radius:0 var(--radius-xs) var(--radius-xs) 0}
+.art-cn-badge{display:inline-block;font-size:9px;font-weight:700;color:#dc2626;background:#fee2e2;padding:2px 7px;border-radius:3px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}
+
 /* References card */
 .rf-c{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm);margin-bottom:24px}
 .rf-c h4{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.6px}
@@ -225,6 +230,21 @@ body{font-family:var(--ff);background:var(--bg);color:var(--text);line-height:1.
 .ft a{color:var(--accent);text-decoration:none}
 .ft a:hover{text-decoration:underline}
 
+
+/* ── MOBILE CARDS (replaces table on small screens) ── */
+.mob-cards{display:none;flex-direction:column;gap:12px}
+.mob-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .15s,box-shadow .15s;touch-action:manipulation}
+.mob-card:active{transform:scale(.98)}
+.mob-card-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.mob-card-rank{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;border-radius:50%;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.mob-card-name{font-size:14px;font-weight:700;color:var(--navy);line-height:1.3;flex:1}
+.mob-card-mid{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.mob-card-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.mob-metric{text-align:center;padding:8px 4px;background:var(--bg);border-radius:var(--radius-xs)}
+.mob-metric .mv{font-size:16px;font-weight:700;color:var(--navy);font-family:var(--ff-mono)}
+.mob-metric .ml{font-size:9px;color:var(--text-muted);margin-top:2px}
+.mob-card-if{font-size:11px;color:var(--text-muted);margin-top:6px;padding-top:8px;border-top:1px solid var(--border)}
+
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
   .topnav{padding:0 16px}
@@ -241,11 +261,8 @@ body{font-family:var(--ff);background:var(--bg);color:var(--text);line-height:1.
   .content-area{padding:0 16px 60px}
   .hw{overflow:visible}
   .hw-c{font-size:13px;padding:12px 16px;gap:8px}
-  .hs{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .ht{min-width:740px;font-size:11px}
-  .ht th{padding:9px 10px;font-size:9.5px}
-  .ht td{padding:8px 10px}
-  .scroll-hint{display:block}
+  .hs,.scroll-hint{display:none}
+  .mob-cards{display:flex}
   .rt-grid{grid-template-columns:1fr}
   .rt-view{padding:0 16px 60px}
   .rt-pg-hd{flex-direction:column;gap:10px}
@@ -256,7 +273,7 @@ body{font-family:var(--ff);background:var(--bg);color:var(--text);line-height:1.
   .rf-c{padding:18px}
   .meth-grid{grid-template-columns:1fr}
   .meth-card{padding:18px}
-  .jw{overflow-x:auto}.jt{min-width:580px}
+  .jw{overflow-x:auto}.jt{min-width:500px}
 }
 @media(max-width:480px){
   .stat-bar{grid-template-columns:repeat(2,1fr);gap:6px;padding:0 12px}
@@ -266,7 +283,6 @@ body{font-family:var(--ff);background:var(--bg);color:var(--text);line-height:1.
   .hero h1{font-size:20px}
   .content-area{padding:0 12px 48px}
   .chart-grid{padding:0 12px}
-  .ht{min-width:680px;font-size:10px}
   .rt-pg-hd h3{font-size:18px}
   .rt-mr{gap:8px}
   .rt-mb{min-width:48px;padding:8px 10px}.rt-mb .mv{font-size:16px}.rt-mb .ml{font-size:9px}
@@ -331,6 +347,7 @@ body{font-family:var(--ff);background:var(--bg);color:var(--text);line-height:1.
     <div class="hw-c"><span class="hw-label">六维对比</span>综合评分降序排列 &middot; 点击套路名查看详情</div>
     <div class="scroll-hint">&larr; 左右滑动查看更多列 &rarr;</div>
     <div class="hs"><table class="ht" id="heatTable"><thead><tr></tr></thead><tbody></tbody></table></div>
+    <div class="mob-cards" id="mobCards"></div>
   </div>
 
   <!-- METHODOLOGY -->
@@ -525,6 +542,22 @@ function buildHeatTable(){
     h+='<td><span class="'+ifC+'">'+minF.toFixed(1)+'~'+maxF.toFixed(1)+'</span></td></tr>';
   });
   tbody.innerHTML=h;
+  // Generate mobile cards
+  var cardsHtml='';
+  sortedR.forEach(function(r,i){
+    var cat=r.category;
+    var minF=Math.min.apply(null,r.journals.map(function(j){return pf(j.if)}));
+    var maxF=Math.max.apply(null,r.journals.map(function(j){return pf(j.if)}));
+    var ifC=maxF>=10?"if-h":(maxF>=5?"if-m":"if-l");
+    var boi=calcBOI(r);
+    cardsHtml+='<div class="mob-card" onclick="showRt(\''+r.id+'\')">';
+    cardsHtml+='<div class="mob-card-top"><span class="mob-card-rank '+rnkCls(i)+'">'+(i+1)+'</span><span class="mob-card-name">'+r.name+'</span></div>';
+    cardsHtml+='<div class="mob-card-mid"><span class="tag-sm '+(TM[cat]||'')+'">'+cat+'</span><span class="sc-badge '+scCls(r.composite)+'">'+r.composite+'</span><span class="boi-badge '+boiLabel(boi)+'">'+boiSign(boi)+boi+'</span></div>';
+    cardsHtml+='<div class="mob-card-metrics"><div class="mob-metric"><div class="mv">'+r.difficulty_write+'</div><div class="ml">成文难度</div></div><div class="mob-metric"><div class="mv">'+r.difficulty_pub+'</div><div class="ml">发文难度</div></div><div class="mob-metric"><div class="mv">'+r.innovation+'</div><div class="ml">创新性</div></div><div class="mob-metric"><div class="mv">'+r.hotness+'</div><div class="ml">热度</div></div></div>';
+    cardsHtml+='<div class="mob-card-if"><span class="'+ifC+'">IF '+minF.toFixed(1)+'~'+maxF.toFixed(1)+'</span></div>';
+    cardsHtml+='</div>';
+  });
+  document.getElementById('mobCards').innerHTML=cardsHtml;
 }
 
 /* ── METHODOLOGY ── */
@@ -546,15 +579,18 @@ function showRt(rid){
   h+='<div class="rt-mr"><div class="rt-mb"><div class="mv">'+r.difficulty_write+'/5</div><div class="ml">成文难度</div></div><div class="rt-mb"><div class="mv">'+r.difficulty_pub+'/5</div><div class="ml">发文难度</div></div><div class="rt-mb"><div class="mv">'+r.innovation+'/5</div><div class="ml">创新性</div></div><div class="rt-mb"><div class="mv">'+r.hotness+'/5</div><div class="ml">热度</div></div></div>';
   h+='<div class="rt-grid"><div class="rt-c"><h4>核心套路</h4><p>'+r.core+'</p></div><div class="rt-c"><h4>常用数据库</h4><ul>'+r.databases.map(function(d){return'<li>'+d+'</li>'}).join('')+'</ul></div><div class="rt-c"><h4>分析流程</h4><ul class="slst">'+r.flow.map(function(s,i){return'<li><span class="si">'+(i+1)+'</span>'+s+'</li>'}).join('')+'</ul></div></div>';
 
-  h+='<div class="jw"><div class="jw-hd">匹配期刊 ('+r.journals.length+'个) &middot; '+totalArts+' 篇文献 &middot; 点击行展开</div><table class="jt"><thead><tr><th></th><th>期刊</th><th>IF</th><th>分区</th><th>发文量</th><th>覆盖时段</th></tr></thead><tbody>';
+  h+='<div class="jw"><div class="jw-hd">匹配期刊 ('+r.journals.length+'个) &middot; '+totalArts+' 篇文献 &middot; 点击行展开</div><table class="jt"><thead><tr><th></th><th>期刊</th><th>IF</th><th>发文量</th><th>覆盖时段</th></tr></thead><tbody>';
   r.journals.forEach(function(j,ji){
     var arts=j.articles||[];
-    h+='<tr class="jr-row" onclick="toggleArts(event,'+ji+')"><td><span class="j-expand">&#9654;</span></td><td style="font-weight:600">'+j.name+'<span class="art-count">'+arts.length+'篇</span></td><td style="font-weight:700">'+j.if+'</td><td><span class="'+casCls(j.cas)+'">'+j.cas+'</span></td><td>'+j.pub_count+'</td><td>'+j.period+'</td></tr>';
+    h+='<tr class="jr-row" onclick="toggleArts(event,'+ji+')"><td><span class="j-expand">&#9654;</span></td><td style="font-weight:600">'+j.name+'<span class="art-count">'+arts.length+'篇</span></td><td style="font-weight:700">'+j.if+'</td><td>'+j.pub_count+'</td><td>'+j.period+'</td></tr>';
     if(arts.length>0){
-      h+='<tr class="art-list-row"><td colspan="6"><div class="art-list-wrap"><div class="art-list-inner">';
+      h+='<tr class="art-list-row"><td colspan="5"><div class="art-list-wrap"><div class="art-list-inner">';
       arts.forEach(function(a){
+        var hasCN=/[一-鿿]/.test(a.title);
         var pmidUrl=a.pmid&&!a.generated?'<a class="art-pmid" href="https://pubmed.ncbi.nlm.nih.gov/'+a.pmid+'/" target="_blank" rel="noopener">PMID:'+a.pmid+'</a>':(a.generated?'<span class="art-gen">代表文献</span>':'<span class="art-gen">PMID:'+a.pmid+'</span>');
-        h+='<div class="art-item"><div class="art-title">'+a.title+'</div><div class="art-meta"><span>'+a.year+'</span><span>'+a.authors+'</span><span>'+a.journal+'</span>'+pmidUrl+'</div></div>';
+        h+='<div class="art-item'+(hasCN?' art-item-cn':'')+'">';
+        if(hasCN)h+='<div class="art-cn-badge">&#128220; 中文翻译</div>';
+        h+='<div class="art-title">'+a.title+'</div><div class="art-meta"><span>'+a.year+'</span><span>'+a.authors+'</span><span>'+a.journal+'</span>'+pmidUrl+'</div></div>';
       });
       h+='</div></div></td></tr>';
     }
