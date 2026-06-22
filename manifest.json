@@ -1,0 +1,28 @@
+{
+  "name": "医学研究热点图谱",
+  "short_name": "热点图谱",
+  "description": "基于 PubMed 文献计量学的医学研究热点自动追踪与可视化分析",
+  "start_url": "/medical-bibliometrics-hotspot/",
+  "scope": "/medical-bibliometrics-hotspot/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f4f6f9",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/medical-bibliometrics-hotspot/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/medical-bibliometrics-hotspot/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["medical", "science", "education"],
+  "lang": "zh-CN",
+  "dir": "ltr"
+}
