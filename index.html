@@ -501,7 +501,7 @@ function buildCharts(){
 function buildHeatTable(){
   var sortedR=R.slice().sort(function(a,b){return b.composite-a.composite});
   var thead=document.querySelector('#heatTable thead tr');
-  thead.innerHTML='<th>#</th><th>套路</th><th>类别</th><th>评分</th><th>蓝海</th><th>成文</th><th>发文</th><th>创新</th><th>热度</th><th>IF范围</th><th>分区</th>';
+  thead.innerHTML='<th>#</th><th>套路</th><th>类别</th><th>评分</th><th>蓝海</th><th>成文</th><th>发文</th><th>创新</th><th>热度</th><th>IF范围</th>';
   var tbody=document.querySelector('#heatTable tbody');
   var h='';
   sortedR.forEach(function(r,i){
@@ -522,8 +522,7 @@ function buildHeatTable(){
     h+='<td><span class="hc '+hD(r.difficulty_pub)+'">'+r.difficulty_pub+'</span></td>';
     h+='<td><span class="hc '+hI(r.innovation)+'">'+r.innovation+'</span></td>';
     h+='<td><span class="hc '+hI(r.hotness)+'">'+r.hotness+'</span></td>';
-    h+='<td><span class="'+ifC+'">'+minF.toFixed(1)+'~'+maxF.toFixed(1)+'</span></td>';
-    h+='<td style="font-size:11px;color:var(--text-muted);max-width:160px;white-space:normal">'+cases+'</td></tr>';
+    h+='<td><span class="'+ifC+'">'+minF.toFixed(1)+'~'+maxF.toFixed(1)+'</span></td></tr>';
   });
   tbody.innerHTML=h;
 }
